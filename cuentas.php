@@ -264,21 +264,21 @@ function ac_nuevo_ingreso(){
 </script>
 
 <!-- App and page level script -->
-<script type="text/javascript" src="/plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
-<script type="text/javascript" src="/javascript/app.min.js"></script>
-<script type="text/javascript" src="/plugins/datatables/js/jquery.datatables.min.js"></script>
-<script type="text/javascript" src="/plugins/datatables/tabletools/js/tabletools.min.js"></script>
-<script type="text/javascript" src="/plugins/datatables/tabletools/js/zeroclipboard.js"></script>
-<script type="text/javascript" src="/plugins/datatables/js/jquery.datatables-custom.min.js"></script>
-<script type="text/javascript" src="/javascript/tables/datatable.js"></script>
+<script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
+<script type="text/javascript" src="javascript/app.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
+<script type="text/javascript" src="javascript/tables/datatable.js"></script>
 
-<script type="text/javascript" src="/javascript/components/animation.js"></script>
-<script type="text/javascript" src="/plugins/parsley/js/parsley.min.js"></script>
-<script type="text/javascript" src="/plugins/autosize/js/jquery.autosize.min.js"></script>
-<script type="text/javascript" src="/plugins/jqueryui/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/plugins/jqueryui/js/jquery-ui-touch.min.js"></script>
-<script type="text/javascript" src="/javascript/forms/element.js"></script>
-<script type="text/javascript" src="/javascript/pages/calendar.js"></script>
+<script type="text/javascript" src="javascript/components/animation.js"></script>
+<script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>
+<script type="text/javascript" src="plugins/autosize/js/jquery.autosize.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui-touch.min.js"></script>
+<script type="text/javascript" src="javascript/forms/element.js"></script>
+<script type="text/javascript" src="javascript/pages/calendar.js"></script>
 
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->

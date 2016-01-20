@@ -318,7 +318,7 @@ function cerrar(){
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui-touch.min.js"></script>
 <script type="text/javascript" src="javascript/forms/element.js"></script>
-<script type="text/javascript" src="/javascript/pages/calendar.js"></script>
-<script type="text/javascript" src="/plugins/timepicker/js/moment.js"></script>
-<script type="text/javascript" src="/plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/plugins/selectize/js/selectize.min.js"></script>
+<script type="text/javascript" src="javascript/pages/calendar.js"></script>
+<script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
+<script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="plugins/selectize/js/selectize.min.js"></script>

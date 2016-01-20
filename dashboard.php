@@ -554,21 +554,21 @@
 <!-- Scripts -->
 <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
 <!-- Library script : mandatory -->
-<script type="text/javascript" src="/library/jquery/js/jquery.min.js"></script>
-<script type="text/javascript" src="/library/jquery/js/jquery-migrate.min.js"></script>
-<script type="text/javascript" src="/library/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/library/core/js/core.min.js"></script>
+<script type="text/javascript" src="library/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="library/jquery/js/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="library/core/js/core.min.js"></script>
 <!--/ Library script -->
         
         
 <!-- App and page level script -->
-<script type="text/javascript" src="/plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
-<script type="text/javascript" src="/javascript/app.min.js"></script>
-<script type="text/javascript" src="/plugins/flot/jquery.flot.min.js"></script>
-<script type="text/javascript" src="/plugins/flot/jquery.flot.categories.min.js"></script>
-<script type="text/javascript" src="/plugins/flot/jquery.flot.tooltip.min.js"></script>
-<script type="text/javascript" src="/plugins/flot/jquery.flot.resize.min.js"></script>
-<script type="text/javascript" src="/plugins/flot/jquery.flot.spline.min.js"></script>
-<script type="text/javascript" src="/javascript/pages/dashboard.js"></script>
+<script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
+<script type="text/javascript" src="javascript/app.min.js"></script>
+<script type="text/javascript" src="plugins/flot/jquery.flot.min.js"></script>
+<script type="text/javascript" src="plugins/flot/jquery.flot.categories.min.js"></script>
+<script type="text/javascript" src="plugins/flot/jquery.flot.tooltip.min.js"></script>
+<script type="text/javascript" src="plugins/flot/jquery.flot.resize.min.js"></script>
+<script type="text/javascript" src="plugins/flot/jquery.flot.spline.min.js"></script>
+<script type="text/javascript" src="javascript/pages/dashboard.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->

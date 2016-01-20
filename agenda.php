@@ -94,22 +94,22 @@
 
 <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
 <!-- Library script : mandatory -->
-<script type="text/javascript" src="/library/jquery/js/jquery.min.js"></script>
-<script type="text/javascript" src="/library/jquery/js/jquery-migrate.min.js"></script>
-<script type="text/javascript" src="/library/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/library/core/js/core.min.js"></script>
+<script type="text/javascript" src="library/jquery/js/jquery.min.js"></script>
+<script type="text/javascript" src="library/jquery/js/jquery-migrate.min.js"></script>
+<script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="library/core/js/core.min.js"></script>
 <!--/ Library script -->
 
 <!-- App and page level script -->
-<script type="text/javascript" src="/plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
-<script type="text/javascript" src="/javascript/app.min.js"></script>
-<script type="text/javascript" src="/plugins/jqueryui/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/plugins/fullcalendar/js/fullcalendar.min.js"></script>
-<script type="text/javascript" src="/plugins/parsley/js/parsley.min.js"></script>
-<script type="text/javascript" src="/javascript/pages/calendar.js"></script>
-<script type="text/javascript" src="/plugins/timepicker/js/moment.js"></script>
-<script type="text/javascript" src="/plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/plugins/selectize/js/selectize.min.js"></script>
+<script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
+<script type="text/javascript" src="javascript/app.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="plugins/fullcalendar/js/fullcalendar.min.js"></script>
+<script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>
+<script type="text/javascript" src="javascript/pages/calendar.js"></script>
+<script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
+<script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="plugins/selectize/js/selectize.min.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->
 <script>

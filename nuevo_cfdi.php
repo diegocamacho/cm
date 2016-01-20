@@ -493,11 +493,11 @@
 
 <script type="text/javascript" src="javascript/forms/wizard.js"></script>
 
-<script type="text/javascript" src="/plugins/datatables/js/jquery.datatables.min.js"></script>
-<script type="text/javascript" src="/plugins/datatables/tabletools/js/tabletools.min.js"></script>
-<script type="text/javascript" src="/plugins/datatables/tabletools/js/zeroclipboard.js"></script>
-<script type="text/javascript" src="/plugins/datatables/js/jquery.datatables-custom.min.js"></script>
-<script type="text/javascript" src="/javascript/tables/datatable.js"></script>
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
+<script type="text/javascript" src="javascript/tables/datatable.js"></script>
 
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->

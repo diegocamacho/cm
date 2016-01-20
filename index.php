@@ -14,16 +14,16 @@ include('includes/funciones.php');
         <meta name="author" content="DigmaStudio">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/image/touch/apple-touch-icon-144x144-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/image/touch/apple-touch-icon-114x114-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/image/touch/apple-touch-icon-72x72-precomposed.png">
-        <link rel="apple-touch-icon-precomposed" href="/image/touch/apple-touch-icon-57x57-precomposed.png">
-        <link rel="shortcut icon" href="/image/touch/apple-touch-icon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="image/touch/apple-touch-icon-144x144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="image/touch/apple-touch-icon-114x114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="image/touch/apple-touch-icon-72x72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="image/touch/apple-touch-icon-57x57-precomposed.png">
+        <link rel="shortcut icon" href="image/touch/apple-touch-icon.png">
 
         <!-- CSS: mandatory -->
-        <link rel="stylesheet" href="/library/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/stylesheet/layout.min.css">
-        <link rel="stylesheet" href="/stylesheet/uielement.min.css">
+        <link rel="stylesheet" href="library/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="stylesheet/layout.min.css">
+        <link rel="stylesheet" href="stylesheet/uielement.min.css">
         <!--/ CSS -->
         
 		<!-- START CSS NO MANDATORY -->
@@ -34,10 +34,10 @@ include('includes/funciones.php');
 			    	
 		    case 'Agenda': 
 		    ?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/fullcalendar/css/fullcalendar.min.css">
-			<link rel="stylesheet" href="/plugins/timepicker/css/bootstrap-datetimepicker.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
+			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    
@@ -48,8 +48,8 @@ include('includes/funciones.php');
 		    break;
 			case 'Consulta';
 			?>
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/summernote/css/summernote.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/summernote/css/summernote.min.css">
 			<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
 			<?
 			break;
@@ -62,97 +62,97 @@ include('includes/funciones.php');
 		    case 'Recordatorios':
 		    ?>
 			<link rel="stylesheet" href="plugins/switchery/css/switchery.min.css">
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/fullcalendar/css/fullcalendar.min.css">
-			<link rel="stylesheet" href="/plugins/timepicker/css/bootstrap-datetimepicker.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
+			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 
 		    case 'Ingresos':
 		    ?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
 		    break;
 		    
 		    case 'Gastos':
 		    ?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    
 		    case 'Cuentas':
 		    ?>
-		    <link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
+		    <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<?
 			break;
 			
 		    case 'NuevoCFDI':
 		    ?>
 			<link rel="stylesheet" href="plugins/steps/css/jquery-steps.min.css">
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
 		    break;
 
 		    case 'RecibosEmitidos':
 		    ?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    
 		    case 'FacturasRecibidas':
 		    ?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    
 		    case 'Aseguradoras':
 		    ?>
-		    <link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+		    <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<?
 			break;
 			
 			case 'Recetas':
 			?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<?
 			break;
 			
 			case 'Secretarias':
 			?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<?
 			break;
 			
 			case 'Clinicas':
 			?>
-			<link rel="stylesheet" href="/plugins/jqueryui/css/jquery-ui.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="/plugins/datatables/css/jquery.datatables.min.css">
-			<link rel="stylesheet" href="/plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<?
 			break;
 			 
@@ -162,10 +162,10 @@ include('includes/funciones.php');
 		<!-- END CSS NO MANDATORY -->
 		
         <!-- START JAVASCRIPT SECTION - Load only modernizr script here -->
-        <script src="/library/modernizr/js/modernizr.min.js"></script>
+        <script src="library/modernizr/js/modernizr.min.js"></script>
         <!--/ END JAVASCRIPT SECTION -->
         
-        <script src="/plugins/storage/store.min.js"></script>
+        <script src="plugins/storage/store.min.js"></script>
 
 		<script>
 		    init()
