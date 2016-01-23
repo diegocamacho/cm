@@ -95,7 +95,7 @@
                           <div class="input-group">
                           <input type="text" class="form-control" name="task" placeholder="Agregar nuevo recordatorio">
                               <span class="input-group-btn">
-                                  <button class="btn btn-primary ladda-button" data-style="expand-right" type="button"><span class="ladda-label">Agregar</span></button>
+                                  <button class="btn btn-primary" id="agrega_recordatorio" data-style="expand-right" type="button" onclick="hola();"><span class="ladda-label">Agregar</span></button>
                               </span>
                           </div>
                       </div>
