@@ -2,7 +2,7 @@
 <section id="main" role="main">
     <!-- START Template Container -->
     <div class="container-fluid">
-        <!-- Page Header 
+        <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
                 <h4 class="title semibold">Recordatorios</h4>
@@ -16,7 +16,7 @@
               <div class="col-md-12" id="panel_lista1">
                   <!-- START Widget Panel -->
                   <div class="widget panel">
-                      <!-- panel body -->
+                      <!-- panel body -
                       <div class="panel-body">
                           <h5 class="semibold text-primary">Recordatorios</h5>
                       </div>

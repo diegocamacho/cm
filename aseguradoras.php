@@ -43,12 +43,14 @@ $muestra=mysql_num_rows($query);
                     </div>
                    
                     <table class="table table-striped" id="zero-configuration">
+	                    <!--
                         <thead>
                             <tr>
                                 <th>Nombre</th>
                                 <th></th>
                             </tr>
                         </thead>
+                        -->
                         <tbody>
                         <? while($ft=mysql_fetch_assoc($query)){ ?>
                             <tr>

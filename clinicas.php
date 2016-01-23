@@ -42,13 +42,14 @@ $muestra=mysql_num_rows($query);
                         <h3 class="panel-title">Clínicas</h3>
                     </div>
                    
-                    <table class="table table-striped" id="zero-configuration">
+                    <table class="table table-striped" id="">
+	                    <!--
                         <thead>
                             <tr>
                                 <th>Nombre</th>
                                 <th></th>
                             </tr>
-                        </thead>
+                        </thead>-->
                         <tbody>
                         <? while($ft=mysql_fetch_assoc($query)){ ?>
                             <tr>
