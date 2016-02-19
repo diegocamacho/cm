@@ -10,10 +10,10 @@ if($s_id_tipo_credencial==1){
 	$id_secretaria=$s_id_usuario;
 	$id_medico=$_SESSION['s_id_medico'];
 }else{
-	exit("Sus credenciales han expirado.");
+	header("Location: login.php");
 }
 
 if(!isset($_SESSION['s_id_credencial'])){
-	exit("Su sesión ha expirado.");
+	header("Location: login.php");
 }
 ?>

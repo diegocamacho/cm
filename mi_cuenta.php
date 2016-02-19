@@ -259,7 +259,7 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Contraseña Actual</label>
                                     <div class="col-sm-5">
-                                        <input type="password" class="form-control mod" name="contrasena" id="contrasena">
+                                        <input type="password" class="form-control mod limpia" name="contrasena" id="contrasena">
                                         <div class="help-block mt12 text-danger" id="msg_contrasena"></div>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Nueva Contraseña</label>
                                     <div class="col-sm-5">
-                                        <input type="password" class="form-control mod" name="nueva_contrasena" id="nueva_contrasena">
+                                        <input type="password" class="form-control mod limpia" name="nueva_contrasena" id="nueva_contrasena">
                                         <div class="help-block mt12 text-danger" id="msg_nueva_contrasena"></div>
                                     </div>
                                 </div>
@@ -275,7 +275,7 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Repetir Contraseña</label>
                                     <div class="col-sm-5">
-                                        <input type="password" class="form-control mod" name="verifica_contrasena" id="verifica_contrasena">
+                                        <input type="password" class="form-control mod limpia" name="verifica_contrasena" id="verifica_contrasena">
                                         <div class="help-block mt12 text-danger" id="msg_verifica_contrasena"></div>
                                     </div>
                                 </div>
@@ -501,6 +501,7 @@ function ac_form_pass(){
 	    	$('#msg_pass').show();
 	    	$('#msg_pass').attr("class","alert alert-dismissable alert-success animation animating flipInX mt15");
 			$('.mod').removeAttr("readonly");
+			$('.limpia').val("");
 	    }
 	});
 };

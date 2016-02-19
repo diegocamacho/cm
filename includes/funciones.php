@@ -1,15 +1,34 @@
 <?
 //Utilerias
+date_default_timezone_set("America/Mexico_City");
 $fechahora=date("Y-m-d H:i:s");
+$fecha_actual=date("Y-m-d");
+$hora_actual=date("H:i");
+function nombreMedico($id){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="SELECT nombre FROM medicos WHERE id_medico=$id";
+	$query=@mysql_query($sql);
+	if($query){ 
+		$ft=mysql_fetch_assoc($query);
+		return $ft['nombre'];
+	}else{ 
+		return "N/A"; 
+	}
+}
+
 /*------------------------------------- Módulos ---------------------------------*/
 //Ingresos
 function ac_ingresos($monto,$fecha,$descripcion){
 	
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	global $fechahora;
 	
-	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$id_medico','1','2','1','$monto','$descripcion','$fechahora','$fecha')";
+	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$s_id_usuario','1','2','1','$monto','$descripcion','$fechahora','$fecha')";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 	
@@ -19,10 +38,10 @@ function ac_ingresos($monto,$fecha,$descripcion){
 function ac_mi_cuenta_alertas($agenda,$resumen_inicial,$resumen_final,$facturacion_1,$facturacion_2){
 	
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Actualizamos contraseña
-	$sql="UPDATE alertas SET agenda='$agenda', resumen_inicial='$resumen_inicial', resumen_final='$resumen_final', facturacion_1='$facturacion_1', facturacion_2='$facturacion_2' WHERE id_medico=$id_medico";
+	$sql="UPDATE alertas SET agenda='$agenda', resumen_inicial='$resumen_inicial', resumen_final='$resumen_final', facturacion_1='$facturacion_1', facturacion_2='$facturacion_2' WHERE id_medico=$s_id_usuario";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 }
@@ -30,10 +49,10 @@ function ac_mi_cuenta_alertas($agenda,$resumen_inicial,$resumen_final,$facturaci
 function ac_mi_cuenta_pass($nueva_contrasena){
 	
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Actualizamos contraseña
-	$sql="UPDATE credenciales SET contrasena='$nueva_contrasena' WHERE id_usuario=$id_medico AND id_tipo_credencial=1";
+	$sql="UPDATE credenciales SET contrasena='$nueva_contrasena' WHERE id_usuario=$s_id_usuario AND id_tipo_credencial=1";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 }
@@ -41,7 +60,7 @@ function ac_mi_cuenta_pass($nueva_contrasena){
 function ac_mi_cuenta_perfil($nombre,$cedula,$sexo,$email,$celular,$id_celular_compania,$fecha_nacimiento,$id_estado,$ciudad){
 	
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Validamos el estado
 	$valida=mysql_num_rows(mysql_query("SELECT * FROM estados WHERE id_estado=$id_estado"));
@@ -52,10 +71,10 @@ function ac_mi_cuenta_perfil($nombre,$cedula,$sexo,$email,$celular,$id_celular_c
 	//Updateamos
 	mysql_query('BEGIN');
 	
-	$sq1=@mysql_query("UPDATE medicos SET nombre='$nombre',cedula='$cedula',sexo='$sexo',celular='$celular',id_celular_compania='$id_celular_compania',fecha_nacimiento='$fecha_nacimiento',id_estado='$id_estado',ciudad='$ciudad' WHERE id_medico=$id_medico");
+	$sq1=@mysql_query("UPDATE medicos SET nombre='$nombre',cedula='$cedula',sexo='$sexo',celular='$celular',id_celular_compania='$id_celular_compania',fecha_nacimiento='$fecha_nacimiento',id_estado='$id_estado',ciudad='$ciudad' WHERE id_medico=$s_id_usuario");
 	if(!$sq1) $error = true;
 	
-	$sq2=@mysql_query("UPDATE credenciales SET email='$email' WHERE id_usuario=$id_medico AND id_tipo_credencial=1");
+	$sq2=@mysql_query("UPDATE credenciales SET email='$email' WHERE id_usuario=$s_id_usuario AND id_tipo_credencial=1");
 	if(!$sq2) $error = true;
 	
 	if($error){
@@ -72,21 +91,21 @@ function ac_mi_cuenta_perfil($nombre,$cedula,$sexo,$email,$celular,$id_celular_c
 function ac_facturacion($rfc,$nombre,$calle,$ext,$interior,$cp,$colonia,$localidad,$mpio,$id_estado){
 	
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Validamos el estado
 	$valida=mysql_num_rows(mysql_query("SELECT * FROM estados WHERE id_estado=$id_estado"));
 	if($valida==0) exit("No existe el estado que intentas usar.");
 	//consultamos si el doc tiene registro
-	$valida=mysql_num_rows(mysql_query("SELECT * FROM informacion_fiscal WHERE id_medico=$id_medico"));
+	$valida=mysql_num_rows(mysql_query("SELECT * FROM informacion_fiscal WHERE id_medico=$s_id_usuario"));
 	if($valida==0){
 		//Creamos el registro
-		$sql="INSERT INTO informacion_fiscal (id_medico,rfc,nombre,calle,ext,interior,cp,colonia,localidad,mpio,id_estado) VALUES ('$id_medico','$rfc','$nombre','$calle','$ext','$interior','$cp','$colonia','$localidad','$mpio','$id_estado')";
+		$sql="INSERT INTO informacion_fiscal (id_medico,rfc,nombre,calle,ext,interior,cp,colonia,localidad,mpio,id_estado) VALUES ('$s_id_usuario','$rfc','$nombre','$calle','$ext','$interior','$cp','$colonia','$localidad','$mpio','$id_estado')";
 		$query=@mysql_query($sql);
 		if($query){ return true; }else{ return false; }
 	}else{
 		//Updateamos el registro
-		$sql="UPDATE informacion_fiscal SET rfc='$rfc',nombre='$nombre',calle='$calle',ext='$ext',interior='$interior',cp='$cp',colonia='$colonia',localidad='$localidad',mpio='$mpio',id_estado='$id_estado' WHERE id_medico=$id_medico";
+		$sql="UPDATE informacion_fiscal SET rfc='$rfc',nombre='$nombre',calle='$calle',ext='$ext',interior='$interior',cp='$cp',colonia='$colonia',localidad='$localidad',mpio='$mpio',id_estado='$id_estado' WHERE id_medico=$s_id_usuario";
 		$query=@mysql_query($sql);
 		if($query){ return true; }else{ return false; }
 	}
@@ -95,18 +114,18 @@ function ac_facturacion($rfc,$nombre,$calle,$ext,$interior,$cp,$colonia,$localid
 function ac_clinica($nombre,$id_clinica=false,$elimina=false){
 
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Elimina
 	if($elimina){
-		$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo=1"));
+		$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_medico='$s_id_usuario' AND activo=1"));
 		if($valida==1) exit("Debe tener como mínimo una clínica.");
 		
 		$sql="UPDATE clinicas SET activo='0' WHERE id_clinica=$id_clinica";
 		$ultimo=@mysql_query($sql);
 	}else{
 		//Validamos el límite de clínicas
-		$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo=1"));
+		$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_medico='$s_id_usuario' AND activo=1"));
 		if($valida>30) exit("Haz alcanzado el límite máximo de clínicas, contacta a soporte.");
 	
 		if($id_clinica){
@@ -115,7 +134,7 @@ function ac_clinica($nombre,$id_clinica=false,$elimina=false){
 			$ultimo=@mysql_query($sql);
 		}else{
 			//Nueva Clinica
-			$sql="INSERT INTO clinicas (id_medico,clinica) VALUES ('$id_medico','$nombre')";
+			$sql="INSERT INTO clinicas (id_medico,clinica) VALUES ('$s_id_usuario','$nombre')";
 			$query=@mysql_query($sql);
 			$ultimo=@mysql_insert_id();
 			
@@ -132,7 +151,7 @@ function ac_clinica($nombre,$id_clinica=false,$elimina=false){
 function ac_aseguradora($nombre,$id_aseguradora=false,$elimina=false){
 
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Elimina
 	if($elimina){
@@ -140,7 +159,7 @@ function ac_aseguradora($nombre,$id_aseguradora=false,$elimina=false){
 		$ultimo=@mysql_query($sql);
 	}else{
 		//Validamos el límite de clínicas
-		$valida=@mysql_num_rows(mysql_query("SELECT * FROM aseguradoras WHERE id_medico='$id_medico' AND activo=1"));
+		$valida=@mysql_num_rows(mysql_query("SELECT * FROM aseguradoras WHERE id_medico='$s_id_usuario' AND activo=1"));
 		if($valida>50) exit("Haz alcanzado el límite máximo de aseguradoras, contacta a soporte.");
 		
 		if($id_aseguradora){
@@ -149,7 +168,7 @@ function ac_aseguradora($nombre,$id_aseguradora=false,$elimina=false){
 			$ultimo=@mysql_query($sql);
 		}else{
 			//Nueva Clinica
-			$sql="INSERT INTO aseguradoras (id_medico,nombre_aseguradora) VALUES ('$id_medico','$nombre')";
+			$sql="INSERT INTO aseguradoras (id_medico,nombre_aseguradora) VALUES ('$s_id_usuario','$nombre')";
 			$query=@mysql_query($sql);
 			$ultimo=@mysql_insert_id();
 			
@@ -162,12 +181,30 @@ function ac_aseguradora($nombre,$id_aseguradora=false,$elimina=false){
 	}
 }
 
+//Citas
+function nuevaCita($id_secretaria,$id_clinica,$id_paciente,$fecha,$hora,$anotacion){
+
+	global $conexion;
+	global $s_id_usuario;
+	global $id_medico;
+
+	$sql="INSERT INTO agenda (id_medico,id_secretaria,id_clinica,id_paciente,fecha,hora,anotacion) VALUES ('$id_medico','$id_secretaria','$id_clinica','$id_paciente','$fecha','$hora','$anotacion')";
+	$query=@mysql_query($sql);
+	$ultimo=@mysql_insert_id();
+			
+	if($ultimo){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 //Secretarias *Vincula
 function ac_secretaria_vincula($id_secretaria,$id_clinica){
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
-	$sql="INSERT INTO rel_secretarias_medicos (id_medico,id_secretaria,id_clinica) VALUES ('$id_medico','$id_secretaria','$id_clinica')";
+	$sql="INSERT INTO rel_secretarias_medicos (id_medico,id_secretaria,id_clinica) VALUES ('$s_id_usuario','$id_secretaria','$id_clinica')";
 	$ultimo=@mysql_query($sql);
 	
 	if($ultimo){
@@ -179,23 +216,23 @@ function ac_secretaria_vincula($id_secretaria,$id_clinica){
 //Secretarias *Elimina
 function ac_secretaria_elimina($id_secretaria){
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 
-	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$id_medico"));
+	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$s_id_usuario"));
 	if($valida>0){
 		
 		$valida=mysql_fetch_assoc(mysql_query("SELECT confirmado FROM secretarias WHERE id_secretaria=$id_secretaria"));
 		if($valida['confirmado']>0){
 			//Validar que la secretaria este confirmada
 			
-				$sq1=@mysql_query("DELETE FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$id_medico");
+				$sq1=@mysql_query("DELETE FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$s_id_usuario");
 				if($sq1) return true;
 			
 		}else{
 			//No esta confirmada voy a borrar el registro
 			mysql_query('BEGIN');
 			
-			$sq1=@mysql_query("DELETE FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$id_medico");
+			$sq1=@mysql_query("DELETE FROM rel_secretarias_medicos WHERE id_secretaria=$id_secretaria AND id_medico=$s_id_usuario");
 			if(!$sq1) $error = true;
 			
 			$sq2=@mysql_query("DELETE FROM credenciales WHERE id_usuario=$id_secretaria AND id_tipo_credencial=2");
@@ -221,11 +258,11 @@ function ac_secretaria_elimina($id_secretaria){
 //Secretarias *Alta de nueva secretaria
 function ac_secretaria_alta($id_clinica,$nombre,$email,$celular,$id_celular_compania,$contrasena){
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	global $fechahora;
 	
 	//Validamos el límite de secretarias
-	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico='$id_medico'"));
+	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico='$s_id_usuario'"));
 	if($valida>30) exit("Haz alcanzado el límite máximo de secretarias, contacta a soporte.");
 	//Validamos la clínica
 	$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_clinica='$id_clinica' AND activo=1"));
@@ -243,7 +280,7 @@ function ac_secretaria_alta($id_clinica,$nombre,$email,$celular,$id_celular_comp
 	    $query=@mysql_query($sql);
 	    $id_credencial=@mysql_insert_id();
 	    if($id_credencial){
-	    	$sql="INSERT INTO rel_secretarias_medicos (id_medico,id_secretaria,id_clinica) VALUES ('$id_medico','$id_secretaria','$id_clinica')";
+	    	$sql="INSERT INTO rel_secretarias_medicos (id_medico,id_secretaria,id_clinica) VALUES ('$s_id_usuario','$id_secretaria','$id_clinica')";
 	    	$ultimo=@mysql_query($sql);
 	    }else{
 	    	echo "No se concedió el acceso para esta secretaria, intente más tarde.";
@@ -262,10 +299,10 @@ function ac_secretaria_alta($id_clinica,$nombre,$email,$celular,$id_celular_comp
 function ac_secretaria_edita($id_clinica,$nombre,$email,$celular,$id_celular_compania,$contrasena,$id_secretaria){
 
 	global $conexion;
-	global $id_medico;
+	global $s_id_usuario;
 	
 	//Validamos el límite de secretarias
-	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico='$id_medico'"));
+	$valida=mysql_num_rows(mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico='$s_id_usuario'"));
 	if($valida>30) exit("Haz alcanzado el límite máximo de secretarias, contacta a soporte.");
 	//Validamos la clínica
 	$valida=mysql_num_rows(mysql_query("SELECT * FROM clinicas WHERE id_clinica='$id_clinica' AND activo=1"));
@@ -281,7 +318,7 @@ function ac_secretaria_edita($id_clinica,$nombre,$email,$celular,$id_celular_com
 	$valida=mysql_num_rows($q);
 	if($valida>0) exit("El correo ya esta en uso.");
 	//Validamos que exista una relación medico secretaria
-	$q=mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico=$id_medico AND id_secretaria=$id_secretaria");
+	$q=mysql_query("SELECT * FROM rel_secretarias_medicos WHERE id_medico=$s_id_usuario AND id_secretaria=$id_secretaria");
 	$valida=mysql_num_rows($q);
 	if($valida>0){
 		if($contrasena)$act=",contrasena='$contrasena'";
@@ -291,7 +328,7 @@ function ac_secretaria_edita($id_clinica,$nombre,$email,$celular,$id_celular_com
 		if(!$sq1) $error=true;
 		$sq2=@mysql_query("UPDATE credenciales SET email='$email' ".$act." WHERE id_usuario=$id_secretaria AND id_tipo_credencial=2");
 		if(!$sq2) $error=true;
-		$sq3=@mysql_query("UPDATE rel_secretarias_medicos SET id_clinica='$id_clinica' WHERE id_secretaria=$id_secretaria AND id_medico=$id_medico");
+		$sq3=@mysql_query("UPDATE rel_secretarias_medicos SET id_clinica='$id_clinica' WHERE id_secretaria=$id_secretaria AND id_medico=$s_id_usuario");
 		if(!$sq3) $error=true;
 		
 			if($error){
@@ -378,6 +415,14 @@ function escapar($cadena,$numerico=false){
 	}else{
 		return mysql_real_escape_string(strip_tags($cadena));
 	}
+}
+//Comprobamos una cadena de texto para un nombre
+function comprobarNombre($nombre){ 
+	if(ereg("^[a-zA-Z0-9\-_]{3,20}$+", $nombre)) { 
+	   return true; 
+   	}else{ 
+	   	return false; 
+   	} 
 }
 //Fecha para base de datos
 function fechaBase($fecha){ 
@@ -479,6 +524,9 @@ function soloMes($mes){
 	
 	}
 	return $mest;
+}
+function formatoHora($hora){
+    return date('h:i A',strtotime($hora));
 }
 function fnum($num,$sinDecimales = false, $sinNumberFormat = false){
 

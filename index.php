@@ -1,5 +1,5 @@
 <?
-include('includes/session.php');
+include('includes/session_ui.php');
 include('includes/db.php');
 include('includes/funciones.php');
 ?>
@@ -11,8 +11,8 @@ include('includes/funciones.php');
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Calidad Médica</title>
-        <meta name="author" content="DigmaStudio">
-        <meta name="description" content="">
+        <meta name="author" content="epicmedia.pro">
+        <meta name="description" content="App para el contreol de consulta medica y consultorios">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="image/touch/apple-touch-icon-144x144-precomposed.png">
         <link rel="apple-touch-icon-precomposed" sizes="114x114" href="image/touch/apple-touch-icon-114x114-precomposed.png">
@@ -34,10 +34,10 @@ include('includes/funciones.php');
 			    	
 		    case 'Agenda': 
 		    ?>
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
 			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
-			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    
@@ -46,6 +46,14 @@ include('includes/funciones.php');
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
 		    break;
+		    
+		    case 'ConsultasAgendadas':
+		    ?>
+			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<? 
+		    break;
+		    
 			case 'Consulta';
 			?>
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">

@@ -1,5 +1,5 @@
 <?
-$sql="SELECT * FROM clinicas WHERE id_medico='$id_credencial' AND activo='1'";
+$sql="SELECT * FROM clinicas WHERE id_medico='$s_id_usuario' AND activo='1'";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 ?>

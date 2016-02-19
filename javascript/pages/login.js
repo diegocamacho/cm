@@ -18,17 +18,18 @@ $(function () {
             $this.prop("disabled", true);
 
             // start nprogress bar
-            NProgress.start();
+            
 
             // you can do the ajax request here
+            loguea();
             // this is for demo purpose only
-            setTimeout(function () {
+            /*setTimeout(function () {
                 // done nprogress bar
                 NProgress.done();
 
                 // redirect user
-                location.href = "index.html";
-            }, 500);
+                location.href = "index.php";
+            }, 500);*/
         } else {
             // toggle animation
             $form
@@ -42,3 +43,25 @@ $(function () {
         e.preventDefault();
     });
 });
+
+
+function loguea(){
+	NProgress.start();
+	var email = $('#email').val();
+	var pass = $('#pass').val();
+
+	
+	$.post('ac/login.php','email='+email+'&pass='+pass,function(data) {
+		if(data==1){
+			window.location = 'index.php';
+		}else{
+			NProgress.done();
+			$('#email').focus();
+			$('#msg_error').html(data);
+			$('#msg_error').show();
+			$('.btn-success').prop("disabled", false);
+			//$('#load').hide();
+			//$('.btn-login').show();
+		}
+	});
+}

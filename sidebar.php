@@ -1,104 +1,113 @@
-		<?php
-		$menu_php = isset($_GET['Modulo']) ? $_GET['Modulo']: NULL;
-		
-		switch($menu_php){
-			    	
-		    case 'Agenda':
-		    $agenda_active = "active";	
-		    break;
-		    
-		    case 'ConsultasAgendadas':
-		    $consultas_active = "1";
-			$consultas_agendadas_active = "active";
-		    break;
-		    
-		    case 'ConsultasAtendidas':
-		    $consultas_active = "1";
-			$consultas_atendidas_active = "active";
-		    break;
-		    
-		    case 'Consulta':
-		    $consultas_active = "1";
-		    break;
+<?php
+$menu_php = isset($_GET['Modulo']) ? $_GET['Modulo']: NULL;
 
-		    case 'Pacientes':
-			$pacientes_active = "active";
-		    break;
-		    
-		    case 'Recordatorios':
-		    $recordatorios_active = "active";
-		    break;
+switch($menu_php){
+	    	
+    case 'Agenda':
+    $agenda_active = "active";	
+    break;
+    
+    case 'ConsultasAgendadas':
+    $consultas_active = "1";
+	$consultas_agendadas_active = "active";
+    break;
+    
+    case 'ConsultasAtendidas':
+    $consultas_active = "1";
+	$consultas_atendidas_active = "active";
+    break;
+    
+    case 'Consulta':
+    $consultas_active = "1";
+    break;
 
-		    case 'Ingresos':
-			$ingresos_active = "active";
-		    break;
-		    
-		    case 'Gastos':
-			$gastos_active = "active";
-		    break;
-		    
-		    case 'Cuentas':
-			$cuentas_active = "active";
-		    break;
-		    
-		    case 'NuevoCFDI':
-		    $facturacion_active = "1";
-			$nuevo_recibo_active = "active";
-		    break;
-		    
-		    case 'RecibosEmitidos':
-		    $facturacion_active = "1";
-			$recibos_emitidos_active = "active";
-		    break;
-		    
-		    case 'FacturasRecibidas':
-		    $facturacion_active = "1";
-			$facturas_recibidas_active = "active";
-		    break;
-		    
-		    case 'Noticias':
-			$noticias_active = "active";
-		    break;
-		    
-		    case 'Tienda':
-			$tienda_active = "active";
-		    break;
-		    
-		    case 'MiCuenta':
-		    $configuracion_active = "1";
-		    $mi_cuenta_active = "active";
-		    break;
-		    
-		    case 'Facturacion':
-		    $configuracion_active = "1";
-		    $configura_facturacion_active = "active";
-		    break;
-		    
-		    case 'Aseguradoras':
-		    $configuracion_active = "1";
-		    $aseguradoras_active = "active";
-		    break;
-		    
-		    case 'Recetas':
-		    $configuracion_active = "1";
-		    $recetas_active = "active";
-		    break;
-		    
-		    case 'Secretarias':
-		    $configuracion_active = "1";
-		    $secretarias_active = "active";
-		    break;
-		    
-		    case 'Clinicas':
-		    $configuracion_active = "1";
-		    $clinicas_active = "active";
-		    break;
-		    
-		    default:
-		    $panel_active ="active";	    
-			break;
-		}
-		?>
+    case 'Pacientes':
+	$pacientes_active = "active";
+    break;
+    
+    case 'Recordatorios':
+    $recordatorios_active = "active";
+    break;
+
+    case 'Ingresos':
+	$ingresos_active = "active";
+    break;
+    
+    case 'Gastos':
+	$gastos_active = "active";
+    break;
+    
+    case 'Cuentas':
+	$cuentas_active = "active";
+    break;
+    
+    case 'NuevoCFDI':
+    $facturacion_active = "1";
+	$nuevo_recibo_active = "active";
+    break;
+    
+    case 'RecibosEmitidos':
+    $facturacion_active = "1";
+	$recibos_emitidos_active = "active";
+    break;
+    
+    case 'FacturasRecibidas':
+    $facturacion_active = "1";
+	$facturas_recibidas_active = "active";
+    break;
+    
+    case 'Noticias':
+	$noticias_active = "active";
+    break;
+    
+    case 'Tienda':
+	$tienda_active = "active";
+    break;
+    
+    case 'MiCuenta':
+    $configuracion_active = "1";
+    $mi_cuenta_active = "active";
+    break;
+    
+    case 'Facturacion':
+    $configuracion_active = "1";
+    $configura_facturacion_active = "active";
+    break;
+    
+    case 'Aseguradoras':
+    $configuracion_active = "1";
+    $aseguradoras_active = "active";
+    break;
+    
+    case 'Recetas':
+    $configuracion_active = "1";
+    $recetas_active = "active";
+    break;
+    
+    case 'Secretarias':
+    $configuracion_active = "1";
+    $secretarias_active = "active";
+    break;
+    
+    case 'Clinicas':
+    $configuracion_active = "1";
+    $clinicas_active = "active";
+    break;
+    
+    default:
+    $panel_active ="active";	    
+	break;
+}
+
+//Número de citas para el día
+$sql_citas="SELECT * FROM agenda WHERE id_medico=$id_medico AND activo=1 AND fecha='$fecha_actual'";
+$q_citas=mysql_query($sql_citas);
+$numero=mysql_num_rows($q_citas);
+
+$sql_citas2="SELECT * FROM agenda WHERE id_medico=$id_medico AND activo=1 AND fecha='$fecha_actual' AND hora > '$hora_actual'";
+$q_citas2=mysql_query($sql_citas2);
+$numero2=mysql_num_rows($q_citas2);
+?>
 
 
 <!-- START Template Sidebar (Left) -->
@@ -119,7 +128,9 @@
                 <a href="?Modulo=Agenda">
                     <span class="figure"><i class="ico-calendar6"></i></span>
                     <span class="text">Agenda</span>
-                    <span class="number"><span class="label label-primary">25</span></span>
+                    <? if($numero){ ?>
+                    <span class="number"><span class="label label-primary"><?=$numero?></span></span>
+                    <? } ?>
                 </a>
             </li>
             
@@ -137,7 +148,9 @@
                     <li class="<?=$consultas_agendadas_active?>">
                         <a href="?Modulo=ConsultasAgendadas">
                             <span class="text">Agendadas</span>
-                            <span class="number"><span class="label label-primary">10</span></span>
+                            <? if($numero2){ ?>
+                            <span class="number"><span class="label label-primary"><?=$numero2?></span></span>
+                            <? } ?>
                         </a>
                     </li>
                     <li <? if($consultas_nueva_active==1){ ?> class="active" <? } ?>>

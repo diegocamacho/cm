@@ -1,7 +1,7 @@
 <?
 $sql="SELECT nombre, secretarias.id_secretaria,confirmado,vinculado FROM secretarias 
 JOIN rel_secretarias_medicos ON rel_secretarias_medicos.id_secretaria=secretarias.id_secretaria
-WHERE rel_secretarias_medicos.id_medico=$id_credencial";
+WHERE rel_secretarias_medicos.id_medico=$id_medico";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 

@@ -1,5 +1,5 @@
 <?
-$sql="SELECT * FROM aseguradoras WHERE id_medico='$id_credencial' AND activo='1'";
+$sql="SELECT * FROM aseguradoras WHERE id_medico='$id_medico' AND activo='1'";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 ?>

@@ -12,10 +12,11 @@ $(function () {
         y = date.getFullYear();
 
     $("#full_calendar").fullCalendar({
+	    defaultView: 'agendaDay',
         header: {
             left: "prev,next",
             center: "title",
-            right: "today,month,agendaWeek,agendaDay"
+            right: "month,agendaWeek,agendaDay"
         },
         buttonText: {
             prev: '<i class="ico-angle-left"></i>',

@@ -15,7 +15,7 @@ $nueva_contrasena=contrasena($nueva_contrasena);
 $verifica_contrasena=contrasena($verifica_contrasena);
 
 /********************* Validaciones ************************/
-$sql="SELECT contrasena FROM credenciales WHERE id_usuario=$id_medico AND id_tipo_credencial=1";
+$sql="SELECT contrasena FROM credenciales WHERE id_credencial=$s_id_credencial AND id_tipo_credencial=1";
 $q=@mysql_query($sql);
 $datos=@mysql_fetch_assoc($q);
 $old_pass=$datos['contrasena'];
