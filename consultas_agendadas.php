@@ -15,10 +15,8 @@ if($opciones==7){
 	LEFT JOIN secretarias ON secretarias.id_secretaria=agenda.id_secretaria
 	WHERE agenda.id_medico=$id_medico AND agenda.activo=1 AND agenda.fecha='$fecha_actual' ORDER BY hora ASC";	
 }
-
-	
-
 $q=mysql_query($sql);
+$valida=mysql_num_rows($q);
 ?>
 <!-- START Template Main -->
 <section id="main" role="main">
@@ -52,6 +50,7 @@ $q=mysql_query($sql);
                 
             </div>
         </div>
+<? if($valida){ ?>
         <!-- Page Header -->
 		<? if($_GET['msg']==1){ ?>
         <div class="alert alert-dismissable alert-success animation animating flipInX">
@@ -85,7 +84,7 @@ $q=mysql_query($sql);
                             
                             <li class="text-center mb15">
 	                            <div class="btn-group">
-	                            	<a class="btn btn-info btn-xs" href="?Modulo=Consulta&id=<?=ft['id_agemda']?>" role="button">Atender</a>
+	                            	<a class="btn btn-info btn-xs" href="?Modulo=Consulta&ID=<?=$ft['id_agenda']?>" role="button">Atender</a>
 	                            	<div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
                                             Opciones
@@ -112,7 +111,9 @@ $q=mysql_query($sql);
             </div>
 
             <? } ?>
-
+<? }else{ ?>
+<div class="alert alert-dismissable alert-info animation animating flipInX">No se han <b>Agendado Consultas.</b>&nbsp;</div>
+<? } ?>
             
         </div>
         <!--/ END Row -->
@@ -139,7 +140,7 @@ $q=mysql_query($sql);
 <!-- App and page level script -->
 <script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
 <script type="text/javascript" src="javascript/app.min.js"></script>
-<script type="text/javascript" src="plugins/bootbox/js/bootbox.min.js"></script>
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="plugins/shuffle/js/jquery.shuffle.min.js"></script>

@@ -214,7 +214,7 @@ $citas=substr($citas, 0,-1);
 
 <script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>
 <!--<script type="text/javascript" src="javascript/pages/calendar.js"></script>-->
-<script type="text/javascript" src="plugins/bootbox/js/bootbox.min.js"></script>
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="plugins/selectize/js/selectize.min.js"></script>

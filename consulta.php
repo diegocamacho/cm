@@ -1,11 +1,52 @@
+<?
+$id_agenda=escapar($_GET['ID'],1);
+
+if(!$id_agenda){
+	//Clinicas
+	$sql_clinica="SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo='1'";
+	$q_clinica=mysql_query($sql_clinica);
+	$valida_clinica=mysql_num_rows($q_clinica);
+
+	//Pacientes
+	$sql_pacientes="SELECT * FROM pacientes WHERE id_medico='$id_medico' AND activo='1'";
+	$q_pacientes=mysql_query($sql_pacientes);
+}else{
+	$sql="SELECT agenda.*, pacientes.*, clinicas.clinica FROM agenda 
+	JOIN pacientes ON pacientes.id_paciente=agenda.id_paciente
+	JOIN clinicas ON clinicas.id_clinica=agenda.id_clinica
+	LEFT JOIN secretarias ON secretarias.id_secretaria=agenda.id_secretaria
+	WHERE agenda.id_medico=$id_medico AND agenda.activo=1 AND agenda.id_agenda='$id_agenda' AND atendida=0";
+	$q=mysql_query($sql);
+	$valida_consulta=mysql_num_rows($q);
+	if(!$valida_consulta) header("Location: index.php");
+	
+	$datos=mysql_fetch_assoc($q);
+	/* Datos */
+	$nombre=$datos['nombre'];
+	$telefono=$datos['celular'];
+	$email=$datos['email'];
+	$edad=$datos['edad'];
+	$sexo=$datos['sexo'];
+	$anotacion=$datos['anotacion'];
+	$antecedentes=$datos['antecedentes_alergias'];
+	$titulo="/ ".$nombre;
+	
+}
+
+$sq_aseguradoras="SELECT * FROM aseguradoras WHERE id_medico=$id_medico AND activo=1";
+$q_aseguradoras=mysql_query($sq_aseguradoras);
+$valida_aseguradoras=mysql_num_rows($q_aseguradoras);
+?>
+
 <!-- START Template Main -->
 <section id="main" role="main">
+
     <!-- START Template Container -->
     <div class="container-fluid">
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Consulta / Diego Camacho Flores</h4>
+                <h4 class="title semibold">Consulta <?=$titulo?></h4>
             </div>
             <div class="page-header-section">
                 <!-- Toolbar -->
@@ -17,12 +58,12 @@
             </div>
         </div>
         <!-- Page Header -->
-
         <!-- START row -->
         <div class="row">
             <div class="col-md-6">
+	            
                 <!-- START panel -->
-                <form class="panel panel-teal form-horizontal form-bordered" action="">
+                <form class="panel panel-teal form-horizontal form-bordered" id="datos1">
                     <!-- panel heading/header -->
                     <div class="panel-heading">
                     	<h3 class="panel-title"><i class="ico-user22 mr5"></i> Datos Generales</h3>            
@@ -31,23 +72,32 @@
                     <!-- panel body -->
                     <div class="panel-body">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Nombre<span class="text-danger">*</span></label>
+                            <label class="col-sm-3 control-label">Paciente<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="text" name="nombre" id="selectize-contact" class="form-control" placeholder="Nombre del paciente..." >
+	                            <? if(!$id_agenda){ ?>
+                                <select id="selectize-select" name="id_paciente" class="form-control mod" placeholder="Seleccione o escriba el nombre...">
+            	                    <option value="">Seleccione o escriba el nombre...</option>
+            	                    <? while($ft=mysql_fetch_assoc($q_pacientes)){ ?>
+        	                        <option value="<?=$ft['id_paciente']?>"><?=$ft['nombre']?></option>
+        	                        <? } ?>
+								</select>
+								<? }else{ ?>
+								<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
+								<? } ?>
                             </div>
                         </div>
                         
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">Celular<span class="text-danger">*</span></label>
+                            <label class="col-sm-3 control-label">Teléfono<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="celular" data-mask="(999) 999-9999" >
+                                <input type="text" class="form-control" name="telefono" data-mask="(99) 9999-9999" value="<?=$telefono?>" >
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" >
+                                <input type="text" class="form-control" name="email" value="<?=$email?>" >
                             </div>
                         </div>
                         
@@ -60,7 +110,7 @@
 
             <div class="col-md-6">
                 <!-- START panel -->
-                <form class="panel panel-teal form-bordered" action="">
+                <form class="panel panel-teal form-bordered" id="datos2">
                     <!-- panel heading/header -->
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="ico-user22 mr5"></i> Datos Personales</h3>
@@ -74,15 +124,15 @@
                             
                                 <div class="col-sm-6">
                                     <label class="control-label">Edad</label>
-                                    <input type="text" name="edad" class="form-control" data-mask="99" >
+                                    <input type="text" name="edad" class="form-control" data-mask="99" value="<?=$edad?>" >
                                 </div>
                                 
                                 <div class="col-sm-6">
                                     <label class="control-label">Sexo</label>
-                                    <select class="form-control">
+                                    <select class="form-control" name="sexo">
                                 		<option>Seleccione</option>
-										<option value="1">Masculino</option>
-										<option value="1">Femenino</option>
+										<option value="M" <? if($sexo=="M"){ ?>selected="selected" <? } ?>>Masculino</option>
+										<option value="F" <? if($sexo=="F"){ ?>selected="selected" <? } ?>>Femenino</option>
 									</select>
                                 </div>
                                 
@@ -97,7 +147,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4"></textarea>
+                                    <textarea class="form-control animated" rows="4" name="antecedentes"><?=$antecedentes?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +160,35 @@
             
         </div>
         <!--/ END row -->
-        
+<!-- Observación en la cita -->
+<? if($anotacion){ ?>    
+		<div class="row">
+			<div class="col-md-12">
+                <!-- START panel -->
+                <div class="panel panel-teal">
+                    <!-- panel heading/header -->
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="ico-user22 mr5"></i> Anotaciones al solicitar la cita</h3>
+                    </div>
+                    <!--/ panel heading/header -->
+                    
+                    <!-- panel body with collapse capable -->
+                    <div class="panel-collapse pull out">
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-sm-12 mb10">
+                                    <textarea class="form-control animated" rows="4"><?=$anotacion?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/ panel body with collapse capabale -->
+
+                </div>
+                <!--/ END panel -->
+            </div>
+		</div>        
+<? } ?>        
 <!-- Diagnostico -->
 		<div class="row">
 			<div class="col-md-12">
@@ -127,7 +205,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4"></textarea>
+                                    <textarea class="form-control animated" rows="4" name="diagnostico" id="diagnostico"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -152,12 +230,18 @@
                     <!-- panel body with collapse capable -->
                     <div class="panel-collapse pull out">
                         <div class="panel-body">
-                            <!-- Summernote -->
-                            <div class="summernote"></div>
-                            <br /><br />
-                            <!--/ Summernote -->
+	                        
+                            	<div class="summernote" id="summernote_receta" name="summernote_receta"></div>
+                            	<br />
+                            	
+                            <div id="contenedor-receta" style="display: none;">
+                            	<h4>Receta Adicional: </h4>
+                            	<div class="summernote" id="summernote_receta_adicional" name="summernote_receta_adicional"></div>
+                            	<br /><br />
+                            </div>
                             <div class="panel-footer text-right">
-                                <button class="btn btn-primary"><span class="ico-plus-circle2"></span> Receta Adicional</button>
+                                <button class="btn btn-primary" id="btn-receta-adicional"><span class="ico-plus-circle2"></span> Receta Adicional</button>
+                                <button class="btn btn-danger" id="btn-receta-adicional-x" style="display: none;"><span class="ico-plus-circle2"></span> Eliminar Receta Adicional</button>
                             </div>
                         </div>
                     </div>
@@ -183,7 +267,7 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4"></textarea>
+                                    <textarea class="form-control animated" rows="4" name="sugerencias" id="sugerencias"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -199,10 +283,11 @@
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<br />
-				<button class="btn btn-lg btn-primary" data-toggle="modal" data-target="#ModalConfirma">Terminar Consulta</button>
+				<button class="btn btn-lg btn-primary" data-toggle="modal" data-target="#ModalConfirma" data-backdrop="static">Terminar Consulta</button>
 				<br /><br />
 			</div>
 		</div>
+
     </div>
     <!--/ END Template Container -->
 
@@ -237,107 +322,90 @@ $(function(){
             ["table", ["table"]]
         ]
     });
+    
+    
+
 	
-	// Contact style
-    // ================================
-    (function () {
-        var REGEX_EMAIL = "([a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*@" +
-                    "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
-
-        var formatName = function (item) {
-            return $.trim((item.first_name || '') + ' ' + (item.last_name || ''));
-        };
-        // contact
-        $("#selectize-contact").selectize({
-            persist: false,
-            maxItems: 1,
-            valueField: "email",
-            labelField: "name",
-            searchField: ["first_name", "last_name", "email"],
-            sortField: [{
-                field: "first_name",
-                direction: "asc"
-            }, {
-                field: "last_name",
-                direction: "asc"
-            }],
-            options: [{
-                email: "nikola@tesla.com",
-                first_name: "Nikola",
-                last_name: "Tesla"
-            }, {
-                email: "diego@thirdroute.com",
-                first_name: "diego",
-                last_name: "Reavis"
-            },{
-                email: "juan@thirdroute.com",
-                first_name: "Juan",
-                last_name: "Reavis"
-            },{
-                email: "pepe@thirdroute.com",
-                first_name: "Pepe",
-                last_name: "Reavis"
-            },{
-                email: "adolfo@thirdroute.com",
-                first_name: "Adolfo",
-                last_name: "Reavis"
-            },{
-                email: "jose@thirdroute.com",
-                first_name: "Jose",
-                last_name: "Reavis"
-            },{
-                email: "jorge@thirdroute.com",
-                first_name: "Jorge",
-                last_name: "Reavis"
-            },{
-                email: "pampersdry@gmail.com",
-                first_name: "John",
-                last_name: "Pozy"
-            }],
-            render: {
-                item: function (item, escape) {
-                    var name = formatName(item);
-                    return "<div>" +
-                        (name ? "<span class=\"name\">" + escape(name) + "</span>" : "") +
-                        (item.email ? "<small class=\"text-muted ml10\">" + escape(item.email) + "</small>" : "") +
-                        "</div>";
-                },
-                option: function (item, escape) {
-                    var name = formatName(item);
-                    var label = name || item.email;
-                    var caption = name ? item.email : null;
-                    return "<div>" +
-                        "<span class=\"text-primary\">" + escape(label) + "</span><br/>" +
-                        (caption ? "<small class=\"text-muted\">" + escape(caption) + "</small>" : "") +
-                        "</div>";
-                }
-            },
-            create: function (input) {
-                if ((new RegExp("^" + REGEX_EMAIL + "$", "i")).test(input)) {
-                    return {
-                        email: input
-                    };
-                }
-                var match = input.match(new RegExp("^([^<]*)\<" + REGEX_EMAIL + "\>$", "i"));
-                if (match) {
-                    var name = $.trim(match[1]);
-                    var pos_space = name.indexOf(" ");
-                    var first_name = name.substring(0, pos_space);
-                    var last_name = name.substring(pos_space + 1);
-
-                    return {
-                        email: match[2],
-                        first_name: first_name,
-                        last_name: last_name
-                    };
-                }
-                alert("Invalid email address.");
-                return false;
-            }
-        });
-    })();
+	//Selector
+	$("#selectize-select").selectize({
+		create: true,
+		onItemAdd: function(){
+			$('#telefono').focus();
+		},
+        sortField: {
+            field: "text",
+            direction: "asc"
+        }
+        
+    });
+    
+    $('#btn-receta-adicional').click(function() {
+		$('#contenedor-receta').show().addClass("animation animating bounceInLeft");
+		$('#btn-receta-adicional').hide();
+		$('#btn-receta-adicional-x').show();
+		$('#receta_adicional').summernote('focus');
+	});
+	
+	$('#btn-receta-adicional-x').click(function() {
+		$('#contenedor-receta').hide('fast');
+		$('#btn-receta-adicional-x').hide();
+		$('#btn-receta-adicional').show();
+	});
+	
+	$('#tipo_cobro').change(function() {
+		var	tipo_cobro=$('#tipo_cobro').val();
+		if(tipo_cobro==4){
+			$('#ver_aseguradoras').show('fast');
+		}else{
+			$('#ver_aseguradoras').hide('fast');
+		}
+		$('#monto').focus();
+	});
     	
 });
+
+function terminarConsulta(){
+	
+	var btn_guarda = Ladda.create(document.querySelector('#btn-cobrar'));
+	btn_guarda.start();	
+	
+	var datos1=$('#datos1').serialize();
+	var datos2=$('#datos2').serialize();
+	var diagnostico=$('#diagnostico').val();
+	var sugerencias=$('#sugerencias').val();
+	var receta = encodeURIComponent($('#summernote_receta').summernote('code'));
+	var receta_adicional = encodeURIComponent($('#summernote_receta_adicional').summernote('code'));
+	
+	var enviar_email=$('#enviar_email').val();
+	var monto=$('#monto').val();
+	var id_aseguradora=$('#id_aseguradora').val();
+	var	tipo_cobro=$('#tipo_cobro').val();
+	
+	if(tipo_cobro==4){
+		if(!id_aseguradora){
+			$('#msg_data').html('No ha creado aseguradoras, no puede continuar.');
+	    	$('#msg').show();
+	    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+	    	btn_guarda.stop();
+	    	return false;
+		}
+	}
+	var datos=datos1+'&'+datos2+'&receta='+receta+'&sugerencia='+sugerencias+'&diagnostico='+diagnostico+'&receta_adicional='+receta_adicional+'&tipo_cobro='+tipo_cobro+'&monto='+monto+'&id_aseguradora='+id_aseguradora+'&email='+enviar_email;
+	alert(datos);
+	return false;
+	
+	$('.mod').attr("disabled", true); 
+	$.post('ac/nueva_cita.php',datos,function(data){
+	    if(data==1){
+			window.open("?Modulo=ConsultasAgendadas&msg=1", "_self");
+	    }else{
+	    	$('#msg_data').html(data);
+	    	$('#msg').show();
+	    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+	    	btn_guarda.stop();
+	    }
+	});
+}
 </script>
 <!-- App and page level script -->
 <script type="text/javascript" src="javascript/app.min.js"></script>
@@ -347,7 +415,7 @@ $(function(){
 <script type="text/javascript" src="plugins/selectize/js/selectize.min.js"></script>
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui-touch.min.js"></script>
-<script type="text/javascript" src="javascript/forms/element.js"></script>
+
 
 
 <!--/ App and page level scrip -->
@@ -356,7 +424,7 @@ $(function(){
 <!-- START Modal -->
 <div id="ModalConfirma" class="modal fade">
     <div class="modal-dialog">
-        <form class="modal-content" action="">
+        <form class="modal-content" >
             <div class="modal-header">
                 <div class="cell text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -367,52 +435,66 @@ $(function(){
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                    
+                    	<!-- Mensaje de Error -->
+						<div id="msg" style="display:none;">
+						    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						    <span id="msg_data"></span>
+						</div>
+						<!-- END Mensaje de Error -->
                         <div class="form-group">
                         	<div class="row">
                                 
                                 <div class="col-sm-6">
                                     <label class="control-label">Tipo de Cobro</label>
-                                    <select class="form-control">
-                                		<option>Seleccione</option>
+                                    <select class="form-control" name="tipo_cobro" id="tipo_cobro">
+                                		<option value="">Seleccione</option>
 										<option value="1">Cobro en Caja</option>
-										<option value="1">Cobro Inmediato</option>
-										<option value="2">Crédito General</option>
-										<option value="3">Crédito Aseguradora</option>
+										<option value="2">Cobro Inmediato (Dentro de Consultorio)</option>
+										<option value="3">Crédito General</option>
+										<option value="4">Crédito Aseguradora</option>
 									</select>
                                 </div>
                                 
-                                <!-- En saco de que elija aseguradora (El botón de monto se va para abajo) Otra nota; si es con aseguradora también se debe pedir el número de poliza-->
-                                <div class="col-sm-6" style="display:none;">
-                                    <label class="control-label">Aseguradora</label>
-                                    <select class="form-control">
-                                		<option>Seleccione</option>
-										<option value="1">Bancomer</option>
-										<option value="2">Banco Azteca</option>
-										<option value="3">Seguros Banorte</option>
-									</select>
-                                </div>
                                 
                                 <div class="col-sm-6">
                                     <label class="control-label">Monto de honorarios</label>
                                     <div class="input-group">
 									    <span class="input-group-addon">$</span>
-									    <input type="text" class="form-control">
-									    <span class="input-group-addon">.00</span>
+									    <input type="text" class="form-control" name="monto" id="monto">
+									    
 									</div>
                                 </div>
                                 
                             </div>
                         </div>
                         
+                        <div class="form-group" id="ver_aseguradoras" style="display: none;">
+                        	<div class="row">                                
+                                <!-- En saco de que elija aseguradora (El botón de monto se va para abajo) Otra nota; si es con aseguradora también se debe pedir el número de poliza-->
+                                <div class="col-sm-12" >
+	                                <? if($valida_aseguradoras){ ?>
+                                    <label class="control-label">Seleccione Aseguradora</label>
+                                    <select class="form-control" name="id_aseguradora" id="id_aseguradora">
+                                		<option value="">Seleccione</option>
+                                		<? while($ft=mysql_fetch_assoc($q_aseguradoras)){ ?>
+										<option value="<?=$ft['id_aseguradora']?>"><?=$ft['nombre_aseguradora']?></option>
+										<? } ?>
+									</select>
+									<? }else{ ?>
+									<div class="alert alert-dismissable alert-warning">Aún no ha creado aseguradoras.</div>
+									<? } ?>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
-                            <label class="control-label">Anotación</label>
-                            <textarea name="eventdescription" class="form-control" rows="4" ></textarea>
+                            <label class="control-label">Observación</label>
+                            <textarea name="observacion" id="observacion" class="form-control" rows="4" ></textarea>
                         </div>
                         
                         <div class="form-group" style="margin-bottom: 0px;">
                         	<span class="checkbox custom-checkbox custom-checkbox-primary">
-		                    	<input type="checkbox" name="customcheckbox1" id="customcheckbox1">
+		                    	<input type="checkbox" name="enviar_email" id="enviar_email">
 		                    	<label for="customcheckbox1">&nbsp;&nbsp;Enviar receta por Email</label>
 							</span>
                         </div>
@@ -423,7 +505,7 @@ $(function(){
                 
                 <div class="row">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-					<button type="submit" class="btn btn-primary">Cobrar</button>
+					<button type="button" class="btn btn-success ladda-button" data-style="zoom-in" id="btn-cobrar" onclick="terminarConsulta()"><span class="ladda-label" id="btn_guarda_text">Aceptar</span></button>
                 </div>
 
             </div>

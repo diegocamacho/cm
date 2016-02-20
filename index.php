@@ -57,8 +57,8 @@ include('includes/funciones.php');
 			case 'Consulta';
 			?>
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="plugins/summernote/css/summernote.min.css">
-			<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+			<link rel="stylesheet" href="plugins/summernote/css/summernote.css">
+			<!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">-->
 			<?
 			break;
 		    case 'PerfilPaciente':

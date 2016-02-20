@@ -721,7 +721,7 @@ window.bootbox = window.bootbox || (function init($, undefined) {
     en : {
       OK      : "OK",
       CANCEL  : "Cancel",
-      CONFIRM : "OK"
+      CONFIRM : "Aceptar"
     },
     es : {
       OK      : "OK",
