@@ -22,6 +22,7 @@ if(!$id_agenda){
 	
 	$datos=mysql_fetch_assoc($q);
 	/* Datos */
+	$id_paciente=$datos['id_paciente'];
 	$nombre=$datos['nombre'];
 	$telefono=$datos['celular'];
 	$email=$datos['email'];
@@ -74,16 +75,19 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Paciente<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-	                            <? if(!$id_agenda){ ?>
+	                            <!--
+	                            <? //if(!$id_agenda){ ?>
                                 <select id="selectize-select" name="id_paciente" class="form-control mod" placeholder="Seleccione o escriba el nombre...">
             	                    <option value="">Seleccione o escriba el nombre...</option>
-            	                    <? while($ft=mysql_fetch_assoc($q_pacientes)){ ?>
+            	                    <? //while($ft=mysql_fetch_assoc($q_pacientes)){ ?>
         	                        <option value="<?=$ft['id_paciente']?>"><?=$ft['nombre']?></option>
-        	                        <? } ?>
+        	                        <? //} ?>
 								</select>
-								<? }else{ ?>
+								<? //}else{ ?>
+								-->
 								<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
-								<? } ?>
+								<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
+								<? //} ?>
                             </div>
                         </div>
                         
@@ -366,8 +370,8 @@ $(function(){
 
 function terminarConsulta(){
 	
-	var btn_guarda = Ladda.create(document.querySelector('#btn-cobrar'));
-	btn_guarda.start();	
+	//var btn_guarda = Ladda.create(document.querySelector('#btn-cobrar'));
+	//btn_guarda.start();	
 	
 	var datos1=$('#datos1').serialize();
 	var datos2=$('#datos2').serialize();
@@ -380,6 +384,7 @@ function terminarConsulta(){
 	var monto=$('#monto').val();
 	var id_aseguradora=$('#id_aseguradora').val();
 	var	tipo_cobro=$('#tipo_cobro').val();
+	var	observacion=$('#observacion').val();
 	
 	if(tipo_cobro==4){
 		if(!id_aseguradora){
@@ -390,19 +395,18 @@ function terminarConsulta(){
 	    	return false;
 		}
 	}
-	var datos=datos1+'&'+datos2+'&receta='+receta+'&sugerencia='+sugerencias+'&diagnostico='+diagnostico+'&receta_adicional='+receta_adicional+'&tipo_cobro='+tipo_cobro+'&monto='+monto+'&id_aseguradora='+id_aseguradora+'&email='+enviar_email;
-	alert(datos);
-	return false;
-	
-	$('.mod').attr("disabled", true); 
-	$.post('ac/nueva_cita.php',datos,function(data){
+	var datos=datos1+'&'+datos2+'&receta='+receta+'&sugerencias='+sugerencias+'&diagnostico='+diagnostico+'&receta_adicional='+receta_adicional+'&tipo_cobro='+tipo_cobro+'&monto='+monto+'&id_aseguradora='+id_aseguradora+'&anotacion='+observacion;
+	//$('.mod').attr("disabled", true); 
+	$.post('ac/consulta.php',datos,function(data){
 	    if(data==1){
-			window.open("?Modulo=ConsultasAgendadas&msg=1", "_self");
+			window.open("?Modulo=ConsultasAtendidas&msg=1", "_self");
 	    }else{
+		    alert(data);
+		    /*
 	    	$('#msg_data').html(data);
 	    	$('#msg').show();
-	    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-	    	btn_guarda.stop();
+	    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");*/
+	    	//btn_guarda.stop();
 	    }
 	});
 }
@@ -492,7 +496,7 @@ function terminarConsulta(){
                             <textarea name="observacion" id="observacion" class="form-control" rows="4" ></textarea>
                         </div>
                         
-                        <div class="form-group" style="margin-bottom: 0px;">
+                        <div class="form-group" style="margin-bottom: 0px; display: none;">
                         	<span class="checkbox custom-checkbox custom-checkbox-primary">
 		                    	<input type="checkbox" name="enviar_email" id="enviar_email">
 		                    	<label for="customcheckbox1">&nbsp;&nbsp;Enviar receta por Email</label>

@@ -528,6 +528,13 @@ function soloMes($mes){
 function formatoHora($hora){
     return date('h:i A',strtotime($hora));
 }
+function limpiaNumero($telefono){
+	$telefono = str_replace(' ', '', $telefono);
+	$telefono = str_replace('(', '', $telefono);
+	$telefono = str_replace(')', '', $telefono);
+	$telefono = str_replace('-', '', $telefono);
+	return $telefono;
+}
 function fnum($num,$sinDecimales = false, $sinNumberFormat = false){
 
 //SinDecimales = TRUE: envias: 1500.1234 devuelve: 1,500

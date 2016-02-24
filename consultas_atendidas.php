@@ -26,7 +26,23 @@
             </div>
         </div>
         <!-- Page Header -->
-
+		<!-- Page Header -->
+		<? if($_GET['msg']==1){ ?>
+        <div class="alert alert-dismissable alert-success animation animating flipInX">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            ¡La consulta se ha atendido!
+        </div>
+        <? }elseif($_GET['msg']==2){ ?>
+        <div class="alert alert-dismissable alert-info animation animating flipInX">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            ¡La consulta se ha editado!
+        </div>
+        <? }elseif($_GET['msg']==3){ ?>
+        <div class="alert alert-dismissable alert-danger animation animating flipInX">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            ¡La consulta se ha eliminado!
+        </div>
+        <? } ?>
         <!-- START row -->
         <div class="row">
             <div class="col-md-12">
