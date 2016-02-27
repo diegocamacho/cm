@@ -85,9 +85,13 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
 								</select>
 								<? //}else{ ?>
 								-->
-								<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
-								<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
-								<? //} ?>
+									
+									<? if($id_agenda){ ?>
+									<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
+									<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
+									<? }else{ ?>
+									<input type="text" class="form-control" name="id_paciente" maxlength="68" >
+									<? } ?>
                             </div>
                         </div>
                         
