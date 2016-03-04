@@ -25,7 +25,7 @@
                       </div>
                       <!--/ panel body -->
                       <table class="table">
-                                <tbody>
+                                <tbody id="tabla_recordatorios">
                                     <!-- Solo este TR se va utilizar, los demás son ejemplos. -->    
                                     <?while($recordatorio=mysql_fetch_assoc($qrecordatorios)){?>                                
                                     <tr>
@@ -83,12 +83,12 @@
 						  		<div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control animated" rows="3">Buscar un publicista para la campaña de la clínica</textarea>
+                                            <textarea class="form-control animated" rows="3" id="record_mod"></textarea>
                                         </div>
                                     </div>
                                 </div>
                           <!--- Asignar a un usuario -->      
-                              	<div class="form-group">
+                              	<!--<div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <label class="control-label">Asignar a secretaria</label>
@@ -100,7 +100,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                           <!--- Configurar una fecha límite -->      
                               	<div class="form-group">
                                     <div class="row">
@@ -145,10 +145,10 @@
                           <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
-                          			<button type="button" class="btn btn-default"><i class="ico-trash"></i> Eliminar</button>
+                          			<button type="button" class="btn btn-default" onclick="eliminaRecord();"><i class="ico-trash"></i> Eliminar</button>
                           		</div>
 						  		<div class="col-sm-6 text-right">
-                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in"><span class="ladda-label">Guardar</span></button>
+                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in" onclick="modificaRecord();"><span class="ladda-label">Guardar</span></button>
 						  		</div>
 							</div>
                           </div>
@@ -264,7 +264,50 @@ function cerrar(){
 
 function agregaRecord(){
   var record = $('#nv_record').val();
-  alert(record);
+  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
+        var respuesta = data.split("|");
+        var tr = respuesta[1];
+        respuesta = respuesta[0];
+        if(respuesta=='1'){
+          $("#tabla_recordatorios").append(tr);
+          $('#nv_record').val("");
+        }else{
+          alert('Error: '+tr);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+function modificaRecord(){
+  var record = $('#nv_record').val();
+  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
+        var respuesta = data.split("|");
+        var tr = respuesta[1];
+        respuesta = respuesta[0];
+        if(respuesta=='1'){
+          $("#tabla_recordatorios").append(tr);
+          $('#nv_record').val("");
+        }else{
+          alert('Error: '+tr);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+function eliminaRecord(){
+  var record = $('#nv_record').val();
+  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
+        var respuesta = data.split("|");
+        var tr = respuesta[1];
+        respuesta = respuesta[0];
+        if(respuesta=='1'){
+          $("#tabla_recordatorios").append(tr);
+          $('#nv_record').val("");
+        }else{
+          alert('Error: '+tr);
+          //App.unblockUI('#modal_crop');
+        }
+      });
 }
 
 </script>

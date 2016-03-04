@@ -5,38 +5,16 @@ include('../includes/funciones.php');
 //sleep(10);
 extract($_POST);
 
-if(!$id_paciente) exit("Debe selcionar un paciente o escribir su nombre");
-if(!$id_clinica) exit("Debe selcionar una clínica");
-if(!$fecha) exit("Debe seleccionar una fecha para la cita");
-if(!$hora) exit("Debe seleccionar una hora para la cita");
+if(!$nv_record) exit("Debe escribir un recordatorio");
 
-$fecha=fechaBase($fecha);
-
-if(!is_numeric($id_paciente)){
-	if(limpiaStr($id_paciente,1,1)==true){
-		if(!$telefono) exit("Debe escribir el número del teléfono del paciente.");
-		if(!validarTelefono($telefono)) exit("El teléfono <strong>".escapar($telefono)."</strong> no es válido, verifique el formato.");
-		if($email){if(!validarEmail($email)) exit("El correo <strong>".escapar($email)."</strong> no es válido, verifique el formato.");}
-		$sql="INSERT INTO pacientes (id_medico,nombre,celular,email,fecha_alta)VALUES('$id_medico','$id_paciente','$telefono','$email','$fechahora')";
-		$query=@mysql_query($sql);
-		if($query){
-				$n_id_paciente=mysql_insert_id();
-				if(nuevaCita($id_secretaria,$id_clinica,$n_id_paciente,$fecha,$hora,$anotacion)){
-					echo "1";
-				}else{
-					echo "Ocurrió un error, no se guardo la cita, intente nuevamente";
-				}
-			}else{
-				exit("Ocurrió un error al guardar el paciente, no se creo la cita, intente de nuevo.");
-			}
-	}else{
-		exit("El nombre ".$id_paciente." no es válido");
-	}
+$qrecord = mysql_query("INSERT INTO recordatorios (id_medico,recordatorio,fecha_alta,fecha_limite) VALUES ('$id_medico','$nv_record','$fecha_actual','$fecha_actual')");
+if($qrecord){
+	$id_recordatorio = mysql_insert_id();
+	$tabla = "<tr><td width='5%'><div class='checkbox custom-checkbox nm'><input type='checkbox' id='customcheckbox".$id_recordatorio."' value='1' data-toggle='selectrow' data-target='tr' data-contextual='stroke'><label for='customcheckbox".$id_recordatorio."'></label></div></td><td class='ver' style='cursor: pointer;'>".$nv_record."</td><td width='8%' align='right' class='text-muted' ><small>".fechaDiaMes($fecha_actual)."</small></td></tr>";
+	echo "1|".$tabla;
 }else{
-	if(nuevaCita($id_secretaria,$id_clinica,$id_paciente,$fecha,$hora,$anotacion)){
-		echo "1";
-	}else{
-		echo "Ocurrió un error, no se guardo la cita, intente nuevamente";
-	}
+	$msj = "Ocurrió un error, no se guardo el recordatorio, intente nuevamente";
+	echo "0|".$msj;	
 }
+
 ?>
