@@ -80,10 +80,19 @@
                       <div class="panel-collapse pull out">
                           <div class="panel-body">
                           <!-- Nombre del recordatorio -->
-						  		<div class="form-group">
+						  		              <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <textarea class="form-control animated" rows="3" id="record_mod"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                          <!-- Observaciones del Recordatorio -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label class="control-label">Observaciones de Recordatorio</label>
+                                            <textarea class="form-control animated" rows="4" id="observ_mod"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -280,6 +289,7 @@ $(document).on('click', '[data-id]', function () {
           $("#record_mod").val(respuesta[1]);
           $('#datepicker1').val(fecha);
           $('#id_mod').val(id_record);
+          $("#observ_mod").val(respuesta[3]);
         }else{
           alert('Error: '+respuesta[1]);
           //App.unblockUI('#modal_crop');
@@ -290,10 +300,11 @@ $(document).on('click', '[data-id]', function () {
 function modificaRecord(){
   var id_record = $('#id_mod').val();
   var record = $('#record_mod').val();
+  var observ = $('#observ_mod').val();
   var limit = $('#datepicker1').val();
   var alerta = $('#datepicker2').val();
   var alerta2 = $('#hora_alarma').val();
-  $.post('ac/cambia_recordatorio.php','id_record='+id_record+'&record='+record+'&limit='+limit+'&alerta='+alerta+'&hora_alerta='+alerta2,function(data) {
+  $.post('ac/cambia_recordatorio.php','id_record='+id_record+'&record='+record+'&limit='+limit+'&alerta='+alerta+'&hora_alerta='+alerta2+"&observ="+observ,function(data) {
         if(data=='1'){
           location.reload(true);
         }else{

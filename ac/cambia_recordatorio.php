@@ -19,7 +19,7 @@ if($alerta){
 	$fecha_hora_alarma = $alerta." ".$hora_alerta;
 }
 
-$q = mysql_query("UPDATE recordatorios SET recordatorio='$record', fecha_limite='$limit',fecha_hora_alerta_sms='$fecha_hora_alarma' WHERE id_recordatorio=$id_record AND id_medico=$id_medico");
+$q = mysql_query("UPDATE recordatorios SET recordatorio='$record', observaciones='$observ', fecha_limite='$limit',fecha_hora_alerta_sms='$fecha_hora_alarma' WHERE id_recordatorio=$id_record AND id_medico=$id_medico");
 if ($q) {
 	echo "1";
 }else{
