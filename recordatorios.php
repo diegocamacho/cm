@@ -1,5 +1,5 @@
 <?
-  $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1");
+  $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
 ?>
 <!-- START Template Main -->
 <section id="main" role="main">
@@ -127,7 +127,7 @@
                                     	
                                     	<div class="col-sm-5">
                                     		<div class='input-group date' id='hora'>
-								                <input type='text' class="form-control" name="hora" />
+								                <input type='text' class="form-control" name="hora" id="hora_alarma"/>
 											    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
 											</div>
                                     	</div>
@@ -288,16 +288,16 @@ $(document).on('click', '[data-id]', function () {
 });
 
 function modificaRecord(){
-  var record = $('#nv_record').val();
-  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
-        var respuesta = data.split("|");
-        var tr = respuesta[1];
-        respuesta = respuesta[0];
-        if(respuesta=='1'){
-          $("#tabla_recordatorios").append(tr);
-          $('#nv_record').val("");
+  var id_record = $('#id_mod').val();
+  var record = $('#record_mod').val();
+  var limit = $('#datepicker1').val();
+  var alerta = $('#datepicker2').val();
+  var alerta2 = $('#hora_alarma').val();
+  $.post('ac/cambia_recordatorio.php','id_record='+id_record+'&record='+record+'&limit='+limit+'&alerta='+alerta+'&hora_alerta='+alerta2,function(data) {
+        if(data=='1'){
+          location.reload(true);
         }else{
-          alert('Error: '+tr);
+          alert('Error: '+data);
           //App.unblockUI('#modal_crop');
         }
       });
@@ -315,6 +315,8 @@ function eliminaRecord(){
         }
       });
 }
+
+
 
 </script>
 <!--/ Library script -->

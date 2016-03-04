@@ -481,52 +481,7 @@ function fechaLetra($fecha){
 	$dia=(string)(int)$dia;
 	return $dia." ".$mest." ".$anio;
 }
-//Fecha sin Mes
-function fechaDiaMes($fecha){
-    
-	list($anio,$mes,$dia)=explode("-",$fecha); 
-	switch($mes){
-	case 1:
-	$mest="Ene";
-	break;
-	case 2:
-	$mest="Feb";
-	break;
-	case 3:
-	$mest="Mar";
-	break;
-	case 4:
-	$mest="Abr";
-	break;
-	case 5:
-	$mest="May";
-	break;
-	case 6:
-	$mest="Jun";
-	break;
-	case 7:
-	$mest="Jul";
-	break;
-	case 8:
-	$mest="Ago";
-	break;
-	case 9:
-	$mest="Sep";
-	break;
-	case 10:
-	$mest="Oct";
-	break;
-	case 11:
-	$mest="Nov";
-	break;
-	case 12:
-	$mest="Dic";
-	break;
-	
-	}
-	$dia=(string)(int)$dia;
-	return $dia." ".$mest;
-}
+
 //Obtener el mes
 function soloMes($mes){
     
@@ -624,4 +579,58 @@ function fnum($num,$sinDecimales = false, $sinNumberFormat = false){
 		}
 	}
 
+}
+
+/////NUEVAS FUNCIONES KRIS
+//Fecha sin Año
+function fechaDiaMes($fecha){
+    
+	list($anio,$mes,$dia)=explode("-",$fecha); 
+	switch($mes){
+	case 1:
+	$mest="Ene";
+	break;
+	case 2:
+	$mest="Feb";
+	break;
+	case 3:
+	$mest="Mar";
+	break;
+	case 4:
+	$mest="Abr";
+	break;
+	case 5:
+	$mest="May";
+	break;
+	case 6:
+	$mest="Jun";
+	break;
+	case 7:
+	$mest="Jul";
+	break;
+	case 8:
+	$mest="Ago";
+	break;
+	case 9:
+	$mest="Sep";
+	break;
+	case 10:
+	$mest="Oct";
+	break;
+	case 11:
+	$mest="Nov";
+	break;
+	case 12:
+	$mest="Dic";
+	break;
+	
+	}
+	$dia=(string)(int)$dia;
+	return $dia." ".$mest;
+}
+
+//Hora del dia en formato 24 hrs
+function horaOficial($hora){
+  $hora_oficial = date("H:i",strtotime($hora));
+  return $hora_oficial;
 }

@@ -12,6 +12,6 @@ $qelimina = mysql_query("DELETE FROM recordatorios WHERE id_recordatorio=$id_rec
 if ($qelimina) {
 	echo 1;
 }else{
-	echo "Hubo un problema al eliminar el recordatorio. Intente de nuevo más tarde.";
+	echo "Hubo un problema al eliminar el recordatorio. Por favor, intente más tarde.";
 }
 ?>
