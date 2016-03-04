@@ -36,7 +36,7 @@
                                             </div>
                                         </td>
 										
-                                        <td class="ver" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
+                                        <td onclick="abrir()" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
                                         
                                         <td width="8%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
                                     </tr>
@@ -266,10 +266,17 @@ function agregaRecord(){
   $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
         var respuesta = data.split("|");
         var tr = respuesta[1];
+        var id = respuesta[2];
+        var fecha = respuesta[3].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
         respuesta = respuesta[0];
         if(respuesta=='1'){
           $("#tabla_recordatorios").append(tr);
           $('#nv_record').val("");
+          $("#record_mod").val(record);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id);
+          abrir();
         }else{
           alert('Error: '+tr);
           //App.unblockUI('#modal_crop');
