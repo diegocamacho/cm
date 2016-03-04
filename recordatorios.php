@@ -28,7 +28,7 @@
                                 <tbody id="tabla_recordatorios">
                                     <!-- Solo este TR se va utilizar, los demás son ejemplos. -->    
                                     <?while($recordatorio=mysql_fetch_assoc($qrecordatorios)){?>                                
-                                    <tr>
+                                    <tr id="tr_<?=$recordatorio['id_recordatorio']?>">
                                         <td width="5%">
                                             <div class="checkbox custom-checkbox nm">  
                                                 <input type="checkbox" id="customcheckbox<?=$recordatorio['id_recordatorio']?>" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
@@ -36,7 +36,7 @@
                                             </div>
                                         </td>
 										
-                                        <td class="ver" style="cursor: pointer;"><?=$recordatorio['recordatorio']?></td>
+                                        <td class="ver" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
                                         
                                         <td width="8%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
                                     </tr>
@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                           </div>
-                          
+                          <input type="hidden" id="id_mod" val="">
                           <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
@@ -161,22 +161,12 @@
                   </div>
                   <!--/ END panel -->
               </div>
-              
-               
-              
+            
          </div>
          <!-- Termina el row -->
          
-         
-         
-
-              
-              
-              
          </div>
          <!-- Termina el row -->
-
-
 
      </div>
 </section>
@@ -278,6 +268,25 @@ function agregaRecord(){
       });
 }
 
+//PARA PODER MODIFICAR Y ELIMINAR
+$(document).on('click', '[data-id]', function () {
+    var id_record = $(this).attr('data-id');
+    $.get('data/info_recordatorio.php','id_record='+id_record,function(data) {
+        var respuesta = data.split("|");
+        result = respuesta[0];
+        fecha = respuesta[2].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        if(result=='1'){
+          $("#record_mod").val(respuesta[1]);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id_record);
+        }else{
+          alert('Error: '+respuesta[1]);
+          //App.unblockUI('#modal_crop');
+        }
+      }); 
+});
+
 function modificaRecord(){
   var record = $('#nv_record').val();
   $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
@@ -295,16 +304,13 @@ function modificaRecord(){
 }
 
 function eliminaRecord(){
-  var record = $('#nv_record').val();
-  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
-        var respuesta = data.split("|");
-        var tr = respuesta[1];
-        respuesta = respuesta[0];
-        if(respuesta=='1'){
-          $("#tabla_recordatorios").append(tr);
-          $('#nv_record').val("");
+  var id_record = $('#id_mod').val();
+  $.post('ac/elimina_recordatorio.php','id_record='+id_record,function(data) {
+        if(data=='1'){
+          cerrar();
+          $('#tr_'+id_record).fadeOut('slow');
         }else{
-          alert('Error: '+tr);
+          alert('Error: '+data);
           //App.unblockUI('#modal_crop');
         }
       });
