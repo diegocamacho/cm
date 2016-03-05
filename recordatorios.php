@@ -1,6 +1,7 @@
 <?
   $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
 ?>
+
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -154,7 +155,8 @@
                           <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
-                          			<button type="button" class="btn btn-default" onclick="eliminaRecord();"><i class="ico-trash"></i> Eliminar</button>
+                          			<a href="#modal_confirma" data-toggle="modal" role="button" class="btn btn-default" id="btn_envia" ><i class="ico-trash"></i> Eliminar</a>
+                                <!--<button type="button" class="btn btn-default" onclick="eliminaRecord();"><i class="ico-trash"></i> Eliminar</button>-->
                           		</div>
 						  		<div class="col-sm-6 text-right">
                                 	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in" onclick="modificaRecord();"><span class="ladda-label">Guardar</span></button>
@@ -179,6 +181,35 @@
 
      </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_confirma">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
+        <h5 class="modal-title">Confirmación</h5>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger oculto" role="alert" id="msg_error2"></div>
+<!-- Loader -->
+    <div class="row oculto" id="load_big">
+      <div class="col-md-12 text-center" >
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" width="50" />
+      </div>
+    </div>
+<!--Formulario -->
+    <center><h3 id="msj_confirma">¿Está usted seguro de eliminar este recordatorio?</h3></center>
+          
+      </div>
+      <div class="modal-footer">        
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" id="load2" width="30" class="oculto" />
+        <button type="button" class="btn btn-default btn_ac btn-modal" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger btn_ac btn-modal" onclick="eliminaRecord()">Si</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
 <!-- Library script : mandatory -->
@@ -227,6 +258,9 @@ $(function(){
 	
 	Ladda.bind(".btn.ladda-button", { timeout: 5000 } );
    
+  $('.oculto').css("display","none");
+
+  $('.link').css("cursor","pointer");
 
 });
 
@@ -329,14 +363,22 @@ function modificaRecord(){
 }
 
 function eliminaRecord(){
+  $('#msg_error2').hide('Fast');
+  $('.btn_ac').hide();
+  $('#load2').show();
   var id_record = $('#id_mod').val();
   $.post('ac/elimina_recordatorio.php','id_record='+id_record,function(data) {
         if(data=='1'){
           cerrar();
           $('#tr_'+id_record).fadeOut('slow');
+          $('#load2').hide();
+          $('.btn').show();
+          $('#modal_confirma').modal('hide');
         }else{
-          alert('Error: '+data);
-          //App.unblockUI('#modal_crop');
+          $('#load2').hide();
+          $('.btn').show();
+          $('#msg_error2').html(data);
+          $('#msg_error2').show('Fast');
         }
       });
 }
