@@ -193,10 +193,14 @@ $(function(){
 		cerrar();
     });
 
-
+  $("#nv_record").keyup(function(event){
+    if(event.keyCode == 13){
+        agregaRecord();
+    }
+  });
 
 	$(".ver").click(function() {		
-		abrir();
+    abrir();
     });
     
     $("#ver_configura_recordar").click(function() {		
@@ -227,7 +231,7 @@ $(function(){
 });
 
 function abrir(){
-		$( "#panel_lista1" ).animate({
+    $( "#panel_lista1" ).animate({
 			width : '66.66666667%'
 			}, 200,function() {
 				$('#panel_lista1').removeClass('col-md-12');
@@ -239,8 +243,11 @@ function abrir(){
 			$('#panel_lista2').addClass("animation animating bounceInRight").show().
 			one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",function () {
 				$(this).removeClass("animation animating bounceInRight");
+        $("#record_mod").focus();
 			});
 		 }, 100);
+
+    
 }
 
 function cerrar(){
