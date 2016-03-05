@@ -31,7 +31,7 @@
                                     <tr id="tr_<?=$recordatorio['id_recordatorio']?>">
                                         <td width="5%">
                                             <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox<?=$recordatorio['id_recordatorio']?>" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
+                                                <input type="checkbox" id="customcheckbox<?=$recordatorio['id_recordatorio']?>" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke" onclick="check(<?=$recordatorio['id_recordatorio']?>)" <?if($recordatorio['checa']==1){?>checked<?}?>>  
                                                 <label for="customcheckbox<?=$recordatorio['id_recordatorio']?>"></label>   
                                             </div>
                                         </td>
@@ -341,7 +341,23 @@ function eliminaRecord(){
       });
 }
 
-
+function check(id){
+  var id_record = id;
+  var revisa = $('#customcheckbox'+id).attr('checked');
+  if (revisa){
+    var tipo = 1;
+  }else{
+    var tipo = 0;
+  } 
+  $.post('ac/check_recordatorio.php','id_record='+id_record+'&tipo='+tipo,function(data) {
+        if(data=='1'){
+          
+        }else{
+          alert('Error: '+data);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
 
 </script>
 <!--/ Library script -->
