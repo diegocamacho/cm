@@ -1,3 +1,9 @@
+<?
+$sql="SELECT consultas.*, pacientes.nombre FROM consultas 
+LEFT JOIN pacientes on pacientes.id_paciente=consultas.id_paciente
+WHERE consultas.activo=1";	
+$q_consultas=mysql_query($sql);
+?>
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -55,154 +61,22 @@
                         <thead>
                             <tr>
                                 <th>Paciente</th>
-                                <th>Fecha y hora</th>
+                                <th>Fecha</th>
                                 <th>Tipo de cobro</th>
                                 <th>Diagnóistico</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
+	                        <? while($ft=mysql_fetch_assoc($q_consultas)){ ?>
                             <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
+                                <td><?=$ft['nombre']?></td>
+                                <td><?=fechaLetra(fechaSinHora($ft['fecha_hora']))?></td>
                                 <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
+                                <td><?=$ft['diagnostico']?></td>
                                 <td><span class="label label-teal">Ver Resumen</span></td>
                             </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                                
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
-                            <tr>
-                                <td>Diego Camacho Flores</td>
-                                <td>11 de Mayo - 06:00PM</td>
-                                <td>Pago Inmediato</td>
-                                <td>Fractura en el hueso de la pierna izquierda</td>
-                                <td><span class="label label-teal">Ver Resumen</span></td>
-                            </tr>
+                            <? } ?>
                         </tbody>
                     </table>
                 </div>

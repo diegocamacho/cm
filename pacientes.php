@@ -1,3 +1,7 @@
+<?
+$sql="SELECT * FROM pacientes WHERE activo=1";
+$q_pacientes=mysql_query($sql);
+?>
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -22,290 +26,24 @@
 
         <!-- START Row -->
         <div class="row" id="shuffle-grid">
+	        <? while($ft=mysql_fetch_assoc($q_pacientes)){ ?>
             <div class="col-sm-6 col-md-4 shuffle">
                 <div class="panel widget">
                     <div class="table-layout nm">
                         <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
                         <div class="col-xs-8 valign-middle">
                             <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="index.php?Modulo=PerfilPaciente">Diego Camacho Flores</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> diegocamacho2.0@gmail.com</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
+                                <h5 class="semibold mt0 mb5"><a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>"><?=$ft['nombre']?></a></h5>
+                                <!--<p class="ellipsis text-muted mb5"><? if($ft['email']){ ?><i class="ico-envelop mr5"></i> <?=$ft['email']?><? } ?>&nbsp;</p>-->
+                                <p class="text-muted nm mb5"><? if($ft['celular']){ ?><i class="ico-phone2 mr5"></i> <?=$ft['celular']?><? } ?></p>
+                                <p><a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>" role="button" class="btn btn-primary btn-xs">Perfil</a>&nbsp;<a href="#" role="button" class="btn btn-teal btn-xs">Consultar</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Morgan Cohen</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> urna@Suspendisseseddolor.com</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar1.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Keely Glenn</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> metus@vitaeorci.com</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Fulton Rojas</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> diam@Pellentesquehabitant.com</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar2.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Linus Leonard</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> ante@nullaInteger.co.uk</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar3.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Orson Pierc</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> odio@mollis.net</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar4.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Dane Gonzalez</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> lacus@imperdietnecleo.com</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Maggie Vazquez</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> vestibulum@inlobortistellus.co.uk</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar5.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Ina Odom</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> pede.nec@eget.org</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar6.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Bell Richmond</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> accumsan@vitaeposuereat.org</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Chaney Woodard</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> commodo@piscing.edu</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Warren Snyder</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> fringilla.est@ut.net</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar7.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Austin Hartman</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> Donec.at@nisiAenean.edu</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar8.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Violet Kidd</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> libero.Integer@turpis.org</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Matthew William</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> sapien.Aenean@non.ne</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar9.jpg" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Violet Kidd</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> libero.Integer@turpis.org</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Tamara Moon</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> nulla@lobortisnisinibh.org</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Yardley Anthony</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> tincidunt@in.ca</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-6 col-md-4 shuffle">
-                <div class="panel widget">
-                    <div class="table-layout nm">
-                        <div class="col-xs-4 text-center"><img src="image/avatar/avatar.png" width="100%"></div>
-                        <div class="col-xs-8 valign-middle">
-                            <div class="panel-body">
-                                <h5 class="semibold mt0 mb5"><a href="javascript:void(0);">Carly Porter</a></h5>
-                                <p class="ellipsis text-muted mb5"><i class="ico-envelop mr5"></i> fringilla@dolorelit.ca</p>
-                                <p class="text-muted nm"><i class="ico-phone2 mr5"></i> (983)-1123337</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+			<? } ?>
+            
         </div>
         <!--/ END Row -->
     </div>

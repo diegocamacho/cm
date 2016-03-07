@@ -1,3 +1,31 @@
+<?
+$id_paciente=escapar($_GET['id'],1);
+$sql_paciente="SELECT * FROM pacientes WHERE id_paciente=$id_paciente AND id_medico=$id_medico";
+$q_paciente=mysql_query($sql_paciente);
+$valida=mysql_num_rows($q_paciente);
+	if($valida){
+		$ft=mysql_fetch_assoc($q_paciente);
+		$nombre=$ft['nombre'];
+		$celular=$ft['celular'];
+		$email=$ft['email'];
+		$edad=$ft['edad'];
+		$sexo=$ft['sexo'];
+		$antecedentes_alergias=$ft['antecedentes_alergias'];
+	}
+	
+//Consultas
+$sql_consultas="SELECT * FROM consultas WHERE id_paciente=$id_paciente AND id_medico=$id_medico AND activo=1";
+$q_consultas=mysql_query($sql_consultas);
+$valida_consultas=mysql_num_rows($q_consultas);
+
+//Pagos
+$sql_pagos="SELECT ingresos.*,consultas.*,tipo_cobro.tipo_cobro FROM consultas 
+JOIN ingresos ON ingresos.id_consulta=consultas.id_consulta
+JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
+WHERE consultas.id_paciente=$id_paciente AND consultas.id_medico=$id_medico AND ingresos.activo=1";
+$q_pagos=mysql_query($sql_pagos);
+$valida_pagos=mysql_num_rows($q_pagos);
+?>
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -5,12 +33,12 @@
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Perfil / Diego Camacho Flores</h4>
+                <h4 class="title semibold">Perfil <? if($nombre){ echo "/ ".$nombre; } ?></h4>
             </div>
             <div class="page-header-section">
                 <!-- Toolbar -->
                 <div class="toolbar">
-                    <a class="btn btn-sm btn-danger" href="javascript:void(0);" role="button">Regresar</a>
+                    <a class="btn btn-sm btn-info" href="index.php?Modulo=Pacientes" role="button">Regresar</a>
                 </div>
                 <!--/ Toolbar -->
             </div>
@@ -19,6 +47,7 @@
 
         <!-- START row -->
         <div class="row">
+	        <? if($valida){ ?>
             <!-- Left / Top Side -->
             <div class="col-lg-3">
                 <!-- tab menu -->
@@ -36,10 +65,10 @@
                 <!-- figure with progress -->
                 <ul class="list-table">
                     <li style="width:70px;">
-                        <img class="img-circle img-bordered" src="image/avatar/avatar7.jpg" alt="" width="65px">
+                        <img class="img-circle img-bordered" src="image/avatar/avatar.png" alt="" width="65px">
                     </li>
                     <li class="text-left">
-                        <h5 class="semibold mt0">Diego Camacho Flores</h5>
+                        <h5 class="semibold mt0"><? if($nombre){ echo $nombre; } ?></h5>
                         <div style="max-width:200px;">
 
                             <p class="text-muted clearfix nm">
@@ -79,55 +108,59 @@
             <div class="col-lg-9">
                 <!-- START Tab-content -->
                 <div class="tab-content">
-                    <!-- tab-pane: profile -->
+                    <!-- tab-pane: perfil -->
                     <div class="tab-pane active" id="vergeneral">
-                        <!-- form profile -->
-                        <form class="panel form-horizontal form-bordered" name="form-profile">
+                        <!-- form perfil -->
+                        <form class="panel form-horizontal form-bordered" id="frm_perfil">
                             <div class="panel-body pt0 pb0">
                                 <div class="form-group header bgcolor-default">
                                     <div class="col-md-12">
                                         <h4 class="semibold text-primary mt0 mb5">Datos Generales</h4>
                                     </div>
                                 </div>
-                                
+                                <!-- Mensaje -->
+                                <div id="msg" style="display:none;margin-top: 20px;">
+									<span id="msg_data"></span>
+								</div>
+								<!-- End Mensaje -->
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Nombre</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="name" value="Diego Camacho Flores">
+                                        <input type="text" class="form-control" name="nombre" value="<?=$nombre?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Teléfono Celular</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" name="celular" value="(983) 11 23337">
+                                        <input type="text" class="form-control" name="celular" value="<?=$celular?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Email</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="website" value="diegocamacho2.0@gmail.com">
+                                        <input type="text" class="form-control" name="email" value="<?=$email?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Edad</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="website" value="28">
+                                        <input type="text" class="form-control" name="edad" value="<?=$edad?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Sexo</label>
                                     <div class="col-sm-6">
-										<select class="form-control">
-											<option>Seleccione</option>
-										    <option value="1" selected="selected">Masculino</option>
-										    <option value="1">Femenino</option>
+										<select class="form-control" name="sexo">
+											<option value="">Seleccione</option>
+										    <option value="M" <? if($sexo=="M"){?>selected="selected"<?}?>>Masculino</option>
+										    <option value="F" <? if($sexo=="F"){?>selected="selected"<?}?>>Femenino</option>
 										</select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">Antecedentes y Alergias</label>
                                     <div class="col-sm-6">
-                                        <textarea class="form-control" rows="3">Hipertenso</textarea>
+                                        <textarea class="form-control" rows="3" name="antecedentes_alergias"><?=$antecedentes_alergias?></textarea>
                                     </div>
                                 </div>
                                 
@@ -135,19 +168,19 @@
                             <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
-                          			<button type="button" class="btn btn-danger"><i class="ico-trash"></i> Eliminar Paciente</button>
+                          			<button type="button" class="btn btn-default ladda-button" data-style="zoom-in" id="elimina_paciente"><span class="ladda-label">Eliminar Paciente</span></button>
                           		</div>
 						  		<div class="col-sm-6 text-right">
-                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in"><span class="ladda-label">Guardar Cambios</span></button>
+                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in" id="actualiza_perfil"><span class="ladda-label">Guardar Cambios</span></button>
 						  		</div>
 							</div>
                           </div>
                         </form>
-                        <!--/ form profile -->
+                        <!--/ form perfil -->
                     </div>
-                    <!--/ tab-pane: profile -->
+                    <!--/ tab-pane: perfil -->
 
-                    <!-- tab-pane: account -->
+                    <!-- tab-pane: consultas -->
                     <div class="tab-pane" id="verconsultas">
                         <!-- START row -->
 						<div class="row">
@@ -156,127 +189,46 @@
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Historial de Consultas</h3>
 						            </div>
-						           
+						            <? if($valida_consultas){ ?>
 						            <table class="table table-striped" id="historial_consultas">
 						                <thead>
 						                    <tr>
 						                        <th>Fecha/Hora</th>
 						                        <th>Diagnóstico</th>
-						                        <th>Opciones</th>
+						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
 						                <tbody>
+							                <? while($ft=mysql_fetch_assoc($q_consultas)){ ?>
 						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
+						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora']))?></td>
+						                        <td><?=$ft['diagnostico']?></td>
+						                        <td align="right">
+							                        <div class="btn-group mb5 ml10">
+														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+														    <li><a href="javascript:void(0);">Ver Consulta</a></li>
+														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														</ul>
+													</div>
+						                        </td>
 						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                        
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo 2014 - 18:00</td>
-						                        <td>Fractura en el hueso de la pierna izquierda</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
+						                    <? } ?>
 						                </tbody>
 						            </table>
+						            <? }else{ ?>
+						            <div class="alert alert-dismissable alert-danger">
+										<?=$nombre?> aún no ha tenido consultas.
+									</div>
+						            <? } ?>
 						        </div>
 						    </div>
 						</div>
 						<!--/ END row -->
                     </div>
-                    <!--/ tab-pane: account -->
+                    <!--/ tab-pane: consultas -->
 
-                    <!-- tab-pane: security -->
+                    <!-- tab-pane: pagos -->
                     <div class="tab-pane" id="verpagos">
                         <!-- START row -->
 						<div class="row">
@@ -285,138 +237,48 @@
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Historial de Pagos</h3>
 						            </div>
-						           
+						            <? if($valida_pagos){ ?>
 						            <table class="table table-striped" id="historial_pagos">
 						                <thead>
 						                    <tr>
 						                        <th>Fecha</th>
 						                        <th>Tipo de cobro</th>
 						                        <th>Monto</th>
-						                        <th>Opciones</th>
+						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
 						                <tbody>
+							                <? while($ft=mysql_fetch_assoc($q_pagos)){ ?>
 						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
+						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora_pago']))?></td>
+						                        <td><?=$ft['tipo_cobro']?></td>
+						                        <td><?=number_format($ft['monto'],2)?></td>
+						                        <td align="right">
+							                        <div class="btn-group mb5 ml10">
+														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+														    <li><a href="javascript:void(0);">Convertir en Deuda</a></li>
+														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														</ul>
+													</div>
+						                        </td>
 						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                        
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014/td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Pago Inmediato</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-primary">Detalles</span></td>
-						                    </tr>
+						                    <? } ?>
 						                </tbody>
 						            </table>
+						            <? }else{ ?>
+						            <div class="alert alert-dismissable alert-danger">
+										<?=$nombre?> aún no ha tenido consultas.
+									</div>
+						            <? } ?>
 						        </div>
 						    </div>
 						</div>
 						<!--/ END row -->
                     </div>
-                    <!--/ tab-pane: security -->
-                    
-                    
-                    
-                    <!-- tab-pane: security -->
+                    <!--/ tab-pane: pagos -->
+
+                    <!-- tab-pane: pagos pendientes -->
                     <div class="tab-pane" id="verpagospendientes">
                         <!-- START row -->
 						<div class="row">
@@ -468,13 +330,20 @@
 						</div>
 						<!--/ END row -->
                     </div>
-                    <!--/ tab-pane: security -->
+                    <!--/ tab-pane: pagos pendientes -->
 
                     
                 </div>
                 <!--/ END Tab-content -->
             </div>
             <!--/ Left / Bottom Side -->
+            <? }else{ ?>
+            <div class="col-md-12">
+            	<div class="alert alert-dismissable alert-danger">
+					<strong>Ocurrió un error:</strong> No se ha encontrado el perfil de paciente.
+				</div>
+            </div>
+            <? } ?>
         </div>
         <!--/ END row -->
     </div>
@@ -486,26 +355,60 @@
 </section>
 <!--/ END Template Main -->
 
-
-<!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
-<!-- Library script : mandatory -->
 <script type="text/javascript" src="library/jquery/js/jquery.min.js"></script>
 <script type="text/javascript" src="library/jquery/js/jquery-migrate.min.js"></script>
 <script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="library/core/js/core.min.js"></script>
-<!--/ Library script -->
 
-<!-- App and page level script -->
+<script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script>
+<script type="text/javascript" src="javascript/app.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
+<script type="text/javascript" src="plugins/blockui/jquery.blockUI.js"></script>
 
-<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
+<script>
+function scrollToElement(target) {
+    var topoffset = 30;
+    var speed = 100;
+    var destination = jQuery( target ).offset().top - topoffset;
+    jQuery( 'html:not(:animated),body:not(:animated)' ).animate( { scrollTop: destination}, speed, function() {
+        window.location.hash = target;
+    });
+    return false;
+};
+$(function(){
 
-<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
-
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
-
-<script type="text/javascript" src="javascript/tables/datatable.js"></script>
-
-<!--/ App and page level scrip -->
-<!--/ END JAVASCRIPT SECTION -->
+	$('#actualiza_perfil').click(function() {
+		var btn_actualiza = Ladda.create(document.querySelector('#actualiza_perfil'));
+		btn_actualiza.start();
+		var datos=$('#frm_perfil').serialize();
+        $('#vergeneral').block({ 
+	        overlayCSS:  { 
+	 		backgroundColor: '#FFF', 
+	 		opacity: 0.5, 
+	 		cursor: 'wait' 
+	 	},
+            message: '', 
+        });
+        $.post('ac/perfil_paciente.php',datos+'&id_paciente='+<?=$id_paciente?>,function(data){
+		    if(data==1){
+				$('#msg_data').html("Se ha actualizado el perfil del paciente.");
+		    	$('#msg').show();
+		    	$('#msg').attr("class","alert alert-dismissable alert-success animation animating flipInX");
+		    	btn_actualiza.stop();
+		    	scrollToElement('#main');
+		    	$('#vergeneral').unblock();
+		    }else{
+		    	$('#msg_data').html(data);
+		    	$('#msg').show();
+		    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+		    	$('#msg').focus();
+		    	btn_actualiza.stop();
+		    	scrollToElement('#main');
+		    	$('#vergeneral').unblock();
+		    }
+		});
+		
+    }); 
+});
+</script>

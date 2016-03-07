@@ -33,6 +33,16 @@ function ac_ingresos($monto,$fecha,$descripcion){
 	if($query){ return true; }else{ return false; }
 	
 }
+//Actualización de perfil de paciente
+function ac_edita_paciente($id_paciente,$nombre,$celular,$email=false,$edad,$sexo,$antecedentes_alergias=false){
+	
+	global $conexion;
+	global $id_medico;
+	
+	$sql="UPDATE pacientes SET nombre='$nombre', celular='$celular', email='$email', edad='$edad', sexo='$sexo', antecedentes_alergias='$antecedentes_alergias' WHERE id_paciente=$id_paciente AND id_medico=$id_medico";
+	$query=@mysql_query($sql);
+	if($query){ return true; }else{ return false; }
+}
 /*------------------------------- Configuración ---------------------------------*/
 //Mi cuenta alertas
 function ac_mi_cuenta_alertas($agenda,$resumen_inicial,$resumen_final,$facturacion_1,$facturacion_2){

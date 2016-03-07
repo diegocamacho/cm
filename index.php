@@ -63,7 +63,10 @@ include('includes/funciones.php');
 			break;
 		    case 'PerfilPaciente':
 		    ?>
+			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 		    

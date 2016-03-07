@@ -79,7 +79,7 @@ $valida=mysql_num_rows($q);
                         <ul class="list-unstyled">
                         
                             <li class="text-center mb15">
-                                <img class="img-rounded img-bordered-primary" src="image/avatar/displa_pacientes.png" alt="" width="100px" height="100px" />
+                                <img class="img-rounded img-bordered-primary" src="image/avatar/avatar.png" alt="" width="100px" height="100px" />
                             </li>
                             
                             <li class="text-center mb15">
