@@ -107,6 +107,10 @@ $numero=mysql_num_rows($q_citas);
 $sql_citas2="SELECT * FROM agenda WHERE id_medico=$id_medico AND activo=1 AND fecha='$fecha_actual' AND hora > '$hora_actual'";
 $q_citas2=mysql_query($sql_citas2);
 $numero2=mysql_num_rows($q_citas2);
+
+//Número de to dos pendientes de checar
+$q_recordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico=$id_medico AND (checa=0 OR checa IS NULL)");
+$num_record = mysql_num_rows($q_recordatorios);
 ?>
 
 
@@ -178,7 +182,7 @@ $numero2=mysql_num_rows($q_citas2);
                 <a href="?Modulo=Recordatorios">
                     <span class="figure"><i class="ico-tasks"></i></span>
                     <span class="text">Recordatorios</span>
-                    <span class="number"><span class="label label-primary">5</span></span>
+                    <span class="number"><span class="label label-primary"><?=$num_record?></span></span>
                 </a>
             </li>
             
