@@ -1,3 +1,7 @@
+<?
+  $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
+?>
+
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -22,80 +26,30 @@
                       </div>
                       <!--/ panel body -->
                       <table class="table">
-                                <tbody>
-                                    <tr style="cursor: pointer;">
+                                <tbody id="tabla_recordatorios">
+                                    <!-- Solo este TR se va utilizar, los demás son ejemplos. -->    
+                                    <?while($recordatorio=mysql_fetch_assoc($qrecordatorios)){?>                                
+                                    <tr id="tr_<?=$recordatorio['id_recordatorio']?>">
                                         <td width="5%">
                                             <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox1" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-                                                <label for="customcheckbox1"></label>   
-                                            </div>
-                                        </td>
-                                        
-                                        <td>Pagar el teléfono</td>
-                                        
-                                        <td width="8%" align="right" class="text-muted"><small>Feb 01</small></td>
-                                        
-                                    </tr>
-                                    <tr style="cursor: pointer;">
-                                        <td width="5%">
-                                            <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox2" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-                                                <label for="customcheckbox2"></label>   
-                                            </div>
-                                        </td>
-
-                                        <td>Realizar expediente para la secretaría de salud</td>
-                                        
-                                        <td width="8%" align="right" class="text-muted"><small>Ago 24</small></td>
-                                        
-                                    </tr>
-                                    <tr style="cursor: pointer;">
-                                        <td width="5%">
-                                            <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox3" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-                                                <label for="customcheckbox3"></label>   
-                                            </div>
-                                        </td>
-
-                                        <td>Enviar el pago de las tarjetas</td>
-                                        
-                                        <td width="8%" align="right" class="text-muted"><small>Nov 26</small></td>
-                                        
-                                    </tr>
-                                    <tr style="cursor: pointer;">
-                                        <td width="5%">
-                                            <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox4" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-                                                <label for="customcheckbox4"></label>   
-                                            </div>
-                                        </td>
-
-                                        <td>Llamar al hermano Juan José</td>
-                                        
-                                        <td width="8%" align="right" class="text-muted"><small>Sep 10</small></span></td>
-                                        
-                                    </tr>
-<!-- Solo este TR se va utilizar, los demás son ejemplos. -->                                    
-                                    <tr>
-                                        <td width="5%">
-                                            <div class="checkbox custom-checkbox nm">  
-                                                <input type="checkbox" id="customcheckbox5" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-                                                <label for="customcheckbox5"></label>   
+                                                <input type="checkbox" id="customcheckbox<?=$recordatorio['id_recordatorio']?>" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke" onclick="check(<?=$recordatorio['id_recordatorio']?>)" <?if($recordatorio['checa']==1){?>checked<?}?>>  
+                                                <label for="customcheckbox<?=$recordatorio['id_recordatorio']?>"></label>   
                                             </div>
                                         </td>
 										
-                                        <td id="ver" style="cursor: pointer;">Buscar un publicista para la campaña de la clínica</td>
+                                        <td onclick="abrir()" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
                                         
-                                        <td width="8%" align="right" class="text-muted" ><small>Dic 25</small></td>
+                                        <td width="8%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
                                     </tr>
+                                    <?}?>
                                 </tbody>
                             </table>
                       <!-- panel footer -->
                       <div class="panel-footer">
                           <div class="input-group">
-                          <input type="text" class="form-control" name="task" placeholder="Agregar nuevo recordatorio">
+                          <input type="text" class="form-control" id="nv_record" name="task" placeholder="Agregar nuevo recordatorio">
                               <span class="input-group-btn">
-                                  <button class="btn btn-primary" id="agrega_recordatorio" data-style="expand-right" type="button" onclick="hola();"><span class="ladda-label">Agregar</span></button>
+                                  <button class="btn btn-primary" id="agrega_recordatorio" data-style="expand-right" type="button" onclick="agregaRecord();"><span class="ladda-label">Agregar</span></button>
                               </span>
                           </div>
                       </div>
@@ -127,15 +81,24 @@
                       <div class="panel-collapse pull out">
                           <div class="panel-body">
                           <!-- Nombre del recordatorio -->
-						  		<div class="form-group">
+						  		              <div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <textarea class="form-control animated" rows="3">Buscar un publicista para la campaña de la clínica</textarea>
+                                            <textarea class="form-control animated" rows="3" id="record_mod"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                          <!-- Observaciones del Recordatorio -->
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label class="control-label">Observaciones de Recordatorio</label>
+                                            <textarea class="form-control animated" rows="4" id="observ_mod"></textarea>
                                         </div>
                                     </div>
                                 </div>
                           <!--- Asignar a un usuario -->      
-                              	<div class="form-group">
+                              	<!--<div class="form-group">
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <label class="control-label">Asignar a secretaria</label>
@@ -147,7 +110,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                           <!--- Configurar una fecha límite -->      
                               	<div class="form-group">
                                     <div class="row">
@@ -174,7 +137,7 @@
                                     	
                                     	<div class="col-sm-5">
                                     		<div class='input-group date' id='hora'>
-								                <input type='text' class="form-control" name="hora" />
+								                <input type='text' class="form-control" name="hora" id="hora_alarma"/>
 											    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
 											</div>
                                     	</div>
@@ -188,14 +151,15 @@
                                     </div>
                                 </div>
                           </div>
-                          
+                          <input type="hidden" id="id_mod" val="">
                           <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
-                          			<button type="button" class="btn btn-default"><i class="ico-trash"></i> Eliminar</button>
+                          			<a href="#modal_confirma" data-toggle="modal" role="button" class="btn btn-default" id="btn_envia" ><i class="ico-trash"></i> Eliminar</a>
+                                <!--<button type="button" class="btn btn-default" onclick="eliminaRecord();"><i class="ico-trash"></i> Eliminar</button>-->
                           		</div>
 						  		<div class="col-sm-6 text-right">
-                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in"><span class="ladda-label">Guardar</span></button>
+                                	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in" onclick="modificaRecord();"><span class="ladda-label">Guardar</span></button>
 						  		</div>
 							</div>
                           </div>
@@ -208,25 +172,44 @@
                   </div>
                   <!--/ END panel -->
               </div>
-              
-               
-              
+            
          </div>
          <!-- Termina el row -->
          
-         
-         
-
-              
-              
-              
          </div>
          <!-- Termina el row -->
-
-
 
      </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="modal_confirma">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
+        <h5 class="modal-title">Confirmación</h5>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger oculto" role="alert" id="msg_error2"></div>
+<!-- Loader -->
+    <div class="row oculto" id="load_big">
+      <div class="col-md-12 text-center" >
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" width="50" />
+      </div>
+    </div>
+<!--Formulario -->
+    <center><h3 id="msj_confirma">¿Está usted seguro de eliminar este recordatorio?</h3></center>
+          
+      </div>
+      <div class="modal-footer">        
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" id="load2" width="30" class="oculto" />
+        <button type="button" class="btn btn-default btn_ac btn-modal" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger btn_ac btn-modal" onclick="eliminaRecord()">Si</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
 <!-- Library script : mandatory -->
@@ -241,10 +224,14 @@ $(function(){
 		cerrar();
     });
 
+  $("#nv_record").keyup(function(event){
+    if(event.keyCode == 13){
+        agregaRecord();
+    }
+  });
 
-
-	$("#ver").click(function() {		
-		abrir();
+	$(".ver").click(function() {		
+    abrir();
     });
     
     $("#ver_configura_recordar").click(function() {		
@@ -271,11 +258,14 @@ $(function(){
 	
 	Ladda.bind(".btn.ladda-button", { timeout: 5000 } );
    
+  $('.oculto').css("display","none");
+
+  $('.link').css("cursor","pointer");
 
 });
 
 function abrir(){
-		$( "#panel_lista1" ).animate({
+    $( "#panel_lista1" ).animate({
 			width : '66.66666667%'
 			}, 200,function() {
 				$('#panel_lista1').removeClass('col-md-12');
@@ -287,8 +277,11 @@ function abrir(){
 			$('#panel_lista2').addClass("animation animating bounceInRight").show().
 			one("webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend",function () {
 				$(this).removeClass("animation animating bounceInRight");
+        $("#record_mod").focus();
 			});
 		 }, 100);
+
+    
 }
 
 function cerrar(){
@@ -307,6 +300,105 @@ function cerrar(){
 			});
 		 }, 300);		
 
+}
+
+function agregaRecord(){
+  var record = $('#nv_record').val();
+  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
+        var respuesta = data.split("|");
+        var tr = respuesta[1];
+        var id = respuesta[2];
+        var fecha = respuesta[3].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        respuesta = respuesta[0];
+        if(respuesta=='1'){
+          $("#tabla_recordatorios").append(tr);
+          $('#nv_record').val("");
+          $("#record_mod").val(record);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id);
+          abrir();
+        }else{
+          alert('Error: '+tr);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+//PARA PODER MODIFICAR Y ELIMINAR
+$(document).on('click', '[data-id]', function () {
+    var id_record = $(this).attr('data-id');
+    $.get('data/info_recordatorio.php','id_record='+id_record,function(data) {
+        var respuesta = data.split("|");
+        result = respuesta[0];
+        fecha = respuesta[2].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        if(result=='1'){
+          $("#record_mod").val(respuesta[1]);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id_record);
+          $("#observ_mod").val(respuesta[3]);
+        }else{
+          alert('Error: '+respuesta[1]);
+          //App.unblockUI('#modal_crop');
+        }
+      }); 
+});
+
+function modificaRecord(){
+  var id_record = $('#id_mod').val();
+  var record = $('#record_mod').val();
+  var observ = $('#observ_mod').val();
+  var limit = $('#datepicker1').val();
+  var alerta = $('#datepicker2').val();
+  var alerta2 = $('#hora_alarma').val();
+  $.post('ac/cambia_recordatorio.php','id_record='+id_record+'&record='+record+'&limit='+limit+'&alerta='+alerta+'&hora_alerta='+alerta2+"&observ="+observ,function(data) {
+        if(data=='1'){
+          location.reload(true);
+        }else{
+          alert('Error: '+data);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+function eliminaRecord(){
+  $('#msg_error2').hide('Fast');
+  $('.btn_ac').hide();
+  $('#load2').show();
+  var id_record = $('#id_mod').val();
+  $.post('ac/elimina_recordatorio.php','id_record='+id_record,function(data) {
+        if(data=='1'){
+          cerrar();
+          $('#tr_'+id_record).fadeOut('slow');
+          $('#load2').hide();
+          $('.btn').show();
+          $('#modal_confirma').modal('hide');
+        }else{
+          $('#load2').hide();
+          $('.btn').show();
+          $('#msg_error2').html(data);
+          $('#msg_error2').show('Fast');
+        }
+      });
+}
+
+function check(id){
+  var id_record = id;
+  var revisa = $('#customcheckbox'+id).attr('checked');
+  if (revisa){
+    var tipo = 1;
+  }else{
+    var tipo = 0;
+  } 
+  $.post('ac/check_recordatorio.php','id_record='+id_record+'&tipo='+tipo,function(data) {
+        if(data=='1'){
+          
+        }else{
+          alert('Error: '+data);
+          //App.unblockUI('#modal_crop');
+        }
+      });
 }
 
 </script>
