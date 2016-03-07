@@ -1,5 +1,5 @@
 <?
-$sql="SELECT * FROM pacientes WHERE activo=1";
+$sql="SELECT * FROM pacientes WHERE activo=1 AND id_medico=1 ORDER BY nombre ASC";
 $q_pacientes=mysql_query($sql);
 ?>
 <!-- START Template Main -->
