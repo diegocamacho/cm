@@ -1,3 +1,9 @@
+<?
+//RECORDATORIOS
+$qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
+//END RECORDATORIOS
+?>
+
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -138,79 +144,31 @@
         	        <h5 class="semibold text-teal">Recordatorios</h5>
         	    </div>
         	    <!--/ panel body -->
-        	    <table class="table">
+        	    <table class="table" id="tabla_recordatorios">
         	        <tbody>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox1" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox1"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Dinner with someone</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox2" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox2"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Kill some mobs</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox3" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox3"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Go out and play football</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox4" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox4"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Shield the house</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox5" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox5"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Cut off power supply</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox6" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox6"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Pagar la renta del consultorio</td>
-        	            </tr>
-        	            <tr>
-        	                <td width="5%">
-        	                    <div class="checkbox custom-checkbox nm">  
-        	                        <input type="checkbox" id="customcheckbox7" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke">  
-        	                        <label for="customcheckbox7"></label>   
-        	                    </div>
-        	                </td>
-        	                <td>Depositar en la tarjeta Santander para los pagos domiciliados</td>
-        	            </tr>
+        	            <!-- Solo este TR se va utilizar, los demás son ejemplos. -->    
+                        <?while($recordatorio=mysql_fetch_assoc($qrecordatorios)){?>                                
+                            <tr id="tr_<?=$recordatorio['id_recordatorio']?>">
+                                <td width="5%">
+                                <div class="checkbox custom-checkbox nm">  
+                                    <input type="checkbox" id="customcheckbox<?=$recordatorio['id_recordatorio']?>" value="1" data-toggle="selectrow" data-target="tr" data-contextual="stroke" onclick="check(<?=$recordatorio['id_recordatorio']?>)" <?if($recordatorio['checa']==1){?>checked<?}?>>  
+                                    <label for="customcheckbox<?=$recordatorio['id_recordatorio']?>"></label>   
+                                </div>
+                                </td>
+                                        
+                                <td onclick="abrir()" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
+                                        
+                                <td width="8%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
+                            </tr>
+                        <?}?>
         	        </tbody>
         	    </table>
         	    <!-- panel footer -->
         	    <div class="panel-footer">
         	        <div class="input-group">
-        	        <input type="text" class="form-control" name="task" placeholder="Agregar un Recordatorio">
+        	        <input type="text" class="form-control" id="nv_record" name="task" placeholder="Agregar nuevo recordatorio">
         	            <span class="input-group-btn">
-        	                <button class="btn btn-teal" type="button">Agrega</button>
+        	                <button class="btn btn-teal" id="agrega_recordatorio" data-style="expand-right" type="button" onclick="agregaRecord();">Agregar</button>
         	            </span>
         	        </div>
         	    </div>
@@ -572,3 +530,111 @@
 <script type="text/javascript" src="javascript/pages/dashboard.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->
+<script>
+///TODO LO DE RECORDATORIOS
+$("#nv_record").keyup(function(event){
+    if(event.keyCode == 13){
+        agregaRecord();
+    }
+  });
+
+function agregaRecord(){
+  var record = $('#nv_record').val();
+  $.post('ac/nuevo_recordatorio.php','nv_record='+record,function(data) {
+        var respuesta = data.split("|");
+        var tr = respuesta[1];
+        var id = respuesta[2];
+        var fecha = respuesta[3].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        respuesta = respuesta[0];
+        if(respuesta=='1'){
+          $("#tabla_recordatorios").append(tr);
+          $('#nv_record').val("");
+          /*$("#record_mod").val(record);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id);
+          abrir();*/
+        }else{
+          alert('Error: '+tr);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+//PARA PODER MODIFICAR Y ELIMINAR
+$(document).on('click', '[data-id]', function () {
+    var id_record = $(this).attr('data-id');
+    $.get('data/info_recordatorio.php','id_record='+id_record,function(data) {
+        var respuesta = data.split("|");
+        result = respuesta[0];
+        fecha = respuesta[2].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        if(result=='1'){
+          $("#record_mod").val(respuesta[1]);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id_record);
+          $("#observ_mod").val(respuesta[3]);
+        }else{
+          alert('Error: '+respuesta[1]);
+          //App.unblockUI('#modal_crop');
+        }
+      }); 
+});
+
+function modificaRecord(){
+  var id_record = $('#id_mod').val();
+  var record = $('#record_mod').val();
+  var observ = $('#observ_mod').val();
+  var limit = $('#datepicker1').val();
+  var alerta = $('#datepicker2').val();
+  var alerta2 = $('#hora_alarma').val();
+  $.post('ac/cambia_recordatorio.php','id_record='+id_record+'&record='+record+'&limit='+limit+'&alerta='+alerta+'&hora_alerta='+alerta2+"&observ="+observ,function(data) {
+        if(data=='1'){
+          location.reload(true);
+        }else{
+          alert('Error: '+data);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+
+function eliminaRecord(){
+  $('#msg_error2').hide('Fast');
+  $('.btn_ac').hide();
+  $('#load2').show();
+  var id_record = $('#id_mod').val();
+  $.post('ac/elimina_recordatorio.php','id_record='+id_record,function(data) {
+        if(data=='1'){
+          cerrar();
+          $('#tr_'+id_record).fadeOut('slow');
+          $('#load2').hide();
+          $('.btn').show();
+          $('#modal_confirma').modal('hide');
+        }else{
+          $('#load2').hide();
+          $('.btn').show();
+          $('#msg_error2').html(data);
+          $('#msg_error2').show('Fast');
+        }
+      });
+}
+
+function check(id){
+  var id_record = id;
+  var revisa = $('#customcheckbox'+id).attr('checked');
+  if (revisa){
+    var tipo = 1;
+  }else{
+    var tipo = 0;
+  } 
+  $.post('ac/check_recordatorio.php','id_record='+id_record+'&tipo='+tipo,function(data) {
+        if(data=='1'){
+          
+        }else{
+          alert('Error: '+data);
+          //App.unblockUI('#modal_crop');
+        }
+      });
+}
+///END DE TODO LO DE RECORDATORIOS
+</script>
