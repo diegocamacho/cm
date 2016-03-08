@@ -643,3 +643,16 @@ function horaOficial($hora){
   $hora_oficial = date("H:i",strtotime($hora));
   return $hora_oficial;
 }
+
+//Gastos
+function ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="INSERT INTO gastos (id_medico,id_cat_gastos,monto,fecha,descripcion,facturado,pdf_archivo,xml_archivo) VALUES ('$s_id_usuario','$id_cat','$monto','$fecha','$descripcion','$factura','$pdf','$xml')";
+	$query=@mysql_query($sql);
+	if($query){ return true; }else{ return false; }
+	
+}
