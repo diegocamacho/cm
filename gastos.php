@@ -8,7 +8,7 @@ if(!escapar($mes_seleccionado,1)){ $mes_seleccionado=""; }
 if(!escapar($estado,1)){ $estado=""; }
 //para el pagado y no pagado
 if($estado){
-    $consulta_estado="AND estado=".$estado;
+    $consulta_estado="AND facturado=".$estado;
 }else{
     $consulta_estado="";
 }
@@ -23,9 +23,9 @@ if($mes_seleccionado){
     $url="?Modulo=Gastos";
 }
 //Datos para la tabla
-$sql="SELECT gastos.*, categoria_gastos.categoria FROM gastos 
-JOIN tipo_cobro ON categoria_gastos.id_cat_gastos=gastos.id_cat_gastos
-WHERE gastos.id_medico=$id_medico AND categoria_gastos.activo=1 AND gastos.fecha BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
+$sql="SELECT gastos.*, categorias_gastos.categoria FROM gastos 
+JOIN categorias_gastos ON categorias_gastos.id_cat_gastos=gastos.id_cat_gastos
+WHERE gastos.id_medico=$id_medico AND categorias_gastos.activo=1 AND gastos.fecha BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales
@@ -48,6 +48,7 @@ $sq_clinicas="SELECT * FROM clinicas WHERE id_medico=$id_medico AND activo=1";
 $q_clinicas=mysql_query($sq_clinicas);
 $valida_clinicas=mysql_num_rows($q_clinicas);
 ?>
+
 <!-- START Template Main -->
 <section id="main" role="main">
     <!-- START Template Container -->
@@ -86,6 +87,24 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
         <!-- Page Header -->
 		<!-- Sub-Header -->
 		<div class="row">
+            <div class="col-md-12">
+           
+                <? if($_GET['msg']==1){ ?>
+                <div class="alert alert-dismissable alert-success animation animating flipInX">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    ¡El gasto se ha agregado!
+                </div>
+                <? }elseif($_GET['msg']==2){ ?>
+                <div class="alert alert-dismissable alert-success animation animating flipInX">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    ¡El gasto se ha editado!
+                </div>
+                <? }elseif($_GET['msg']==3){ ?>
+                <div class="alert alert-dismissable alert-success animation animating flipInX">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    ¡El gasto se ha eliminado!
+                </div>
+                <? } ?>
             <div class="col-sm-4">
                 <!-- START Statistic Widget -->
                 <div class="table-layout">
@@ -131,7 +150,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                 </div>
                 <!--/ END Statistic Widget -->
             </div>
-            
+            </div>   
         </div>
                 
                 
@@ -160,24 +179,12 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                 $pdf = $ft['pdf_archivo'];
                             ?>
                                 <tr>
-                                    <td><?$ft['descripcion']?></td>
-                                    <td><?fechaLetra($ft['fecha'])?></td>
-                                    <td align="right"><?=fnum($monto)?></td>
-                                    <td><?if($pdf){?><a role="button" href="<?=$pdf?>" target="_blank" class="btn green-haze"><span class="glyphicon glyphicon-file" aria-hidden="true"></span></a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
+                                    <td><?=$ft['descripcion']?></td>
+                                    <td><?=fechaLetra($ft['fecha'])?></td>
+                                    <td><?=fnum($monto)?></td>
+                                    <td><?if($fact==1){?><a role="button" href="<?=$pdf?>" target="_blank" class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
                                 </tr>
                             <? } ?>
-                            <tr>
-                                <td>Pago de teléfono del consultorio</td>
-                                <td>11 de Mayo</td>
-                                <td>500.00</td>
-                                <td><span class="label label-teal"><i class="ico-folder-download"></i> Facturado</span></td>
-                            </tr>
-                            <tr>
-                                <td>Servicio de Internet Banda Ancha</td>
-                                <td>11 de Mayo</td>
-                                <td>500.00</td>
-                                <td><span class="label label-default">No Facturado</span></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -215,6 +222,20 @@ $(function(){
         }  
     });
 
+    //Enfoco el primer campo
+    $('#NuevoIngreso').on('shown.bs.modal', function (e) {
+        $('#monto').focus();        
+    });
+
+    //Nuevo Ingreso
+    $('#btn_guarda').click(function(){
+        ac_nuevo_gasto();
+    });
+    //Limpiamos el modal cuando se cierre
+    $('#NuevoIngreso').on('hidden.bs.modal', function (e) {
+        $('.mod').removeAttr("disabled");
+        $('.mod').val('');
+    });
 
     //Envio el formulario al presionar enter
     $('form').submit(function(e) {
@@ -238,14 +259,14 @@ function ac_nuevo_gasto(){
     btn_guarda.start();
     $('.mod').attr("disabled", true);
 
-    $.post('ac/ingresos.php',datos,function(data){
+    $.post('ac/gastos.php',datos,function(data){
 
         if(data==1){
-            location.href = "?Modulo=Ingresos&msg=1";
+            location.href = "?Modulo=Gastos&msg=1";
         }else if(data==2){
-            location.href = "?Modulo=Ingresos&msg=2";
+            location.href = "?Modulo=Gastos&msg=2";
         }else if(data==3){
-            location.href = "?Modulo=Ingresos&msg=3";
+            location.href = "?Modulo=Gastos&msg=3";
         }else{
             $('#msg_data').html(data);
             $('#msg').show();
@@ -295,11 +316,16 @@ function ac_nuevo_gasto(){
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                    	
+                    	<!-- Mensaje de Error -->
+                        <div id="msg" style="display:none;">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <span id="msg_data"></span>
+                        </div>
+                        <!-- END Mensaje de Error -->
                     	<div class="form-group">
 
 	                    	<label class="control-label">Categoría</label>
-	                    	<select id="selectize-selectmultiple" class="form-control" placeholder="Seleccione una..." multiple>
+	                    	<select id="selectize-selectmultiple" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
                         		<option value="0">Seleccione una...</option>
                                 <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
                                 while($categorias = mysql_fetch_assoc($q_categorias)){?>
@@ -314,24 +340,24 @@ function ac_nuevo_gasto(){
                                 	<label class="control-label">Monto <span class="text-danger">*</span></label>
 									<div class="input-group">
 							        	<span class="input-group-addon">$</span>
-										<input type="text" class="form-control">
+										<input type="text" id="monto" name="monto" class="form-control mod">
 									</div>
                         		</div>
                         		<div class="col-sm-6">
                                     <label class="control-label">Fecha <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" id="datepicker1" placeholder="Seleccione fecha" />
+                                    <input type="text" class="form-control mod" name="fecha" id="datepicker1" placeholder="Seleccione fecha" />
                         		</div>
                         	</div>
                         </div>
                         
                         <div class="form-group">
                             <label class="control-label">Descripción</label>
-                            <input type="text" class="form-control" id="descripcion" maxlength="160" />
+                            <input type="text" class="form-control mod" name="descripcion" id="descripcion" maxlength="160" />
                         </div>
                         
                         <div class="form-group" style="margin-bottom: 0px;">
                         	<span class="checkbox custom-checkbox custom-checkbox-primary">
-		                    	<input type="checkbox" name="gasto_facturado" id="customcheckbox1">
+		                    	<input type="checkbox" name="factura" id="customcheckbox1" value="1">
 		                    	<label for="customcheckbox1">&nbsp;&nbsp;Gasto facturado</label>
 							</span>
                         </div>
@@ -344,7 +370,7 @@ function ac_nuevo_gasto(){
 										<input type="text" class="form-control" readonly>
 										<span class="input-group-btn">
 										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" accept="application/pdf">
                                     </div>
 									</span>
 									</div>
@@ -356,7 +382,7 @@ function ac_nuevo_gasto(){
 										<input type="text" class="form-control" readonly>
 										<span class="input-group-btn">
 										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" accept="application/xml">
                                     </div>
 									</span>
 									</div>
@@ -369,7 +395,7 @@ function ac_nuevo_gasto(){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" id="btn_guarda">Guardar</button>
+                <button type="button" class="btn btn-success" data-style="zoom-in" id="btn_guarda"><span class="ladda-label">Guardar</span></button>
             </div>
         </form><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
