@@ -179,7 +179,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                             <tr>
                                 <td><? if($id_tipo_ingreso==1){ echo "<a href='#'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
                                 <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
-                                <td align="right"><?=fnum($monto)?></td>
+                                <td><?=fnum($monto)?></td>
                                 <td><? if($estado==1){ ?><span class="label label-primary">Pagado</span> <? }else{ ?><span class="label label-danger"> Pagar</span> <span class="label label-teal"><?=$ft['tipo_cobro']?></span> <? } ?></td>
                                 <td><span class="label label-default">No Emitido</span></td>
                             </tr>
