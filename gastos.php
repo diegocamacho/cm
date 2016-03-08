@@ -8,6 +8,7 @@ if(!escapar($mes_seleccionado,1)){ $mes_seleccionado=""; }
 if(!escapar($estado,1)){ $estado=""; }
 //para el pagado y no pagado
 if($estado){
+    if($estado==2){$estado=0;}
     $consulta_estado="AND facturado=".$estado;
 }else{
     $consulta_estado="";
@@ -74,8 +75,8 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 						     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Filtrar <span class="caret"></span></button>
 						     <ul class="dropdown-menu" role="menu" style="min-width: 0px;">
 						         <li><a href="javascript:void(0);" role="button" data-toggle="modal" data-backdrop="static" data-target="#SeleccionaMes">Por Mes</a></li>
-						         <li><a href="javascript:void(0);">Facturados</a></li>
-						         <li><a href="javascript:void(0);">No Facturados</a></li>
+						         <li><a href="<?=$url?>&Estado=1">Facturados</a></li>
+						         <li><a href="<?=$url?>&Estado=2">No Facturados</a></li>
 						         <li class="divider"></li>
 						     </ul>
 						 </div><!-- /btn-group -->
@@ -189,7 +190,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                     </table>
                 </div>
                  <? }else{ ?>
-                    <div class="alert alert-dismissable alert-warning animation animating flipInX">No se han agregado gastos :)</div>
+                    <div class="alert alert-dismissable alert-warning animation animating flipInX">No tiene gastos registrados en <?=$mes?> :)</div>
                 <? } ?>
             </div>
         </div>
@@ -255,7 +256,7 @@ function ac_nuevo_gasto(){
     var datos=$('#frm_guarda').serialize();
 
     var btn_guarda = Ladda.create(document.querySelector('#btn_guarda'));
-    
+  
     btn_guarda.start();
     $('.mod').attr("disabled", true);
 
