@@ -214,7 +214,48 @@ $(function(){
             $('#sube_pdf').hide('Fast');
         }  
     });
+
+
+    //Envio el formulario al presionar enter
+    $('form').submit(function(e) {
+        ac_nuevo_gasto();
+        e.preventDefault();
+    });
+    
+    //Cambiamso de mes la consulta
+    $('#btn_mes').click(function(){
+        var mes = $('#mes').val();
+        location.href = "?Modulo=Gastos&Mes="+mes;
+    });
 });
+
+function ac_nuevo_gasto(){
+
+    var datos=$('#frm_guarda').serialize();
+
+    var btn_guarda = Ladda.create(document.querySelector('#btn_guarda'));
+    
+    btn_guarda.start();
+    $('.mod').attr("disabled", true);
+
+    $.post('ac/ingresos.php',datos,function(data){
+
+        if(data==1){
+            location.href = "?Modulo=Ingresos&msg=1";
+        }else if(data==2){
+            location.href = "?Modulo=Ingresos&msg=2";
+        }else if(data==3){
+            location.href = "?Modulo=Ingresos&msg=3";
+        }else{
+            $('#msg_data').html(data);
+            $('#msg').show();
+            $('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+            btn_guarda.stop();
+            $('.mod').removeAttr("disabled");
+            $('#nombre').focus();
+        }
+    });
+};
 </script>
 
 <!-- App and page level script -->
@@ -243,7 +284,7 @@ $(function(){
 <!-- START Modal -->
 <div id="NuevoIngreso" class="modal fade">
     <div class="modal-dialog">
-        <form class="modal-content" action="">
+        <form class="modal-content" id="frm_guarda">
             <div class="modal-header">
                 <div class="cell text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -258,21 +299,13 @@ $(function(){
                     	<div class="form-group">
 
 	                    	<label class="control-label">Categoría</label>
-	                    	
 	                    	<select id="selectize-selectmultiple" class="form-control" placeholder="Seleccione una..." multiple>
-                        		<option value="">Seleccione una...</option>
-							    <option value="1">Teléfono Consultorio</option>
-							    <option value="2">Teléfono Celular</option>
-							    <option value="3">Consultorio</option>
-							    <option value="4">Internet</option>
-							    <option value="5">Papeleria</option>
-							    <option value="6">Publicidad</option>
-							    <option value="7">Gasolina</option>
-							    <option value="8">Comisiones Bancarias</option>
-							    <option value="9">Servicios Contables</option>
-							    <option value="10">Servicios de internet</option>
-                        	</select>
-	                                
+                        		<option value="0">Seleccione una...</option>
+                                <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
+                                while($categorias = mysql_fetch_assoc($q_categorias)){?>
+							    <option value="<?=$categorias['id_cat_gastos']?>"><?=$categorias['categoria']?></option>
+                        	   <?}?>  
+                            </select>      
                         </div>
                                 
                         <div class="form-group">
@@ -336,9 +369,46 @@ $(function(){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-success" id="btn_guarda">Guardar</button>
             </div>
         </form><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
 <!--/ END Modal -->
+
+<!-- START modal-sm Seleccionar mes-->
+<div id="SeleccionaMes" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <div class="ico-calendar3 mb15 mt15" style="font-size:36px;"></div>
+                <h4 class="semibold modal-title text-primary">Gastos por Mes</h4>
+            </div>
+            <div class="modal-body">
+            <form id="frm_mes">
+                <select class="form-control" name="mes" id="mes">
+                    <option>Seleccione uno</option>
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn_mes">Aceptar</button>
+            </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--/ END modal-sm -->
