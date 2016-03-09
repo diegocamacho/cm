@@ -171,6 +171,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                 <th>Fecha</th>
                                 <th>Monto</th>
                                 <th>Estado</th>
+                                <th width="10%"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -184,6 +185,15 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                     <td><?=fechaLetra($ft['fecha'])?></td>
                                     <td><?=fnum($monto)?></td>
                                     <td><?if($fact==1){?><a role="button" href="<?=$pdf?>" target="_blank" class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
+                                    <td width="10%">
+                                        <div class="btn-group mb5 ml10">
+                                            <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+                                            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+                                                <li><a data-id="<?=$ft['id_gasto']?>" data-toggle="modal" href="#EditaGasto">Editar</a></li>
+                                                <li><a data-supr="<?=$ft['id_gasto']?>"  data-toggle="modal" href="#ModalConfirma" class="text-danger">Eliminar</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>  
                                 </tr>
                             <? } ?>
                         </tbody>
@@ -249,6 +259,10 @@ $(function(){
         var mes = $('#mes').val();
         location.href = "?Modulo=Gastos&Mes="+mes;
     });
+
+    $('.oculto').css("display","none");
+
+    $('.link').css("cursor","pointer");
 });
 
 function ac_nuevo_gasto(){
@@ -278,6 +292,46 @@ function ac_nuevo_gasto(){
         }
     });
 };
+
+function ac_elimina_gasto(){
+    var gasto = $('#id_elimina').val();
+
+    $.post('ac/elimina_gasto.php',"id_gasto="+gasto,function(data){
+
+        if(data==1){
+            location.href = "?Modulo=Gastos&msg=3";
+        }else{
+            $('#msg_error2').val(data);
+            $('#msg_error2').show();
+        }
+    });
+};
+
+//PARA PODER MODIFICAR
+$(document).on('click', '[data-id]', function () {
+    var id_gasto = $(this).attr('data-id');
+    $.get('data/info_gasto.php','id_gasto='+id_gasto,function(data) {
+        var respuesta = data.split("|");
+        result = respuesta[0];
+        fecha = respuesta[3].split("-");
+        fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
+        if(result=='1'){
+          $("#record_mod").val(respuesta[1]);
+          $('#datepicker1').val(fecha);
+          $('#id_mod').val(id_record);
+          $("#observ_mod").val(respuesta[3]);
+        }else{
+          alert('Error: '+respuesta[1]);
+          //App.unblockUI('#modal_crop');
+        }
+      }); 
+});
+
+//PARA PODER ELIMINAR
+$(document).on('click', '[data-supr]', function () {
+    var id_gasto = $(this).attr('data-supr');
+    $('#id_elimina').val(id_gasto);
+});
 </script>
 
 <!-- App and page level script -->
@@ -439,3 +493,134 @@ function ac_nuevo_gasto(){
     </div><!-- /.modal-dialog -->
 </div>
 <!--/ END modal-sm -->
+
+<!-- START Modal -->
+<div id="EditaGasto" class="modal fade">
+    <div class="modal-dialog">
+        <form class="modal-content" id="frm_guarda">
+            <div class="modal-header">
+                <div class="cell text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <div class="ico-coins mb15 mt15 fsize32"></div>
+                    <h4 class="semibold text-primary">Edita Gasto</h4>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- Mensaje de Error -->
+                        <div id="msg" style="display:none;">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <span id="msg_data"></span>
+                        </div>
+                        <!-- END Mensaje de Error -->
+                        <div class="form-group">
+
+                            <label class="control-label">Categoría</label>
+                            <select id="selectize-selectmultiple" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
+                                <option value="0">Seleccione una...</option>
+                                <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
+                                while($categorias = mysql_fetch_assoc($q_categorias)){?>
+                                <option value="<?=$categorias['id_cat_gastos']?>"><?=$categorias['categoria']?></option>
+                               <?}?>  
+                            </select>      
+                        </div>
+                                
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Monto <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">$</span>
+                                        <input type="text" id="monto" name="monto" class="form-control mod">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label class="control-label">Fecha <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control mod" name="fecha" id="datepicker1" placeholder="Seleccione fecha" />
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="control-label">Descripción</label>
+                            <input type="text" class="form-control mod" name="descripcion" id="descripcion" maxlength="160" />
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 0px;">
+                            <span class="checkbox custom-checkbox custom-checkbox-primary">
+                                <input type="checkbox" name="factura" id="customcheckbox1" value="1">
+                                <label for="customcheckbox1">&nbsp;&nbsp;Gasto facturado</label>
+                            </span>
+                        </div>
+                        <!-- Si el gasto es facturado mostramos uploaders -->
+                        <div class="form-group" id="sube_pdf" style="display:none;"><br />
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label class="control-label">Archivo PDF (opcional)</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" readonly>
+                                        <span class="input-group-btn">
+                                        <div class="btn btn-primary btn-file">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" accept="application/pdf">
+                                    </div>
+                                    </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <label class="control-label">Archivo XML (opcional)</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" readonly>
+                                        <span class="input-group-btn">
+                                        <div class="btn btn-primary btn-file">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" accept="application/xml">
+                                    </div>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                       <!-- Termina -->
+                    </div>
+                </div>
+            </div>
+             <input type="hidden" id="id_mod" val="">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" data-style="zoom-in" id="btn_guarda"><span class="ladda-label">Guardar</span></button>
+            </div>
+        </form><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--/ END Modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="ModalConfirma">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Cerrar</span></button>
+        <h5 class="modal-title">Confirmación</h5>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger oculto" role="alert" id="msg_error2"></div>
+<!-- Loader -->
+    <div class="row oculto" id="load_big">
+      <div class="col-md-12 text-center" >
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" width="50" />
+      </div>
+    </div>
+<!--Formulario -->
+    <center><h3 id="msj_confirma">¿Está usted seguro de eliminar este gasto?</h3></center>
+    <input type="hidden" id="id_elimina" value="">      
+      </div>
+      <div class="modal-footer">        
+        <img src="assets/global/img/loading-spinner-grey.gif" border="0" id="load2" width="30" class="oculto" />
+        <button type="button" class="btn btn-default btn_ac btn-modal" data-dismiss="modal">No</button>
+        <button type="button" class="btn btn-danger btn_ac btn-modal" onclick="ac_elimina_gasto()">Si</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

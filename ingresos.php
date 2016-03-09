@@ -154,10 +154,6 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Ingresos de <?=$mes?></h3>
-                        <div class="panel-toolbar text-right">
-                            <button class="btn btn-xs btn-default">No Pagados</button>
-							<button class="btn btn-xs btn-default">Pagados</button>
-                        </div>
                     </div>
 					
                     <table class="table table-striped" id="zero-configuration">
