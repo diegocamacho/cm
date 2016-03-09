@@ -219,8 +219,14 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <script>
 $(function(){
 	$("#datepicker1").datepicker();
+
+    $("#datepicker2").datepicker();
 	
 	$("#selectize-selectmultiple").selectize({
+        maxItems: 1
+    });
+
+    $("#selectize-selectmultiple2").selectize({
         maxItems: 1
     });
 	
@@ -233,12 +239,21 @@ $(function(){
         }  
     });
 
+    $("#customcheckbox2").click(function() {
+
+        if($("#customcheckbox2").is(':checked')) {  
+            $('#edita_pdf').show('Fast');
+        } else {  
+            $('#edita_pdf').hide('Fast');
+        }  
+    });
+
     //Enfoco el primer campo
     $('#NuevoIngreso').on('shown.bs.modal', function (e) {
         $('#monto').focus();        
     });
 
-    //Nuevo Ingreso
+    //Nuevo Gasto
     $('#btn_guarda').click(function(){
         ac_nuevo_gasto();
     });
@@ -263,6 +278,12 @@ $(function(){
     $('.oculto').css("display","none");
 
     $('.link').css("cursor","pointer");
+
+    //Edita Gasto
+    $('#btn_edita').click(function(){
+        ac_edita_gasto();
+    });
+
 });
 
 function ac_nuevo_gasto(){
@@ -293,6 +314,30 @@ function ac_nuevo_gasto(){
     });
 };
 
+function ac_edita_gasto(){
+
+    var datos=$('#frm_edita').serialize();
+    var id_gasto = $('#id_mod').val();
+    var btn_guarda = Ladda.create(document.querySelector('#btn_edita'));
+  
+    btn_guarda.start();
+    $('.mod').attr("disabled", true);
+
+    $.post('ac/edita_gastos.php',datos+"&id_gasto="+id_gasto,function(data){
+
+        if(data==1){
+            location.href = "?Modulo=Gastos&msg=2";
+        }else{
+            $('#msg_data2').html(data);
+            $('#msg2').show();
+            $('#msg2').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+            btn_guarda.stop();
+            $('.mod').removeAttr("disabled");
+            $('#edita_monto').focus();
+        }
+    });
+};
+
 function ac_elimina_gasto(){
     var gasto = $('#id_elimina').val();
 
@@ -316,10 +361,18 @@ $(document).on('click', '[data-id]', function () {
         fecha = respuesta[3].split("-");
         fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
         if(result=='1'){
-          $("#record_mod").val(respuesta[1]);
-          $('#datepicker1').val(fecha);
-          $('#id_mod').val(id_record);
-          $("#observ_mod").val(respuesta[3]);
+          $("#selectize-selectmultiple2").val(respuesta[1]);
+          //$('#selectize-selectmultiple2 option[value='+respuesta[1]+']').prop('selected', 'selected').change();
+          $('#datepicker2').val(fecha);
+          $('#id_mod').val(id_gasto);
+          $("#edita_monto").val(respuesta[2]);
+          $("#edit_descripcion").val(respuesta[4]);
+          if(respuesta[5]==1){
+            $("#customcheckbox2").prop('checked', true);
+            $('#edita_pdf').show('Fast');
+            $("#pdf_edit").val(respuesta[6]);
+            $("#xml_edit").val(respuesta[7]);
+          }
         }else{
           alert('Error: '+respuesta[1]);
           //App.unblockUI('#modal_crop');
@@ -494,10 +547,10 @@ $(document).on('click', '[data-supr]', function () {
 </div>
 <!--/ END modal-sm -->
 
-<!-- START Modal -->
+<!-- START EDITA Modal -->
 <div id="EditaGasto" class="modal fade">
     <div class="modal-dialog">
-        <form class="modal-content" id="frm_guarda">
+        <form class="modal-content" id="frm_edita">
             <div class="modal-header">
                 <div class="cell text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
@@ -509,15 +562,15 @@ $(document).on('click', '[data-supr]', function () {
                 <div class="row">
                     <div class="col-md-12">
                         <!-- Mensaje de Error -->
-                        <div id="msg" style="display:none;">
+                        <div id="msg2" style="display:none;">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <span id="msg_data"></span>
+                            <span id="msg_data2"></span>
                         </div>
                         <!-- END Mensaje de Error -->
                         <div class="form-group">
 
                             <label class="control-label">Categoría</label>
-                            <select id="selectize-selectmultiple" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
+                            <select id="selectize-selectmultiple2" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
                                 <option value="0">Seleccione una...</option>
                                 <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
                                 while($categorias = mysql_fetch_assoc($q_categorias)){?>
@@ -532,34 +585,34 @@ $(document).on('click', '[data-supr]', function () {
                                     <label class="control-label">Monto <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-addon">$</span>
-                                        <input type="text" id="monto" name="monto" class="form-control mod">
+                                        <input type="text" id="edita_monto" name="monto" class="form-control mod">
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="control-label">Fecha <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control mod" name="fecha" id="datepicker1" placeholder="Seleccione fecha" />
+                                    <input type="text" class="form-control mod" name="fecha" id="datepicker2" placeholder="Seleccione fecha" />
                                 </div>
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label class="control-label">Descripción</label>
-                            <input type="text" class="form-control mod" name="descripcion" id="descripcion" maxlength="160" />
+                            <input type="text" class="form-control mod" name="descripcion" id="edit_descripcion" maxlength="160" />
                         </div>
                         
                         <div class="form-group" style="margin-bottom: 0px;">
                             <span class="checkbox custom-checkbox custom-checkbox-primary">
-                                <input type="checkbox" name="factura" id="customcheckbox1" value="1">
-                                <label for="customcheckbox1">&nbsp;&nbsp;Gasto facturado</label>
+                                <input type="checkbox" name="factura" id="customcheckbox2" value="1">
+                                <label for="customcheckbox2">&nbsp;&nbsp;Gasto facturado</label>
                             </span>
                         </div>
                         <!-- Si el gasto es facturado mostramos uploaders -->
-                        <div class="form-group" id="sube_pdf" style="display:none;"><br />
+                        <div class="form-group" id="edita_pdf" style="display:none;"><br />
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label class="control-label">Archivo PDF (opcional)</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="pdf_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
                                         <div class="btn btn-primary btn-file">
                                        <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" accept="application/pdf">
@@ -571,7 +624,7 @@ $(document).on('click', '[data-supr]', function () {
                                 <div class="col-sm-6">
                                     <label class="control-label">Archivo XML (opcional)</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" readonly>
+                                        <input type="text" id="xml_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
                                         <div class="btn btn-primary btn-file">
                                        <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" accept="application/xml">
@@ -588,12 +641,12 @@ $(document).on('click', '[data-supr]', function () {
              <input type="hidden" id="id_mod" val="">
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" data-style="zoom-in" id="btn_guarda"><span class="ladda-label">Guardar</span></button>
+                <button type="button" class="btn btn-success" data-style="zoom-in" id="btn_edita"><span class="ladda-label">Guardar</span></button>
             </div>
         </form><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
-<!--/ END Modal -->
+<!--/ END Modal EDITA -->
 
 
 <!-- Modal -->

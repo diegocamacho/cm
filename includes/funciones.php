@@ -656,3 +656,15 @@ function ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml){
 	if($query){ return true; }else{ return false; }
 	
 }
+
+function ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="UPDATE gastos SET id_cat_gastos=$id_cat, monto='$monto', fecha='$fecha', descripcion='$descripcion', facturado='$factura', pdf_archivo='$pdf', xml_archivo='$xml' WHERE id_medico=$s_id_usuario AND id_gasto=$id_gasto";
+	$query=@mysql_query($sql);
+	if($query){ return true; }else{ return false; }
+	
+}
