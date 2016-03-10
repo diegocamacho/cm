@@ -218,7 +218,51 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <!--/ Library script -->
 <script>
 $(function(){
-	$("#datepicker1").datepicker();
+	//UPLOADER
+    $("#fileuploader").uploadFile({url: "subir_files_gastos.php",
+        dragDrop: true,
+        fileName: "archivo",
+        returnType: "json",
+        showDelete: true,
+        showDownload:false,
+        statusBarWidth:470,
+        dragdropWidth:470,
+        showFileCounter:false,
+        showPreview:false,
+        showFileSize: false,
+        multiple:false,
+     
+        deleteCallback: function (data, pd) {
+            
+            for (var i = 0; i < data.length; i++) {
+                $('.inputs_subida[value="'+data[i]+'"]').remove();
+                $.post("eliminar.php", {op: "delete",name: data[i]});
+            }
+            pd.statusbar.hide(); //You choice.
+        
+        },
+
+        afterUploadAll: function(){
+            $('#btn_guarda').prop('disabled',false).val('Guardar');
+        },
+        onSubmit: function(){
+            $('#btn_guarda').prop('disabled',true).val('Espere...');
+
+        },
+        onError: function(){
+            $('#btn_guarda').prop('disabled',false).val('Actualizar');
+        },
+
+        onSuccess:function(files,data,xhr){
+            //files: list of files uploaded
+            //data: response from server
+            //xhr : jquer xhr object
+            $('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
+        }
+        
+    });
+
+    $("#datepicker1").datepicker();
 
     $("#datepicker2").datepicker();
 	
@@ -226,9 +270,7 @@ $(function(){
         maxItems: 1
     });
 
-    $("#selectize-selectmultiple2").selectize({
-        maxItems: 1
-    });
+   
 	
 	$("#customcheckbox1").click(function() {
 
@@ -285,6 +327,9 @@ $(function(){
     });
 
 });
+
+    
+
 
 function ac_nuevo_gasto(){
 
@@ -361,8 +406,7 @@ $(document).on('click', '[data-id]', function () {
         fecha = respuesta[3].split("-");
         fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
         if(result=='1'){
-          $("#selectize-selectmultiple2").val(respuesta[1]);
-          //$('#selectize-selectmultiple2 option[value='+respuesta[1]+']').prop('selected', 'selected').change();
+          $("#selectize_edit option[value='"+respuesta[1]+"']").attr("selected", "selected");
           $('#datepicker2').val(fecha);
           $('#id_mod').val(id_gasto);
           $("#edita_monto").val(respuesta[2]);
@@ -405,7 +449,8 @@ $(document).on('click', '[data-supr]', function () {
 <script type="text/javascript" src="javascript/forms/element.js"></script>
 <script type="text/javascript" src="javascript/pages/calendar.js"></script>
 
-
+<link href="plugins/jQuery-Upload-File/uploadfile.css" rel="stylesheet">
+<script src="plugins/jQuery-Upload-File/jquery.uploadfile.min.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->
 
@@ -434,7 +479,6 @@ $(document).on('click', '[data-supr]', function () {
 
 	                    	<label class="control-label">Categoría</label>
 	                    	<select id="selectize-selectmultiple" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
-                        		<option value="0">Seleccione una...</option>
                                 <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
                                 while($categorias = mysql_fetch_assoc($q_categorias)){?>
 							    <option value="<?=$categorias['id_cat_gastos']?>"><?=$categorias['categoria']?></option>
@@ -478,7 +522,7 @@ $(document).on('click', '[data-supr]', function () {
 										<input type="text" class="form-control" readonly>
 										<span class="input-group-btn">
 										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" accept="application/pdf">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" id="nv_pdf" accept="application/pdf">
                                     </div>
 									</span>
 									</div>
@@ -490,7 +534,7 @@ $(document).on('click', '[data-supr]', function () {
 										<input type="text" class="form-control" readonly>
 										<span class="input-group-btn">
 										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" accept="application/xml">
+                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" id="nv_xml" accept="application/xml">
                                     </div>
 									</span>
 									</div>
@@ -570,8 +614,7 @@ $(document).on('click', '[data-supr]', function () {
                         <div class="form-group">
 
                             <label class="control-label">Categoría</label>
-                            <select id="selectize-selectmultiple2" name="id_cat" class="form-control mod" placeholder="Seleccione una..." multiple>
-                                <option value="0">Seleccione una...</option>
+                            <select id="selectize_edit" name="id_cat" class="form-control mod" placeholder="Seleccione una...">
                                 <?$q_categorias = mysql_query("SELECT * FROM categorias_gastos WHERE id_medico=$id_medico AND activo=1");
                                 while($categorias = mysql_fetch_assoc($q_categorias)){?>
                                 <option value="<?=$categorias['id_cat_gastos']?>"><?=$categorias['categoria']?></option>
