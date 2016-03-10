@@ -184,7 +184,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                     <td><?=$ft['descripcion']?></td>
                                     <td><?=fechaLetra($ft['fecha'])?></td>
                                     <td><?=fnum($monto)?></td>
-                                    <td><?if($fact==1){?><a role="button" href="<?=$pdf?>" target="_blank" class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
+                                    <td><?if($fact==1){?><a role="button" href="upload/pdfs/<?=$pdf?>" target="_blank" class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
                                     <td width="10%">
                                         <div class="btn-group mb5 ml10">
                                             <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
@@ -218,15 +218,16 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <!--/ Library script -->
 <script>
 $(function(){
-	//UPLOADER
-    $("#fileuploader").uploadFile({url: "subir_files_gastos.php",
-        dragDrop: true,
+	//UPLOADER PDF
+    $("#filepdf").uploadFile({url: "ac/subir_files_pdf.php",
+        dragDrop: false,
         fileName: "archivo",
         returnType: "json",
         showDelete: true,
+        showStatusAfterSuccess: false,
         showDownload:false,
         statusBarWidth:470,
-        dragdropWidth:470,
+        acceptFiles:"application/pdf",
         showFileCounter:false,
         showPreview:false,
         showFileSize: false,
@@ -236,7 +237,7 @@ $(function(){
             
             for (var i = 0; i < data.length; i++) {
                 $('.inputs_subida[value="'+data[i]+'"]').remove();
-                $.post("eliminar.php", {op: "delete",name: data[i]});
+                $.post("ac/eliminar_pdfs.php", {op: "delete",name: data[i]});
             }
             pd.statusbar.hide(); //You choice.
         
@@ -250,14 +251,61 @@ $(function(){
 
         },
         onError: function(){
-            $('#btn_guarda').prop('disabled',false).val('Actualizar');
+            $('#btn_guarda').prop('disabled',false).val('Guardar');
         },
 
         onSuccess:function(files,data,xhr){
             //files: list of files uploaded
             //data: response from server
             //xhr : jquer xhr object
-            $('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
+            $('#pdf_name').val(data);
+            //$('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
+        }
+        
+    });
+
+    //UPLOADER XML
+    $("#filexml").uploadFile({url: "ac/subir_files_xml.php",
+        dragDrop: false,
+        fileName: "archivo",
+        returnType: "json",
+        showDelete: true,
+        showStatusAfterSuccess: false,
+        showDownload:false,
+        statusBarWidth:470,
+        acceptFiles:"application/xml",
+        showFileCounter:false,
+        showPreview:false,
+        showFileSize: false,
+        multiple:false,
+     
+        deleteCallback: function (data, pd) {
+            
+            for (var i = 0; i < data.length; i++) {
+                $('.inputs_subida[value="'+data[i]+'"]').remove();
+                $.post("ac/eliminar_xmls.php", {op: "delete",name: data[i]});
+            }
+            pd.statusbar.hide(); //You choice.
+        
+        },
+
+        afterUploadAll: function(){
+            $('#btn_guarda').prop('disabled',false).val('Guardar');
+        },
+        onSubmit: function(){
+            $('#btn_guarda').prop('disabled',true).val('Espere...');
+
+        },
+        onError: function(){
+            $('#btn_guarda').prop('disabled',false).val('Guardar');
+        },
+
+        onSuccess:function(files,data,xhr){
+            //files: list of files uploaded
+            //data: response from server
+            //xhr : jquer xhr object
+            $('#xml_name').val(data);
+            //$('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
         }
         
     });
@@ -519,24 +567,20 @@ $(document).on('click', '[data-supr]', function () {
                         		<div class="col-sm-6">
 									<label class="control-label">Archivo PDF (opcional)</label>
 									<div class="input-group">
-										<input type="text" class="form-control" readonly>
+										<input type="text" id="pdf_name" name="pdf" class="form-control mod" readonly>
 										<span class="input-group-btn">
-										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" id="nv_pdf" accept="application/pdf">
-                                    </div>
-									</span>
+                                            <div id="filepdf"></div>										
+									    </span>
 									</div>
                         		</div>
                         		
                         		<div class="col-sm-6">
 									<label class="control-label">Archivo XML (opcional)</label>
 									<div class="input-group">
-										<input type="text" class="form-control" readonly>
+										<input type="text" id="xml_name" class="form-control mod" name="xml" readonly>
 										<span class="input-group-btn">
-										<div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" id="nv_xml" accept="application/xml">
-                                    </div>
-									</span>
+										  <div id="filexml"></div>
+									    </span>
 									</div>
                         		</div>
                         	</div>
