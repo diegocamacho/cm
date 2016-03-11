@@ -310,6 +310,98 @@ $(function(){
         
     });
 
+    //UPLOADER PDF EDIT
+    $("#filepdf_edit").uploadFile({url: "ac/subir_files_pdf.php",
+        dragDrop: false,
+        fileName: "archivo",
+        returnType: "json",
+        showDelete: true,
+        showStatusAfterSuccess: false,
+        showDownload:false,
+        statusBarWidth:470,
+        acceptFiles:"application/pdf",
+        showFileCounter:false,
+        showPreview:false,
+        showFileSize: false,
+        multiple:false,
+     
+        deleteCallback: function (data, pd) {
+            
+            for (var i = 0; i < data.length; i++) {
+                $('.inputs_subida[value="'+data[i]+'"]').remove();
+                $.post("ac/eliminar_pdfs.php", {op: "delete",name: data[i]});
+            }
+            pd.statusbar.hide(); //You choice.
+        
+        },
+
+        afterUploadAll: function(){
+            $('#btn_edita').prop('disabled',false).val('Guardar');
+        },
+        onSubmit: function(){
+            $('#btn_edita').prop('disabled',true).val('Espere...');
+
+        },
+        onError: function(){
+            $('#btn_edita').prop('disabled',false).val('Guardar');
+        },
+
+        onSuccess:function(files,data,xhr){
+            //files: list of files uploaded
+            //data: response from server
+            //xhr : jquer xhr object
+            $('#pdf_edit').val(data);
+            //$('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
+        }
+        
+    });
+
+    //UPLOADER XML EDIT
+    $("#filexml_edit").uploadFile({url: "ac/subir_files_xml.php",
+        dragDrop: false,
+        fileName: "archivo",
+        returnType: "json",
+        showDelete: true,
+        showStatusAfterSuccess: false,
+        showDownload:false,
+        statusBarWidth:470,
+        acceptFiles:"application/xml",
+        showFileCounter:false,
+        showPreview:false,
+        showFileSize: false,
+        multiple:false,
+     
+        deleteCallback: function (data, pd) {
+            
+            for (var i = 0; i < data.length; i++) {
+                $('.inputs_subida[value="'+data[i]+'"]').remove();
+                $.post("ac/eliminar_xmls.php", {op: "delete",name: data[i]});
+            }
+            pd.statusbar.hide(); //You choice.
+        
+        },
+
+        afterUploadAll: function(){
+            $('#btn_edita').prop('disabled',false).val('Guardar');
+        },
+        onSubmit: function(){
+            $('#btn_edita').prop('disabled',true).val('Espere...');
+
+        },
+        onError: function(){
+            $('#btn_edita').prop('disabled',false).val('Guardar');
+        },
+
+        onSuccess:function(files,data,xhr){
+            //files: list of files uploaded
+            //data: response from server
+            //xhr : jquer xhr object
+            $('#xml_edit').val(data);
+            //$('#fileuploader').append('<input type="hidden" class="inputs_subida" id="'+data+'" name="archivo[]" value="'+data+'"/>')
+        }
+        
+    });
+
     $("#datepicker1").datepicker();
 
     $("#datepicker2").datepicker();
@@ -351,6 +443,14 @@ $(function(){
     $('#NuevoIngreso').on('hidden.bs.modal', function (e) {
         $('.mod').removeAttr("disabled");
         $('.mod').val('');
+    });
+
+    //Limpiamos el modal de editar cuando se cierre
+    $('#EditaGasto').on('hidden.bs.modal', function (e) {
+        $('#customcheckbox2').prop('checked', false);
+        $('#edita_pdf').hide('Fast');
+        $('#pdf_edit').val('');
+        $('#xml_edit').val('');
     });
 
     //Envio el formulario al presionar enter
@@ -701,10 +801,8 @@ $(document).on('click', '[data-supr]', function () {
                                     <div class="input-group">
                                         <input type="text" id="pdf_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
-                                        <div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="pdf" accept="application/pdf">
-                                    </div>
-                                    </span>
+                                            <div id="filepdf_edit"></div>                                        
+                                        </span>
                                     </div>
                                 </div>
                                 
@@ -713,10 +811,8 @@ $(document).on('click', '[data-supr]', function () {
                                     <div class="input-group">
                                         <input type="text" id="xml_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
-                                        <div class="btn btn-primary btn-file">
-                                       <span class="icon iconmoon-file-3"></span> Seleccionar <input type="file" name="xml" accept="application/xml">
-                                    </div>
-                                    </span>
+                                            <div id="filexml_edit"></div>                                        
+                                        </span>
                                     </div>
                                 </div>
                             </div>
