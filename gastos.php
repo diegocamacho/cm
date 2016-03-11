@@ -184,7 +184,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                     <td><?=$ft['descripcion']?></td>
                                     <td><?=fechaLetra($ft['fecha'])?></td>
                                     <td><?=fnum($monto)?></td>
-                                    <td><?if($fact==1){?><a role="button" href="upload/pdfs/<?=$pdf?>" target="_blank" class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
+                                    <td><?if($fact==1){?><a role="button" <?if($pdf){?>href="upload/pdfs/<?=$pdf?>" target="_blank"<?}else{?>href="#"<?}?>  class="label label-teal"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Facturado</a><?}else{?><span class="label label-info">No Facturado</span><? } ?></td>
                                     <td width="10%">
                                         <div class="btn-group mb5 ml10">
                                             <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
