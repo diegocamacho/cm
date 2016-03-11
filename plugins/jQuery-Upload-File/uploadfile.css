@@ -88,11 +88,11 @@ vertical-align: middle;
 margin-right:5px;
 }
 .ajax-file-upload {
-	font-family: Arial, Helvetica, sans-serif;
+  cursor:pointer; 
+	/*font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
    font-weight: bold;
 	padding: 15px 20px;
-	cursor:pointer;	
 	line-height:20px;
 	height:25px;
 	margin:0 10px 10px 0;
@@ -114,14 +114,15 @@ margin-right:5px;
   -moz-box-shadow: 0 2px 0 0 #13648d;
   -webkit-box-shadow: 0 2px 0 0 #13648d;
   box-shadow: 0 2px 0 0 #13648d; 
-  vertical-align: middle;  
+  vertical-align: middle;  */
   }
   
 .ajax-file-upload:hover {
-      background: #3396c9;
+  cursor:pointer;
+      /*background: #3396c9;
       -moz-box-shadow: 0 2px 0 0 #15719f;
       -webkit-box-shadow: 0 2px 0 0 #15719f;
-      box-shadow: 0 2px 0 0 #15719f;
+      box-shadow: 0 2px 0 0 #15719f;*/
 }
 
 .ajax-upload-dragdrop

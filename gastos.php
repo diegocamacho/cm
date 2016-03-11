@@ -669,7 +669,7 @@ $(document).on('click', '[data-supr]', function () {
 									<div class="input-group">
 										<input type="text" id="pdf_name" name="pdf" class="form-control mod" readonly>
 										<span class="input-group-btn">
-                                            <div id="filepdf"></div>										
+                                            <div class="btn btn-primary btn-file link" id="filepdf"></div>										
 									    </span>
 									</div>
                         		</div>
@@ -679,7 +679,7 @@ $(document).on('click', '[data-supr]', function () {
 									<div class="input-group">
 										<input type="text" id="xml_name" class="form-control mod" name="xml" readonly>
 										<span class="input-group-btn">
-										  <div id="filexml"></div>
+										  <div class="btn btn-primary btn-file link" id="filexml"></div>
 									    </span>
 									</div>
                         		</div>
@@ -801,7 +801,7 @@ $(document).on('click', '[data-supr]', function () {
                                     <div class="input-group">
                                         <input type="text" id="pdf_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
-                                            <div id="filepdf_edit"></div>                                        
+                                            <div class="btn btn-primary btn-file link" id="filepdf_edit"></div>                                        
                                         </span>
                                     </div>
                                 </div>
@@ -811,7 +811,7 @@ $(document).on('click', '[data-supr]', function () {
                                     <div class="input-group">
                                         <input type="text" id="xml_edit" class="form-control" readonly>
                                         <span class="input-group-btn">
-                                            <div id="filexml_edit"></div>                                        
+                                            <div class="btn btn-primary btn-file link" id="filexml_edit"></div>                                        
                                         </span>
                                     </div>
                                 </div>
