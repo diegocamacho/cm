@@ -1,6 +1,7 @@
 <?
 $estado=$_GET['Estado'];
 $mes_seleccionado=$_GET['Mes'];
+$clinica=$_GET['Clinica'];
 $mes_actual=date('m');
 $ano_actual=date('Y');
 
@@ -11,6 +12,12 @@ if($estado){
 	$consulta_estado="AND estado=".$estado;
 }else{
 	$consulta_estado="";
+}
+//para las clinicas
+if($clinica){
+    $consulta_clinica="AND id_clinica=".$clinica;
+}else{
+    $consulta_clinica="";
 }
 //Para cambiar de mes
 if($mes_seleccionado){
@@ -27,7 +34,7 @@ $sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_pac
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
 LEFT JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
-WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
+WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado $consulta_clinica";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales

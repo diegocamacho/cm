@@ -1,17 +1,24 @@
 <?
 $estado=$_GET['Estado'];
 $mes_seleccionado=$_GET['Mes'];
+$clinica=$_GET['Clinica'];
 $mes_actual=date('m');
 $ano_actual=date('Y');
 
 if(!escapar($mes_seleccionado,1)){ $mes_seleccionado=""; }
 if(!escapar($estado,1)){ $estado=""; }
-//para el pagado y no pagado
+//para el facturado y no facturado
 if($estado){
     if($estado==2){$estado=0;}
     $consulta_estado="AND facturado=".$estado;
 }else{
     $consulta_estado="";
+}
+//para las clinicas
+if($clinica){
+    $consulta_clinica="AND id_clinica=".$clinica;
+}else{
+    $consulta_clinica="";
 }
 //Para cambiar de mes
 if($mes_seleccionado){
@@ -26,7 +33,7 @@ if($mes_seleccionado){
 //Datos para la tabla
 $sql="SELECT gastos.*, categorias_gastos.categoria FROM gastos 
 JOIN categorias_gastos ON categorias_gastos.id_cat_gastos=gastos.id_cat_gastos
-WHERE gastos.id_medico=$id_medico AND categorias_gastos.activo=1 AND gastos.fecha BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
+WHERE gastos.id_medico=$id_medico AND categorias_gastos.activo=1 AND gastos.fecha BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado $consulta_clinica";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales
