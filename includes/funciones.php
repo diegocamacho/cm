@@ -645,25 +645,25 @@ function horaOficial($hora){
 }
 
 //Gastos
-function ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml){
+function ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clin){
 	
 	global $conexion;
 	global $s_id_usuario;
 	global $fechahora;
 	
-	$sql="INSERT INTO gastos (id_medico,id_cat_gastos,monto,fecha,descripcion,facturado,pdf_archivo,xml_archivo) VALUES ('$s_id_usuario','$id_cat','$monto','$fecha','$descripcion','$factura','$pdf','$xml')";
+	$sql="INSERT INTO gastos (id_medico,id_cat_gastos,id_clinica,monto,fecha,descripcion,facturado,pdf_archivo,xml_archivo) VALUES ('$s_id_usuario','$id_cat','$id_clin','$monto','$fecha','$descripcion','$factura','$pdf','$xml')";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 	
 }
 
-function ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml){
+function ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clin){
 	
 	global $conexion;
 	global $s_id_usuario;
 	global $fechahora;
 	
-	$sql="UPDATE gastos SET id_cat_gastos=$id_cat, monto='$monto', fecha='$fecha', descripcion='$descripcion', facturado='$factura', pdf_archivo='$pdf', xml_archivo='$xml' WHERE id_medico=$s_id_usuario AND id_gasto=$id_gasto";
+	$sql="UPDATE gastos SET id_cat_gastos=$id_cat,id_clinica='$id_clin', monto='$monto', fecha='$fecha', descripcion='$descripcion', facturado='$factura', pdf_archivo='$pdf', xml_archivo='$xml' WHERE id_medico=$s_id_usuario AND id_gasto=$id_gasto";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 	

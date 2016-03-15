@@ -17,8 +17,11 @@ if($estado){
 //para las clinicas
 if($clinica){
     $consulta_clinica="AND id_clinica=".$clinica;
+    $n_clinica = mysql_fetch_assoc(mysql_query("SELECT clinica FROM clinicas WHERE id_clinica = $clinica AND id_medico = $id_medico"));
+    $n_clinica = "de ".$n_clinica['clinica'];
 }else{
     $consulta_clinica="";
+    $n_clinica = "";
 }
 //Para cambiar de mes
 if($mes_seleccionado){
@@ -64,7 +67,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Gastos de <?=$mes?></h4>
+                <h4 class="title semibold">Gastos de <?=$mes?> <?=$n_clinica?></h4>
             </div>
             <div class="page-header-section text-right">
                         <? if($valida_clinicas>1){ ?>
@@ -73,7 +76,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                              <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Clínicas <span class="caret"></span></button>
                              <ul class="dropdown-menu" role="menu" style="min-width: 0px;">
                                 <? while($ft=mysql_fetch_assoc($q_clinicas)){ ?>
-                                 <li><a href="javascript:void(0);"><?=$ft['clinica']?></a></li>
+                                 <li><a href="<?=$url?>&Clinica=<?=$ft['id_clinica']?>"><?=$ft['clinica']?></a></li>
                                 <? } ?>
                              </ul>
                         </div>
@@ -207,7 +210,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                     </table>
                 </div>
                  <? }else{ ?>
-                    <div class="alert alert-dismissable alert-warning animation animating flipInX">No tiene gastos registrados en <?=$mes?> :)</div>
+                    <div class="alert alert-dismissable alert-warning animation animating flipInX">No tiene gastos registrados en <?=$mes?> <?=$n_clinica?> :)</div>
                 <? } ?>
             </div>
         </div>
@@ -566,6 +569,7 @@ $(document).on('click', '[data-id]', function () {
           $('#id_mod').val(id_gasto);
           $("#edita_monto").val(respuesta[2]);
           $("#edit_descripcion").val(respuesta[4]);
+          $("#clinica_edit option[value='"+respuesta[8]+"']").attr("selected", "selected");
           if(respuesta[5]==1){
             $("#customcheckbox2").prop('checked', true);
             $('#edita_pdf').show('Fast');
@@ -660,6 +664,16 @@ $(document).on('click', '[data-supr]', function () {
                         <div class="form-group">
                             <label class="control-label">Descripción</label>
                             <input type="text" class="form-control mod" name="descripcion" id="descripcion" maxlength="160" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Clínica</label>
+                            <select name="id_clinica" class="form-control mod" placeholder="Seleccione una...">
+                                <?$q_clinicas = mysql_query("SELECT * FROM clinicas WHERE id_medico=$id_medico AND activo=1");
+                                while($clinicas = mysql_fetch_assoc($q_clinicas)){?>
+                                <option value="<?=$clinicas['id_clinica']?>"><?=$clinicas['clinica']?></option>
+                               <?}?>  
+                            </select>
                         </div>
                         
                         <div class="form-group" style="margin-bottom: 0px;">
@@ -792,6 +806,16 @@ $(document).on('click', '[data-supr]', function () {
                         <div class="form-group">
                             <label class="control-label">Descripción</label>
                             <input type="text" class="form-control mod" name="descripcion" id="edit_descripcion" maxlength="160" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Clínica</label>
+                            <select id="clinica_edit" name="id_clinica" class="form-control mod" placeholder="Seleccione una...">
+                                <?$q_clinicas = mysql_query("SELECT * FROM clinicas WHERE id_medico=$id_medico AND activo=1");
+                                while($clinicas = mysql_fetch_assoc($q_clinicas)){?>
+                                <option value="<?=$clinicas['id_clinica']?>"><?=$clinicas['clinica']?></option>
+                               <?}?>  
+                            </select>
                         </div>
                         
                         <div class="form-group" style="margin-bottom: 0px;">

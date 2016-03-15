@@ -24,7 +24,7 @@ if(!$factura){
 }
 
 /********************* Mandamos la mágia ************************/
-if(ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml)){
+if(ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clinica)){
 	echo "1";
 }else{
 	echo "No se guardaron los datos, por favor intente más tarde.";

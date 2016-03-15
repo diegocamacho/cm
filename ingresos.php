@@ -16,8 +16,11 @@ if($estado){
 //para las clinicas
 if($clinica){
     $consulta_clinica="AND id_clinica=".$clinica;
+    $n_clinica = mysql_fetch_assoc(mysql_query("SELECT clinica FROM clinicas WHERE id_clinica = $clinica AND id_medico = $id_medico"));
+    $n_clinica = "de ".$n_clinica['clinica'];
 }else{
     $consulta_clinica="";
+    $n_clinica = "";
 }
 //Para cambiar de mes
 if($mes_seleccionado){
@@ -56,7 +59,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Ingresos de <?=$mes?></h4>
+                <h4 class="title semibold">Ingresos de <?=$mes?> <?=$n_clinica?></h4>
             </div>
             <div class="page-header-section text-right">
             			<? if($valida_clinicas>1){ ?>
@@ -65,7 +68,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 						     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Clínicas <span class="caret"></span></button>
 						     <ul class="dropdown-menu" role="menu" style="min-width: 0px;">
 						     	<? while($ft=mysql_fetch_assoc($q_clinicas)){ ?>
-						         <li><a href="javascript:void(0);"><?=$ft['clinica']?></a></li>
+						         <li><a href="<?=$url?>&Clinica=<?=$ft['id_clinica']?>"><?=$ft['clinica']?></a></li>
 						        <? } ?>
 						     </ul>
 						</div>
