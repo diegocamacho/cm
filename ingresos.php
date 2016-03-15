@@ -1,6 +1,7 @@
 <?
 $estado=$_GET['Estado'];
 $mes_seleccionado=$_GET['Mes'];
+$clinica=$_GET['Clinica'];
 $mes_actual=date('m');
 $ano_actual=date('Y');
 
@@ -11,6 +12,15 @@ if($estado){
 	$consulta_estado="AND estado=".$estado;
 }else{
 	$consulta_estado="";
+}
+//para las clinicas
+if($clinica){
+    $consulta_clinica="AND id_clinica=".$clinica;
+    $n_clinica = mysql_fetch_assoc(mysql_query("SELECT clinica FROM clinicas WHERE id_clinica = $clinica AND id_medico = $id_medico"));
+    $n_clinica = "de ".$n_clinica['clinica'];
+}else{
+    $consulta_clinica="";
+    $n_clinica = "";
 }
 //Para cambiar de mes
 if($mes_seleccionado){
@@ -27,7 +37,7 @@ $sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_pac
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
 LEFT JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
-WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
+WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado $consulta_clinica";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales
@@ -49,7 +59,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Ingresos de <?=$mes?></h4>
+                <h4 class="title semibold">Ingresos de <?=$mes?> <?=$n_clinica?></h4>
             </div>
             <div class="page-header-section text-right">
             			<? if($valida_clinicas>1){ ?>
@@ -58,7 +68,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 						     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Clínicas <span class="caret"></span></button>
 						     <ul class="dropdown-menu" role="menu" style="min-width: 0px;">
 						     	<? while($ft=mysql_fetch_assoc($q_clinicas)){ ?>
-						         <li><a href="javascript:void(0);"><?=$ft['clinica']?></a></li>
+						         <li><a href="<?=$url?>&Clinica=<?=$ft['id_clinica']?>"><?=$ft['clinica']?></a></li>
 						        <? } ?>
 						     </ul>
 						</div>
@@ -154,10 +164,6 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">Ingresos de <?=$mes?></h3>
-                        <div class="panel-toolbar text-right">
-                            <button class="btn btn-xs btn-default">No Pagados</button>
-							<button class="btn btn-xs btn-default">Pagados</button>
-                        </div>
                     </div>
 					
                     <table class="table table-striped" id="zero-configuration">
@@ -179,7 +185,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                             <tr>
                                 <td><? if($id_tipo_ingreso==1){ echo "<a href='#'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
                                 <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
-                                <td align="right"><?=fnum($monto)?></td>
+                                <td><?=fnum($monto)?></td>
                                 <td><? if($estado==1){ ?><span class="label label-primary">Pagado</span> <? }else{ ?><span class="label label-danger"> Pagar</span> <span class="label label-teal"><?=$ft['tipo_cobro']?></span> <? } ?></td>
                                 <td><span class="label label-default">No Emitido</span></td>
                             </tr>
@@ -309,6 +315,16 @@ function ac_nuevo_ingreso(){
                         </div>
 						<!-- END Mensaje de Error -->
                         <div class="form-group">
+                            <label class="control-label">Clínica</label>
+                            <select id="clinica_edit" name="id_clinica" class="form-control mod" placeholder="Seleccione una...">
+                                <?$q_clinicas = mysql_query("SELECT * FROM clinicas WHERE id_medico=$id_medico AND activo=1");
+                                while($clinicas = mysql_fetch_assoc($q_clinicas)){?>
+                                <option value="<?=$clinicas['id_clinica']?>"><?=$clinicas['clinica']?></option>
+                               <?}?>  
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
                         	<div class="row">
                             	<div class="col-sm-12">
                                 	<label class="control-label">Monto <span class="text-danger">*</span></label>
@@ -333,6 +349,7 @@ function ac_nuevo_ingreso(){
                             <label class="control-label">Descripción</label>
                             <textarea name="descripcion" class="form-control mod" rows="4" ></textarea>
                         </div>
+
                     </div>
                 </div>
             </div>

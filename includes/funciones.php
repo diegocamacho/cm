@@ -22,13 +22,13 @@ function nombreMedico($id){
 
 /*------------------------------------- Módulos ---------------------------------*/
 //Ingresos
-function ac_ingresos($monto,$fecha,$descripcion){
+function ac_ingresos($monto,$fecha,$descripcion,$id_clin){
 	
 	global $conexion;
 	global $s_id_usuario;
 	global $fechahora;
 	
-	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$s_id_usuario','1','2','1','$monto','$descripcion','$fechahora','$fecha')";
+	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,id_clinica,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$s_id_usuario','1','2','1','$id_clin','$monto','$descripcion','$fechahora','$fecha')";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 	
@@ -642,4 +642,29 @@ function fechaDiaMes($fecha){
 function horaOficial($hora){
   $hora_oficial = date("H:i",strtotime($hora));
   return $hora_oficial;
+}
+
+//Gastos
+function ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clin){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="INSERT INTO gastos (id_medico,id_cat_gastos,id_clinica,monto,fecha,descripcion,facturado,pdf_archivo,xml_archivo) VALUES ('$s_id_usuario','$id_cat','$id_clin','$monto','$fecha','$descripcion','$factura','$pdf','$xml')";
+	$query=@mysql_query($sql);
+	if($query){ return true; }else{ return false; }
+	
+}
+
+function ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clin){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="UPDATE gastos SET id_cat_gastos=$id_cat,id_clinica='$id_clin', monto='$monto', fecha='$fecha', descripcion='$descripcion', facturado='$factura', pdf_archivo='$pdf', xml_archivo='$xml' WHERE id_medico=$s_id_usuario AND id_gasto=$id_gasto";
+	$query=@mysql_query($sql);
+	if($query){ return true; }else{ return false; }
+	
 }
