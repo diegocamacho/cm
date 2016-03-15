@@ -36,7 +36,10 @@ $q_pacientes=mysql_query($sql);
                                 <h5 class="semibold mt0 mb5"><a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>"><?=$ft['nombre']?></a></h5>
                                 <!--<p class="ellipsis text-muted mb5"><? if($ft['email']){ ?><i class="ico-envelop mr5"></i> <?=$ft['email']?><? } ?>&nbsp;</p>-->
                                 <p class="text-muted nm mb5"><? if($ft['celular']){ ?><i class="ico-phone2 mr5"></i> <?=$ft['celular']?><? } ?></p>
-                                <p><a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>" role="button" class="btn btn-primary btn-xs">Perfil</a>&nbsp;<a href="#" role="button" class="btn btn-teal btn-xs">Consultar</a></p>
+                                <div class="btn-group">
+                                	<a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>" role="button" class="btn btn-primary btn-sm">Perfil</a>
+									<a href="#" role="button" class="btn btn-teal btn-sm">Consultar</a>
+                                </div>
                             </div>
                         </div>
                     </div>

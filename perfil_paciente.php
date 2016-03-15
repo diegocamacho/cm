@@ -25,6 +25,14 @@ JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 WHERE consultas.id_paciente=$id_paciente AND consultas.id_medico=$id_medico AND ingresos.activo=1";
 $q_pagos=mysql_query($sql_pagos);
 $valida_pagos=mysql_num_rows($q_pagos);
+
+//Cuentas por cobrar
+$sql_cuentas="SELECT cuentas_cobrar.*,ingresos.*,tipo_cobro.* FROM cuentas_cobrar 
+LEFT JOIN ingresos ON ingresos.id_cuentas_cobrar=cuentas_cobrar.id_cuentas_cobrar
+LEFT JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
+WHERE cuentas_cobrar.id_paciente=$id_paciente";
+$q_cuentas=mysql_query($sql_cuentas);
+$valida_cuentas=mysql_num_rows($q_cuentas);
 ?>
 <!-- START Template Main -->
 <section id="main" role="main">
@@ -59,10 +67,11 @@ $valida_pagos=mysql_num_rows($q_pagos);
                     <li class="list-group-item"><a href="#verpagospendientes" data-toggle="tab"><i class="ico-coins mr5"></i> Pagos Pendientes</a> </li>
                 </ul>
                 <!-- tab menu -->
+				
+				<!-- Datos del usuario
+                <hr>
 
-                <hr><!-- horizontal line -->
-
-                <!-- figure with progress -->
+                 
                 <ul class="list-table">
                     <li style="width:70px;">
                         <img class="img-circle img-bordered" src="image/avatar/avatar.png" alt="" width="65px">
@@ -79,11 +88,8 @@ $valida_pagos=mysql_num_rows($q_pagos);
                         </div>
                     </li>
                 </ul>
-                <!--/ figure with progress -->
 
-                <hr><!-- horizontal line -->
-
-                        <!-- follower stats -->
+                <hr>                        
                         <ul class="nav nav-section nav-justified mt15">
                             <li>
                                 <div class="section">
@@ -98,7 +104,7 @@ $valida_pagos=mysql_num_rows($q_pagos);
                                 </div>
                             </li>
                         </ul>
-                        <!--/ follower stats -->
+                -->
 
 
             </div>
@@ -193,7 +199,7 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						            <table class="table table-striped" id="historial_consultas">
 						                <thead>
 						                    <tr>
-						                        <th>Fecha/Hora</th>
+						                        <th width="15%">Fecha</th>
 						                        <th>Diagnóstico</th>
 						                        <th width="10%"></th>
 						                    </tr>
@@ -217,9 +223,12 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						                </tbody>
 						            </table>
 						            <? }else{ ?>
-						            <div class="alert alert-dismissable alert-danger">
-										<?=$nombre?> aún no ha tenido consultas.
-									</div>
+						            <div class="col-md-12 mt15">
+						            	<div class="alert alert-dismissable alert-info">
+											<b><?=$nombre?></b> aún no ha tenido consultas.
+										</div>
+						            </div>
+									<div style="clear: both"></div>
 						            <? } ?>
 						        </div>
 						    </div>
@@ -241,9 +250,9 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						            <table class="table table-striped" id="historial_pagos">
 						                <thead>
 						                    <tr>
-						                        <th>Fecha</th>
+						                        <th width="15%">Fecha</th>
 						                        <th>Tipo de cobro</th>
-						                        <th>Monto</th>
+						                        <th width="10%">Monto</th>
 						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
@@ -252,7 +261,7 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						                    <tr>
 						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora_pago']))?></td>
 						                        <td><?=$ft['tipo_cobro']?></td>
-						                        <td><?=number_format($ft['monto'],2)?></td>
+						                        <td align="right"><?=number_format($ft['monto'],2)?></td>
 						                        <td align="right">
 							                        <div class="btn-group mb5 ml10">
 														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
@@ -267,9 +276,12 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						                </tbody>
 						            </table>
 						            <? }else{ ?>
-						            <div class="alert alert-dismissable alert-danger">
-										<?=$nombre?> aún no ha tenido consultas.
-									</div>
+						            <div class="col-md-12 mt15">
+							            <div class="alert alert-dismissable alert-info">
+											<b><?=$nombre?></b> aún no ha tenido consultas.
+										</div>
+						            </div>
+						            <div style="clear: both"></div>
 						            <? } ?>
 						        </div>
 						    </div>
@@ -287,44 +299,43 @@ $valida_pagos=mysql_num_rows($q_pagos);
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Pagos Pendientes</h3>
 						            </div>
-						           
+						            <? if($valida_cuentas){ ?>
 						            <table class="table table-striped" id="pagos_pendientes">
 						                <thead>
 						                    <tr>
-						                        <th>Fecha de Consulta</th>
+						                        <th  width="15%">Fecha del adeudo</th>
 						                        <th>Tipo de Cobro</th>
-						                        <th>Monto</th>
-						                        <th>Opciones</th>
+						                        <th width="10%">Monto</th>
+						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
 						                <tbody>
+							                <? while($ft=mysql_fetch_assoc($q_cuentas)){ ?>
 						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Crédito General</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-danger">Pagar</span> <span class="label label-primary"> Detalles</span></td>
+						                        <td><?=fechaLetra($ft['fecha_adeudo'])?></td>
+						                        <td><?=$ft['tipo_cobro']?></td>
+						                        <td align="right"><?=number_format($ft['monto'],2)?></td>
+						                        <td align="right">
+							                        <div class="btn-group mb5 ml10">
+														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+														    <li><a href="javascript:void(0);" class="text-success">Pagar</a></li>
+														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														</ul>
+													</div>
+						                        </td>
 						                    </tr>
-						                    
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Crédito General</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-danger">Pagar</span> <span class="label label-primary"> Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Crédito General</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-danger">Pagar</span> <span class="label label-primary"> Detalles</span></td>
-						                    </tr>
-						                    <tr>
-						                        <td>11 de Mayo del 2014</td>
-						                        <td>Crédito General</td>
-						                        <td>$ 550.00</td>
-						                        <td><span class="label label-danger">Pagar</span> <span class="label label-primary"> Detalles</span></td>
-						                    </tr>
+						                    <? } ?>
 						                </tbody>
 						            </table>
+						            <? }else{ ?>
+						            <div class="col-md-12 mt15">
+										<div class="alert alert-dismissable alert-danger">
+											<b><?=$nombre?></b> aún no tiene cuentas por cobrar.
+										</div>
+									</div>
+						            <div style="clear: both"></div>
+						            <? } ?>
 						        </div>
 						    </div>
 						</div>
@@ -339,7 +350,7 @@ $valida_pagos=mysql_num_rows($q_pagos);
             <!--/ Left / Bottom Side -->
             <? }else{ ?>
             <div class="col-md-12">
-            	<div class="alert alert-dismissable alert-danger">
+            	<div class="alert alert-dismissable alert-info">
 					<strong>Ocurrió un error:</strong> No se ha encontrado el perfil de paciente.
 				</div>
             </div>
