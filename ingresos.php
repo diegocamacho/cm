@@ -315,6 +315,16 @@ function ac_nuevo_ingreso(){
                         </div>
 						<!-- END Mensaje de Error -->
                         <div class="form-group">
+                            <label class="control-label">Clínica</label>
+                            <select id="clinica_edit" name="id_clinica" class="form-control mod" placeholder="Seleccione una...">
+                                <?$q_clinicas = mysql_query("SELECT * FROM clinicas WHERE id_medico=$id_medico AND activo=1");
+                                while($clinicas = mysql_fetch_assoc($q_clinicas)){?>
+                                <option value="<?=$clinicas['id_clinica']?>"><?=$clinicas['clinica']?></option>
+                               <?}?>  
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
                         	<div class="row">
                             	<div class="col-sm-12">
                                 	<label class="control-label">Monto <span class="text-danger">*</span></label>
@@ -339,6 +349,7 @@ function ac_nuevo_ingreso(){
                             <label class="control-label">Descripción</label>
                             <textarea name="descripcion" class="form-control mod" rows="4" ></textarea>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -22,13 +22,13 @@ function nombreMedico($id){
 
 /*------------------------------------- Módulos ---------------------------------*/
 //Ingresos
-function ac_ingresos($monto,$fecha,$descripcion){
+function ac_ingresos($monto,$fecha,$descripcion,$id_clin){
 	
 	global $conexion;
 	global $s_id_usuario;
 	global $fechahora;
 	
-	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$s_id_usuario','1','2','1','$monto','$descripcion','$fechahora','$fecha')";
+	$sql="INSERT INTO ingresos (id_medico,estado,id_tipo_ingreso,id_tipo_cobro,id_clinica,monto,anotacion,fecha_hora_captura,fecha_hora_pago) VALUES ('$s_id_usuario','1','2','1','$id_clin','$monto','$descripcion','$fechahora','$fecha')";
 	$query=@mysql_query($sql);
 	if($query){ return true; }else{ return false; }
 	

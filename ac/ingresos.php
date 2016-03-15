@@ -19,7 +19,7 @@ $monto=escapar($monto,1);
 $descripcion=limpiaStr($descripcion,1,1);
 
 /********************* Mandamos la mágia ************************/
-if(ac_ingresos($monto,$fecha,$descripcion)){
+if(ac_ingresos($monto,$fecha,$descripcion,$id_clinica)){
 	echo "1";
 }else{
 	echo "No se guardaron los datos, por favor intente más tarde.";
