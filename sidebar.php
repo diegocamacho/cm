@@ -63,6 +63,16 @@ switch($menu_php){
     case 'Tienda':
 	$tienda_active = "active";
     break;
+
+    case 'ReporteIngreso':
+    $reportes_active = "1";
+    $repo_ingre = "active";
+    break;
+
+    case 'ReporteGasto':
+    $reportes_active = "1";
+    $repo_gast = "active";
+    break;
     
     case 'MiCuenta':
     $configuracion_active = "1";
@@ -236,14 +246,14 @@ $num_record = mysql_num_rows($q_recordatorios);
             
             <!-- Reportes -->
             
-            <li >
+            <li <? if($reportes_active==1){ ?> class="active open" <? } ?>>
                 <a href="javascript:void(0);" data-toggle="submenu" data-target="#reportes" data-parent=".topmenu">
                     <span class="figure"><i class="ico-paste4"></i></span>
                     <span class="text">Reportes</span>
                     <span class="arrow"></span>
                 </a>
                 <!-- START 2nd Level Menu -->
-                <ul id="reportes" class="submenu collapse ">
+                <ul id="reportes" class="submenu collapse <? if($reportes_active==1){ ?>in<? } ?>">
                     <li >
                         <a href="#">
                             <span class="text">Agenda</span>
@@ -254,13 +264,13 @@ $num_record = mysql_num_rows($q_recordatorios);
                             <span class="text">Consultas</span>
                         </a>
                     </li>
-                    <li >
-                        <a href="#">
+                    <li class="<?=$repo_ingre?>">
+                        <a href="?Modulo=ReporteIngreso">
                             <span class="text">Ingresos</span>
                         </a>
                     </li>
-                    <li >
-                        <a href="#">
+                    <li class="<?=$repo_gast?>">
+                        <a href="?Modulo=ReporteGasto">
                             <span class="text">Gastos</span>
                         </a>
                     </li>

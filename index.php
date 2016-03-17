@@ -308,6 +308,15 @@ alert(user.name + ' likes ' + user.likes)
 		    case 'Tienda':
 		    include("tienda.php");
 		    break;
+
+		    //Reportes
+		    case 'ReporteGasto':
+		    include("repo_gasto.php");
+		    break;
+
+		    	case 'ReporteIngreso':
+			    include("repo_ingreso.php");
+			    break;
 		    		    
 		    default:
 		    include('dashboard.php');
