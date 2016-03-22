@@ -78,6 +78,11 @@ switch($menu_php){
     $reportes_active = "1";
     $repo_gast = "active";
     break;
+
+    case 'ReporteFacturas':
+    $reportes_active = "1";
+    $repo_fact = "active";
+    break;
     
     case 'MiCuenta':
     $configuracion_active = "1";
@@ -279,8 +284,8 @@ $num_record = mysql_num_rows($q_recordatorios);
                             <span class="text">Gastos</span>
                         </a>
                     </li>
-                    <li >
-                        <a href="#">
+                    <li class="<?=$repo_fact?>">
+                        <a href="?Modulo=ReporteFacturas">
                             <span class="text">Facturas</span>
                         </a>
                     </li>

@@ -321,6 +321,10 @@ alert(user.name + ' likes ' + user.likes)
 			    case 'ReporteConsultas':
 			    include("repo_consultas.php");
 			    break;
+
+			    case 'ReporteFacturas':
+			    include("repo_facturas.php");
+			    break;
 		    		    
 		    default:
 		    include('dashboard.php');
