@@ -668,3 +668,35 @@ function ac_edita_gastos($id_gasto,$monto,$fecha,$id_cat,$descripcion,$factura,$
 	if($query){ return true; }else{ return false; }
 	
 }
+
+function nombreClinica($id){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="SELECT clinica FROM clinicas WHERE id_clinica=$id";
+	$query=@mysql_query($sql);
+	if($query){ 
+		$ft=mysql_fetch_assoc($query);
+		return $ft['clinica'];
+	}else{ 
+		return "N/A"; 
+	}
+}
+
+function nombrePaciente($id){
+	
+	global $conexion;
+	global $s_id_usuario;
+	global $fechahora;
+	
+	$sql="SELECT nombre FROM pacientes WHERE id_paciente=$id";
+	$query=@mysql_query($sql);
+	if($query){ 
+		$ft=mysql_fetch_assoc($query);
+		return $ft['nombre'];
+	}else{ 
+		return "N/A"; 
+	}
+}

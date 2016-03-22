@@ -317,6 +317,10 @@ alert(user.name + ' likes ' + user.likes)
 		    	case 'ReporteIngreso':
 			    include("repo_ingreso.php");
 			    break;
+
+			    case 'ReporteConsultas':
+			    include("repo_consultas.php");
+			    break;
 		    		    
 		    default:
 		    include('dashboard.php');

@@ -64,6 +64,11 @@ switch($menu_php){
 	$tienda_active = "active";
     break;
 
+    case 'ReporteConsultas':
+    $reportes_active = "1";
+    $repo_cons = "active";
+    break;
+
     case 'ReporteIngreso':
     $reportes_active = "1";
     $repo_ingre = "active";
@@ -259,8 +264,8 @@ $num_record = mysql_num_rows($q_recordatorios);
                             <span class="text">Agenda</span>
                         </a>
                     </li>
-                    <li >
-                        <a href="#">
+                    <li class="<?=$repo_cons?>">
+                        <a href="?Modulo=ReporteConsultas">
                             <span class="text">Consultas</span>
                         </a>
                     </li>

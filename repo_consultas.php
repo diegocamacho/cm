@@ -10,7 +10,7 @@
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Reporte de Ingresos por Fecha</h4>
+                <h4 class="title semibold">Reporte de Consultas por Fecha</h4>
             </div>
             <div class="page-header-section">
                 <!-- Toolbar -->
@@ -33,7 +33,7 @@
                 <div class="panel panel-primary">
                     <!-- panel heading/header -->
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="ico-user-md mr5"></i> Reporte de Ingresos por Fecha</h3>
+                        <h3 class="panel-title"><i class="ico-user-md mr5"></i> Reporte de Consultas por Fecha</h3>
                     </div>
                     <!--/ panel heading/header -->
                     
@@ -106,7 +106,7 @@ $('#btn_guarda').click(function(){
             $('#fecha_inicio').val('');
             $('#fecha_fin').val('');
             window.open(
-                "/cm/formatos/ingresos.php?fecha_ini="+fecha_inicio+"&fecha_fin="+fecha_fin,
+                "/cm/formatos/consultas.php?fecha_ini="+fecha_inicio+"&fecha_fin="+fecha_fin,
                 "_blank"
             );
         }else{
