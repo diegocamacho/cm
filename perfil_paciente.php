@@ -174,7 +174,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
                             <div class="panel-footer">
                           	<div class="row">
                           		<div class="col-sm-6">
-                          			<button type="button" class="btn btn-default ladda-button" data-style="zoom-in" id="elimina_paciente"><span class="ladda-label">Eliminar Paciente</span></button>
+                          			<button type="button" class="btn btn-default ladda-button" data-style="zoom-in" id="btn_elimina_paciente"><span class="ladda-label">Eliminar Paciente</span></button>
                           		</div>
 						  		<div class="col-sm-6 text-right">
                                 	<button type="button" class="btn btn-primary ladda-button" data-style="zoom-in" id="actualiza_perfil"><span class="ladda-label">Guardar Cambios</span></button>
@@ -374,7 +374,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 <script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script>
 <script type="text/javascript" src="javascript/app.min.js"></script>
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
-
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="plugins/blockui/jquery.blockUI.js"></script>
 
 <script>
@@ -420,6 +420,41 @@ $(function(){
 		    }
 		});
 		
-    }); 
+    });
+    
+    
+    $('#btn_elimina_paciente').click(function() {
+	    bootbox.confirm("¿Estas seguro/a que quieres eliminar al paciente <?=$nombre?>?", function (result) {
+        	if(result==true){
+				var btn_actualiza = Ladda.create(document.querySelector('#actualiza_perfil'));
+				btn_actualiza.start();
+				var datos=$('#frm_perfil').serialize();
+        		$('#vergeneral').block({ 
+	    		    overlayCSS:  { 
+	 				backgroundColor: '#FFF', 
+	 				opacity: 0.5, 
+	 				cursor: 'wait' 
+	 			},
+        		    message: '', 
+        		});
+        		$.post('ac/activa_desactiva_paciente.php',datos+'&id_paciente=<?=$id_paciente?>&tipo=0',function(data){
+				    if(data==1){
+						window.open("?Modulo=Pacientes&msg=1", "_self");
+				    }else{
+				    	$('#msg_data').html(data);
+				    	$('#msg').show();
+				    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+				    	$('#msg').focus();
+				    	btn_actualiza.stop();
+				    	scrollToElement('#main');
+				    	$('#vergeneral').unblock();
+				    }
+				});
+			}else{
+				event.preventDefault();
+			}
+		});
+		
+    });
 });
 </script>

@@ -23,7 +23,12 @@ $q_pacientes=mysql_query($sql);
             </div>
         </div>
         <!-- Page Header -->
-
+		<? if($_GET['msg']==1){ ?>
+        <div class="alert alert-dismissable alert-success animation animating flipInX">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            ¡El paciente se ha eliminado!
+        </div>
+        <? } ?>
         <!-- START Row -->
         <div class="row" id="shuffle-grid">
 	        <? while($ft=mysql_fetch_assoc($q_pacientes)){ ?>

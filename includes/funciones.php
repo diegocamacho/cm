@@ -700,3 +700,18 @@ function nombrePaciente($id){
 		return "N/A"; 
 	}
 }
+
+function validaPaciente($id){
+	
+	global $conexion;
+	global $id_medico;
+	
+	$sql="SELECT id_paciente FROM pacientes WHERE id_paciente=$id AND id_medico=$id_medico";
+	$query=@mysql_query($sql);
+	$valida=mysql_num_rows($query);
+	if($valida){
+		return true;
+	}else{ 
+		return false; 
+	}
+}
