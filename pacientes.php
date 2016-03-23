@@ -43,7 +43,7 @@ $q_pacientes=mysql_query($sql);
                                 <p class="text-muted nm mb5"><? if($ft['celular']){ ?><i class="ico-phone2 mr5"></i> <?=$ft['celular']?><? } ?></p>
                                 <div class="btn-group">
                                 	<a href="index.php?Modulo=PerfilPaciente&id=<?=$ft['id_paciente']?>" role="button" class="btn btn-primary btn-sm">Perfil</a>
-									<a href="#" role="button" class="btn btn-teal btn-sm">Consultar</a>
+									<a href="index.php?Modulo=Consulta&id_paciente=<?=$ft['id_paciente']?>" role="button" class="btn btn-teal btn-sm">Consultar</a>
                                 </div>
                             </div>
                         </div>

@@ -1,15 +1,34 @@
 <?
 $id_agenda=escapar($_GET['ID'],1);
-
+$id_paciente=escapar($_GET['id_paciente'],1);
 if(!$id_agenda){
-	//Clinicas
-	$sql_clinica="SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo='1'";
-	$q_clinica=mysql_query($sql_clinica);
-	$valida_clinica=mysql_num_rows($q_clinica);
-
-	//Pacientes
-	$sql_pacientes="SELECT * FROM pacientes WHERE id_medico='$id_medico' AND activo='1'";
-	$q_pacientes=mysql_query($sql_pacientes);
+	//Si viene desde los pacientes pero sin cita
+	if($id_paciente){
+		$sql="SELECT * FROM pacientes WHERE id_medico=$id_medico AND activo=1 AND id_paciente=$id_paciente";
+		$q=mysql_query($sql);
+		$valida_consulta=mysql_num_rows($q);
+		if(!$valida_consulta) header("Location: index.php");
+		
+		$datos=mysql_fetch_assoc($q);
+		/* Datos */
+		$nombre=$datos['nombre'];
+		$telefono=$datos['celular'];
+		$email=$datos['email'];
+		$edad=$datos['edad'];
+		$sexo=$datos['sexo'];
+		$anotacion=$datos['anotacion'];
+		$antecedentes=$datos['antecedentes_alergias'];
+		$titulo="/ ".$nombre;
+	}else{
+		//Clinicas
+		$sql_clinica="SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo='1'";
+		$q_clinica=mysql_query($sql_clinica);
+		$valida_clinica=mysql_num_rows($q_clinica);
+		
+		//Pacientes
+		$sql_pacientes="SELECT * FROM pacientes WHERE id_medico='$id_medico' AND activo='1'";
+		$q_pacientes=mysql_query($sql_pacientes);
+	}
 }else{
 	$sql="SELECT agenda.*, pacientes.*, clinicas.clinica FROM agenda 
 	JOIN pacientes ON pacientes.id_paciente=agenda.id_paciente
@@ -89,8 +108,14 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
 									<? if($id_agenda){ ?>
 									<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
 									<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
-									<? }else{ ?>
+									<? }else{ 
+										if($id_paciente){
+									?>
+										<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
+										<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
+										<? }else{ ?>
 									<input type="text" class="form-control" name="id_paciente" maxlength="68" >
+										<? } ?>
 									<? } ?>
                             </div>
                         </div>
