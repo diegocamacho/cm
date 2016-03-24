@@ -22,15 +22,16 @@ $valida_consultas=mysql_num_rows($q_consultas);
 $sql_pagos="SELECT ingresos.*,consultas.*,tipo_cobro.tipo_cobro FROM consultas 
 JOIN ingresos ON ingresos.id_consulta=consultas.id_consulta
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
-WHERE consultas.id_paciente=$id_paciente AND consultas.id_medico=$id_medico AND ingresos.activo=1";
+WHERE consultas.id_paciente=$id_paciente AND consultas.id_medico=$id_medico AND ingresos.activo=1 AND ingresos.estado=1";
 $q_pagos=mysql_query($sql_pagos);
 $valida_pagos=mysql_num_rows($q_pagos);
 
 //Cuentas por cobrar
-$sql_cuentas="SELECT cuentas_cobrar.*,ingresos.*,tipo_cobro.* FROM cuentas_cobrar 
+$sql_cuentas="SELECT cuentas_cobrar.*,ingresos.*,tipo_cobro.*,aseguradoras.* FROM cuentas_cobrar 
 LEFT JOIN ingresos ON ingresos.id_cuentas_cobrar=cuentas_cobrar.id_cuentas_cobrar
 LEFT JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
-WHERE cuentas_cobrar.id_paciente=$id_paciente";
+LEFT JOIN aseguradoras on ingresos.id_aseguradora=aseguradoras.id_aseguradora
+WHERE cuentas_cobrar.id_paciente=$id_paciente AND ingresos.estado=2";
 $q_cuentas=mysql_query($sql_cuentas);
 $valida_cuentas=mysql_num_rows($q_cuentas);
 ?>
@@ -213,7 +214,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 							                        <div class="btn-group mb5 ml10">
 														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
 														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
-														    <li><a href="javascript:void(0);">Ver Consulta</a></li>
+														    <li><a data-toggle="modal" href="data/consulta.php?id_consulta=<?=$ft['id_consulta']?>" data-target="#consulta">Ver Consulta</a></li>
 														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
 														</ul>
 													</div>
@@ -251,8 +252,9 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                <thead>
 						                    <tr>
 						                        <th width="15%">Fecha</th>
-						                        <th>Tipo de cobro</th>
-						                        <th width="10%">Monto</th>
+						                        <th width="15%">Tipo de cobro</th>
+						                        <th>Observación</th>
+						                        <th width="8%" style="text-align: right">Monto</th>
 						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
@@ -261,6 +263,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                    <tr>
 						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora_pago']))?></td>
 						                        <td><?=$ft['tipo_cobro']?></td>
+						                        <td><?=$ft['anotacion']?></td>
 						                        <td align="right"><?=number_format($ft['monto'],2)?></td>
 						                        <td align="right">
 							                        <div class="btn-group mb5 ml10">
@@ -304,8 +307,9 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                <thead>
 						                    <tr>
 						                        <th  width="15%">Fecha del adeudo</th>
-						                        <th>Tipo de Cobro</th>
-						                        <th width="10%">Monto</th>
+						                        <th width="20%">Tipo de cobro</th>
+						                        <th>Observación</th>
+						                        <th width="8%" style="text-align: right">Monto</th>
 						                        <th width="10%"></th>
 						                    </tr>
 						                </thead>
@@ -313,7 +317,8 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 							                <? while($ft=mysql_fetch_assoc($q_cuentas)){ ?>
 						                    <tr>
 						                        <td><?=fechaLetra($ft['fecha_adeudo'])?></td>
-						                        <td><?=$ft['tipo_cobro']?></td>
+						                        <td><?=$ft['tipo_cobro']?> <? if($ft['nombre_aseguradora']){ echo "<br>(".$ft['nombre_aseguradora'].")"; } ?></td>
+						                        <td><?=$ft['anotacion']?></td>
 						                        <td align="right"><?=number_format($ft['monto'],2)?></td>
 						                        <td align="right">
 							                        <div class="btn-group mb5 ml10">
@@ -458,3 +463,14 @@ $(function(){
     });
 });
 </script>
+
+
+
+
+
+<div class="modal fade" id="consulta" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+		</div>
+	</div>
+</div>
