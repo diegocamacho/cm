@@ -43,7 +43,7 @@ if(!is_numeric($id_paciente)){
 		exit("El nombre ".$id_paciente." no es válido");
 	}
 }else{
-	$sq4=@mysql_query("UPDATE pacientes SET nombre='$nombre', celular='$telefono', email='$mail', edad='$edad', sexo='$sexo', antecedentes_alergias='$antecedentes' WHERE id_paciente=$id_paciente");
+	$sq4=@mysql_query("UPDATE pacientes SET nombre='$nombre', celular='$telefono', email='$email', edad='$edad', sexo='$sexo', antecedentes_alergias='$antecedentes' WHERE id_paciente=$id_paciente");
 	if(!$sq4) exit("Ocurrió un error al actualizar los datos el paciente, <b>no se guardo la consulta</b>, intente de nuevo.");
 }
 
@@ -61,9 +61,20 @@ if(!$id_paciente){
 	$sq1=@mysql_query("INSERT INTO consultas (id_paciente,id_agenda,id_medico,diagnostico,sugerencias,fecha_hora)VALUES('$id_paciente','$id_agenda','$id_medico','$diagnostico','$sugerencias','$fechahora')");
 	if(!$sq1) $error=true;
 	$id_consulta=mysql_insert_id();
-
+	
+	//Cuando no es credito el estado se setea a 1
+	$estado=1;
+	
+	if($tipo_cobro>=3){
+		$sq0=@mysql_query("INSERT INTO cuentas_cobrar (id_paciente,fecha_adeudo)VALUES('$id_paciente','$fecha_actual')");
+		if(!$sq0) $error=true;
+		$id_cuentas_cobrar=mysql_insert_id();
+		//Aquí con el estado 2 indicamos que es a crédito
+		$estado=2;
+		}
+	
 	$sq2=@mysql_query("INSERT INTO ingresos (id_medico,estado,id_secretaria,id_tipo_ingreso,id_tipo_cobro,id_aseguradora,id_consulta,id_cuentas_cobrar,monto,anotacion,fecha_hora_captura,fecha_hora_pago)
-									VALUES('$id_medico','1','0','1','$tipo_cobro','$id_aseguradora','$id_consulta','$id_cuentas_cobrar','$monto','$anotacion','$fechahora','$fechahora')");
+									VALUES('$id_medico','$estado','0','1','$tipo_cobro','$id_aseguradora','$id_consulta','$id_cuentas_cobrar','$monto','$anotacion','$fechahora','$fechahora')");
 	if(!$sq2) $error=true;
 	
 	$sq3=@mysql_query("INSERT INTO recetas (id_consulta,receta)VALUES('$id_consulta','$receta')");

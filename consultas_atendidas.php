@@ -1,6 +1,9 @@
 <?
-$sql="SELECT consultas.*, pacientes.nombre FROM consultas 
+$sql="SELECT consultas.*, tipo_cobro.tipo_cobro,pacientes.nombre,aseguradoras.nombre_aseguradora FROM consultas 
 LEFT JOIN pacientes on pacientes.id_paciente=consultas.id_paciente
+LEFT JOIN ingresos on ingresos.id_consulta=consultas.id_consulta
+LEFT JOIN tipo_cobro on ingresos.id_tipo_cobro=tipo_cobro.id_tipo_cobro
+LEFT JOIN aseguradoras on ingresos.id_aseguradora=aseguradoras.id_aseguradora
 WHERE consultas.activo=1";	
 $q_consultas=mysql_query($sql);
 ?>
@@ -72,7 +75,7 @@ $q_consultas=mysql_query($sql);
                             <tr>
                                 <td><?=$ft['nombre']?></td>
                                 <td><?=fechaLetra(fechaSinHora($ft['fecha_hora']))?></td>
-                                <td>Pago Inmediato</td>
+                                <td><?=$ft['tipo_cobro']?> <? if($ft['nombre_aseguradora']){ echo "(".$ft['nombre_aseguradora'].")"; } ?></td>
                                 <td><?=$ft['diagnostico']?></td>
                                 <td><span class="label label-teal">Ver Resumen</span></td>
                             </tr>
