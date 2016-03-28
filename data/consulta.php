@@ -5,7 +5,6 @@ include("../includes/funciones.php");
 extract($_GET);
 if(!$id_consulta) exit("Ocurrió un error, no se encontro la consulta seleccionada.");
 $id_consulta=escapar($id_consulta,1);
-
 $sql="SELECT consultas.*, tipo_cobro.tipo_cobro,pacientes.*,aseguradoras.nombre_aseguradora FROM consultas 
 LEFT JOIN pacientes on pacientes.id_paciente=consultas.id_paciente
 LEFT JOIN ingresos on ingresos.id_consulta=consultas.id_consulta

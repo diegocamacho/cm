@@ -196,6 +196,11 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Historial de Consultas</h3>
 						            </div>
+						            <!-- Mensaje -->
+									<div id="msg_consultas" style="display:none;margin: 20px 10px 10px 10px;">
+										<span id="msg_data_consultas"></span>
+									</div>
+									<!-- End Mensaje -->
 						            <? if($valida_consultas){ ?>
 						            <table class="table table-striped" id="historial_consultas">
 						                <thead>
@@ -207,15 +212,15 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                </thead>
 						                <tbody>
 							                <? while($ft=mysql_fetch_assoc($q_consultas)){ ?>
-						                    <tr>
+						                    <tr class="consulta_<?=$ft['id_consulta']?>">
 						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora']))?></td>
 						                        <td><?=$ft['diagnostico']?></td>
 						                        <td align="right">
 							                        <div class="btn-group mb5 ml10">
 														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
 														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
-														    <li><a data-toggle="modal" href="data/consulta.php?id_consulta=<?=$ft['id_consulta']?>" data-target="#consulta">Ver Consulta</a></li>
-														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														    <li><a href="javascript:void(0);" data-toggle="modal" data-id="<?=$ft['id_consulta']?>" data-target="#verResumen">Ver Consulta</a></li>
+														    <li><a href="javascript:void(0);" class="text-danger" onclick="eliminaConsulta(<?=$ft['id_consulta']?>)">Eliminar</a></li>
 														</ul>
 													</div>
 						                        </td>
@@ -461,16 +466,81 @@ $(function(){
 		});
 		
     });
+    
+    /* Traemos los datos de la consulta */
+    $(document).on('click', '[data-id]', function () {
+
+	    var id_consulta = $(this).attr('data-id');
+	    $('#here-mtfkr').val(''); 
+	    $.ajax({
+	   	url: "data/consulta.php",
+	   	data: 'id_consulta='+id_consulta,
+	   	success: function(data){
+	   		$('#here-mtfkr').html(data);
+	    	$('#footer').show();
+	   	},
+	   	cache: false
+	   });
+	});
+	
 });
+function eliminaConsulta(id){
+	bootbox.confirm("¿Estas seguro/a que quieres eliminar la consulta?", function (result) {
+    	if(result==true){
+	    	var id_consulta = id;
+    		$('#verconsultas').block({ 
+			    overlayCSS:  { 
+				backgroundColor: '#FFF', 
+				opacity: 0.5, 
+				cursor: 'wait' 
+			},
+    		    message: '', 
+    		});
+    		$.post('ac/elimina_consulta.php?id_consulta='+id_consulta,function(data){
+			    if(data==1){
+					$('.consulta_'+id_consulta).hide();
+			    	$('#verconsultas').unblock();
+			    }else{
+			    	$('#msg_data_consultas').html(data);
+			    	$('#msg_consultas').show();
+			    	$('#msg_consultas').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+			    	scrollToElement('#main');
+			    	$('#verconsultas').unblock();
+			    }
+			});
+		}else{
+			event.preventDefault();
+		}
+	});
+}
 </script>
 
 
 
 
 
-<div class="modal fade" id="consulta" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-		</div>
-	</div>
+
+
+
+
+<!-- START Modal -->
+<div id="verResumen" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="frm_guarda">
+            <div class="modal-header">
+                <div class="cell text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <div class="ico-vcard mb15 mt15 fsize32"></div>
+                    <h4 class="semibold text-primary">Resumen de Consulta Medica</h4>
+                </div>
+            </div>
+            <div class="modal-body" id="here-mtfkr">
+                
+            </div>
+            <div class="modal-footer" style="display:none;" id="footer">
+                <button type="button" class="btn mod btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </form><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div>
+<!--/ END Modal -->
