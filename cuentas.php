@@ -27,14 +27,30 @@ $sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_pac
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
 LEFT JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
-WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
+WHERE ingresos.id_medico=$id_medico AND consultas.activo = 1 AND estado=2 AND ingresos.activo=1 AND (ingresos.id_tipo_cobro=3 OR ingresos.id_tipo_cobro=4) AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales
-$sq_total="SELECT SUM(monto) AS total FROM ingresos WHERE ingresos.id_medico=1 AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$sq_total="SELECT SUM(ingresos.monto) AS total FROM ingresos
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta 
+WHERE ingresos.id_medico=$id_medico AND consultas.activo=1 AND estado=2 AND ingresos.activo=1 AND (ingresos.id_tipo_cobro=3 OR ingresos.id_tipo_cobro=4) AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
 $q_total=mysql_query($sq_total);
 $datos_total=mysql_fetch_assoc($q_total);
 $total=$datos_total['total'];
+
+$sq_total="SELECT SUM(monto) AS total FROM ingresos 
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
+WHERE ingresos.id_medico=$id_medico AND consultas.activo=1 AND estado=2 AND ingresos.activo=1 AND ingresos.id_tipo_cobro=3 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$q_total=mysql_query($sq_total);
+$datos_total=mysql_fetch_assoc($q_total);
+$total_general=$datos_total['total'];
+
+$sq_total="SELECT SUM(monto) AS total FROM ingresos 
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
+WHERE ingresos.id_medico=$id_medico AND consultas.activo=1 AND estado=2 AND ingresos.activo=1 AND ingresos.id_tipo_cobro=4 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$q_total=mysql_query($sq_total);
+$datos_total=mysql_fetch_assoc($q_total);
+$total_aseguradora=$datos_total['total'];
 //Falta relacionar los ingresos facturados
 
 //Buscamos clínicas
@@ -72,9 +88,9 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 						         <li><a href="<?=$url?>&Estado=2">No Pagados</a></li>
 						     </ul>
 						 </div>
-						-->
+						
                         <a class="btn btn-sm btn-primary" href="javascript:void(0);" role="button" data-toggle="modal" data-backdrop="static" data-target="#NuevoIngreso">Nuevo Ingreso Adicional</a>
-
+                        -->
             </div>
         </div>
         <!-- Page Header -->
@@ -121,7 +137,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 				        </div>
 				        <div class="col-xs-8 panel">
 				            <div class="panel-body text-center">
-				                <h4 class="semibold nm">13,560.00</h4>
+				                <h4 class="semibold nm"><?=fnum($total_general)?></h4>
 				                <p class="semibold text-muted mb0 mt5">CRÉDITO EN GENERAL</p>
 				            </div>
 				        </div>
@@ -136,7 +152,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 				        </div>
 				        <div class="col-xs-8 panel">
 				            <div class="panel-body text-center">
-				                <h4 class="semibold nm">104,000.00</h4>
+				                <h4 class="semibold nm"><?=fnum($total_aseguradora)?></h4>
 				                <p class="semibold text-muted mb0 mt5">CRÉDITO ASEGURADORA</p>
 				            </div>
 				        </div>
@@ -149,6 +165,9 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                 
         <!-- Tabla y acciones -->
         <div class="row">
+            <div id="msg_pendientes" style="display:none;margin: 20px 10px 10px 10px;">
+                <span id="msg_data_pendientes"></span>
+            </div>
             <div class="col-md-12">
             	<? if($muestra){ ?>
                 <div class="panel panel-primary">
@@ -156,7 +175,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         <h3 class="panel-title">Cuentas por cobrar</h3>
                     </div>
 					
-                    <table class="table table-striped" id="zero-configuration">
+                    <table class="table table-striped" id="pagos_pendientes">
                         <thead>
                             <tr>
                             	<th>Nombre</th>
@@ -164,20 +183,31 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                 <th>Fecha</th>
                                 <th align="right">Monto</th>
                                 <th>Estado</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                         <? while($ft=mysql_fetch_assoc($query)){ 
 	                        $id_tipo_ingreso=$ft['id_tipo_ingreso'];
+                            $id_paciente = $ft['id_paciente'];
 	                        $estado=$ft['estado'];
 	                        $monto=$ft['monto'];
                         ?>
                             <tr>
                             	<td>Diego Camacho</td>
-                                <td><? if($id_tipo_ingreso==1){ echo "<a href='#'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
+                                <td><? if($id_tipo_ingreso==1){ echo "<a href='?Modulo=PerfilPaciente&id=$id_paciente'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
                                 <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
-                                <td align="right"><?=fnum($monto)?></td>
+                                <td><?=fnum($monto)?></td>
                                 <td><? if($estado==1){ ?><span class="label label-primary">Pagado</span> <? }else{ ?><span class="label label-danger"> Pagar</span> <span class="label label-teal"><?=$ft['tipo_cobro']?></span> <? } ?></td>
+                                <td>
+                                    <div class="btn-group mb5 ml10">
+                                        <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+                                            <li><a href="javascript:void(0);" data-toggle="modal" data-ingreso="<?=$ft['id_ingreso']?>" data-target="#pagaAdeudo" class="text-success">Pagar</a></li>
+                                            <li><a href="javascript:void(0);" onclick="eliminaPagoPendiente(<?=$ft['id_ingreso']?>)" class="text-danger">Eliminar</a></li>
+                                       </ul>
+                                    </div>                                    
+                                </td>
                             </tr>
                         <? } ?>
                         </tbody>
@@ -199,68 +229,94 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <script type="text/javascript" src="library/jquery/js/jquery-migrate.min.js"></script>
 <script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="library/core/js/core.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
+<script type="text/javascript" src="plugins/blockui/jquery.blockUI.js"></script>
 <!--/ Library script -->
 <script>
 $(function(){
-	$("#fecha").datepicker();
-	
-	//Nuevo Ingreso
-	$('#btn_guarda').click(function(){
-	 	ac_nuevo_ingreso();
-	});	
-	
-	//Enfoco el primer campo
-	$('#NuevoIngreso').on('shown.bs.modal', function (e) {
-		$('#monto').focus();		
-  	});
-  	
-  	//Limpiamos el modal cuando se cierre
-  	$('#NuevoIngreso').on('hidden.bs.modal', function (e) {
-  		$('.mod').removeAttr("disabled");
-	  	$('.mod').val('');
-  	});
-	
 	//Envio el formulario al presionar enter
 	$('form').submit(function(e) {
 		ac_nuevo_ingreso();
 		e.preventDefault();
 	});
 	
-	//Cambiamso de mes la consulta
-	$('#btn_mes').click(function(){
-		var mes = $('#mes').val();
-		location.href = "?Modulo=Ingresos&Mes="+mes;
-	});
-	
+	$(document).on('click', '[data-ingreso]', function () {
+
+        var id_ingreso = $(this).attr('data-ingreso');
+        $('#muestra_info_deuda').html(''); 
+        $.ajax({
+        url: "data/adeudo.php",
+        data: 'id_ingreso='+id_ingreso,
+        success: function(data){
+            $('#muestra_info_deuda').html(data);
+            $('#footer_adeudo').show();
+            
+            store.set('id_ingreso',id_ingreso);
+        },
+        cache: false
+       });
+    });
+    
+    $('#pagaAdeudo').on('hidden.bs.modal', function (e) {
+        store.remove('id_ingreso');
+        $('#muestra_info_deuda').html("");
+    });
+
 });
 
-function ac_nuevo_ingreso(){
+function eliminaPagoPendiente(id){
+    bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago pendiente?", function (result) {
+        if(result==true){
+            $('#pagos_pendientes').block({ 
+                overlayCSS:  { 
+                backgroundColor: '#FFF', 
+                opacity: 0.5, 
+                cursor: 'wait' 
+            },
+                message: '', 
+            });
+            $.post('ac/elimina_ingreso_pendiente.php?id_ingreso='+id,function(data){
+                if(data==1){
+                    $('#msg_pendientes').hide();
+                    $('.pendientes_'+id).hide();
+                    $('#pagos_pendientes').unblock();
+                }else{
+                    $('#msg_data_pendientes').html(data);
+                    $('#msg_pendientes').show();
+                    $('#msg_pendientes').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+                    scrollToElement('#main');
+                    $('#pagos_pendientes').unblock();
+                }
+            });
+        }else{
+            event.preventDefault();
+        }
+    });
+}
 
-	var datos=$('#frm_guarda').serialize();
-
-	var btn_guarda = Ladda.create(document.querySelector('#btn_guarda'));
-	
-	btn_guarda.start();
-	$('.mod').attr("disabled", true);
-
-	$.post('ac/ingresos.php',datos,function(data){
-
-	    if(data==1){
-	    	location.href = "?Modulo=Ingresos&msg=1";
-	    }else if(data==2){
-	    	location.href = "?Modulo=Ingresos&msg=2";
-	    }else if(data==3){
-	    	location.href = "?Modulo=Ingresos&msg=3";
-	    }else{
-	    	$('#msg_data').html(data);
-	    	$('#msg').show();
-	    	$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-	    	btn_guarda.stop();
-	    	$('.mod').removeAttr("disabled");
-	    	$('#nombre').focus();
-	    }
-	});
-};
+function pagaDeuda(){
+    var btn_guarda = Ladda.create(document.querySelector('#btn_guarda'));
+    btn_guarda.start();
+    if(!store.get('id_ingreso')){
+        var id_ingreso = 0;
+    }else{
+        var id_ingreso = store.get('id_ingreso');
+    }
+    
+    $.post('ac/paga_pendiente.php?id_ingreso='+id_ingreso,function(data){
+        if(data==1){
+            alert("ok");
+            window.open("?Modulo=PerfilPaciente&id=<?=$id_paciente?>", "_self");
+        }else{
+            $('#msg_data_paga').html(data);
+            $('#msg_paga').show();
+            $('#msg_paga').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+            $('#msg_paga').focus();
+            btn_guarda.stop();
+        }
+    });
+}
 </script>
 
 <!-- App and page level script -->
@@ -285,96 +341,29 @@ function ac_nuevo_ingreso(){
 
 
 <!-- START Modal -->
-<div id="NuevoIngreso" class="modal fade">
-    <div class="modal-dialog modal-sm">
+<div id="pagaAdeudo" class="modal fade">
+    <div class="modal-dialog">
         <form class="modal-content" id="frm_guarda">
             <div class="modal-header">
                 <div class="cell text-center">
                     <button type="button" class="close" data-dismiss="modal">×</button>
                     <div class="ico-coins mb15 mt15 fsize32"></div>
-                    <h4 class="semibold text-primary">Nuevo Ingreso Adicional</h4>
+                    <h4 class="semibold text-primary">Pago de Adeudo</h4>
                 </div>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                    	<!-- Mensaje de Error -->
-                    	<div id="msg" style="display:none;">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <span id="msg_data"></span>
-                        </div>
-						<!-- END Mensaje de Error -->
-                        <div class="form-group">
-                        	<div class="row">
-                            	<div class="col-sm-12">
-                                	<label class="control-label">Monto <span class="text-danger">*</span></label>
-									<div class="input-group">
-							        	<span class="input-group-addon">$</span>
-										<input type="text" class="form-control mod" name="monto" id="monto">
-									</div>
-								</div>
-                        	</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <label class="control-label">Fecha <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control mod" id="fecha" name="fecha" placeholder="Seleccione fecha" />
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="control-label">Descripción</label>
-                            <textarea name="descripcion" class="form-control mod" rows="4" ></textarea>
-                        </div>
-                    </div>
+                <!-- Mensaje -->
+                <div id="msg_paga" style="display:none;margin: 0px 10px 10px 10px;">
+                    <span id="msg_data_paga"></span>
                 </div>
+                <!-- End Mensaje -->
+                <div id="muestra_info_deuda"></div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success ladda-button" data-style="zoom-in" id="btn_guarda"><span class="ladda-label">Guardar</span></button>
+            <div class="modal-footer" style="display:none;" id="footer_adeudo">
+                <button type="button" class="btn mod btn-default" data-dismiss="modal">Cancelar</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-success ladda-button" data-style="zoom-in" id="btn_guarda" onclick="pagaDeuda();"><span class="ladda-label">Pagar</span></button>
             </div>
         </form><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
 <!--/ END Modal -->
-
-
-<!-- START modal-sm Seleccionar mes-->
-<div id="SeleccionaMes" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <button type="button" class="close" data-dismiss="modal">×</button>
-                <div class="ico-calendar3 mb15 mt15" style="font-size:36px;"></div>
-                <h4 class="semibold modal-title text-primary">Ingresos por Mes</h4>
-            </div>
-            <div class="modal-body">
-            <form id="frm_mes">
-                <select class="form-control" name="mes" id="mes">
-                	<option>Seleccione uno</option>
-                    <option value="01">Enero</option>
-                    <option value="02">Febrero</option>
-                    <option value="03">Marzo</option>
-                    <option value="04">Abril</option>
-                    <option value="05">Mayo</option>
-                    <option value="06">Junio</option>
-                    <option value="07">Julio</option>
-                    <option value="08">Agosto</option>
-                    <option value="09">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btn_mes">Aceptar</button>
-            </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div>
-<!--/ END modal-sm -->
