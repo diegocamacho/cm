@@ -252,12 +252,17 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Historial de Pagos</h3>
 						            </div>
+						            <!-- Mensaje -->
+									<div id="msg_ingresos" style="display:none;margin: 20px 10px 10px 10px;">
+										<span id="msg_data_ingresos"></span>
+									</div>
+									<!-- End Mensaje -->
 						            <? if($valida_pagos){ ?>
 						            <table class="table table-striped" id="historial_pagos">
 						                <thead>
 						                    <tr>
 						                        <th width="15%">Fecha</th>
-						                        <th width="15%">Tipo de cobro</th>
+						                        <th width="18%">Tipo de cobro</th>
 						                        <th>Observación</th>
 						                        <th width="8%" style="text-align: right">Monto</th>
 						                        <th width="10%"></th>
@@ -265,7 +270,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                </thead>
 						                <tbody>
 							                <? while($ft=mysql_fetch_assoc($q_pagos)){ ?>
-						                    <tr>
+						                    <tr class="ingreso_<?=$ft['id_ingreso']?>">
 						                        <td><?=fechaLetra(fechaSinHora($ft['fecha_hora_pago']))?></td>
 						                        <td><?=$ft['tipo_cobro']?></td>
 						                        <td><?=$ft['anotacion']?></td>
@@ -274,8 +279,8 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 							                        <div class="btn-group mb5 ml10">
 														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
 														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
-														    <li><a href="javascript:void(0);">Convertir en Deuda</a></li>
-														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														    <li><a href="javascript:void(0);" onclick="convierteDeuda(<?=$ft['id_ingreso']?>)">Convertir en Deuda</a></li>
+														    <li><a href="javascript:void(0);" class="text-danger" onclick="eliminaIngreso(<?=$ft['id_ingreso']?>)">Eliminar</a></li>
 														</ul>
 													</div>
 						                        </td>
@@ -307,12 +312,17 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						            <div class="panel-heading">
 						                <h3 class="panel-title">Pagos Pendientes</h3>
 						            </div>
+						            <!-- Mensaje -->
+									<div id="msg_pendientes" style="display:none;margin: 20px 10px 10px 10px;">
+										<span id="msg_data_pendientes"></span>
+									</div>
+									<!-- End Mensaje -->
 						            <? if($valida_cuentas){ ?>
 						            <table class="table table-striped" id="pagos_pendientes">
 						                <thead>
 						                    <tr>
-						                        <th  width="15%">Fecha del adeudo</th>
-						                        <th width="20%">Tipo de cobro</th>
+						                        <th  width="15%">Adeudo</th>
+						                        <th width="21%">Tipo de cobro</th>
 						                        <th>Observación</th>
 						                        <th width="8%" style="text-align: right">Monto</th>
 						                        <th width="10%"></th>
@@ -320,7 +330,7 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 						                </thead>
 						                <tbody>
 							                <? while($ft=mysql_fetch_assoc($q_cuentas)){ ?>
-						                    <tr>
+						                    <tr class="pendientes_<?=$ft['id_ingreso']?>">
 						                        <td><?=fechaLetra($ft['fecha_adeudo'])?></td>
 						                        <td><?=$ft['tipo_cobro']?> <? if($ft['nombre_aseguradora']){ echo "<br>(".$ft['nombre_aseguradora'].")"; } ?></td>
 						                        <td><?=$ft['anotacion']?></td>
@@ -329,8 +339,8 @@ $valida_cuentas=mysql_num_rows($q_cuentas);
 							                        <div class="btn-group mb5 ml10">
 														<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
 														<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
-														    <li><a href="javascript:void(0);" class="text-success">Pagar</a></li>
-														    <li><a href="javascript:void(0);" class="text-danger">Eliminar</a></li>
+														    <li><a href="javascript:void(0);" data-toggle="modal" data-ingreso="<?=$ft['id_ingreso']?>" data-target="#pagaAdeudo" class="text-success">Pagar</a></li>
+														    <li><a href="javascript:void(0);" onclick="eliminaPagoPendiente(<?=$ft['id_ingreso']?>)" class="text-danger">Eliminar</a></li>
 														</ul>
 													</div>
 						                        </td>
@@ -398,6 +408,9 @@ function scrollToElement(target) {
     return false;
 };
 $(function(){
+	
+	//Limpiamos el local storage
+	store.clear();
 
 	$('#actualiza_perfil').click(function() {
 		var btn_actualiza = Ladda.create(document.querySelector('#actualiza_perfil'));
@@ -483,12 +496,35 @@ $(function(){
 	   });
 	});
 	
+	/* Traemos los datos del adeudo */
+    $(document).on('click', '[data-ingreso]', function () {
+
+	    var id_ingreso = $(this).attr('data-ingreso');
+	    $('#muestra_info_deuda').html(''); 
+	    $.ajax({
+	   	url: "data/adeudo.php",
+	   	data: 'id_ingreso='+id_ingreso,
+	   	success: function(data){
+	   		$('#muestra_info_deuda').html(data);
+	    	$('#footer_adeudo').show();
+	    	
+	    	store.set('id_ingreso',id_ingreso);
+	   	},
+	   	cache: false
+	   });
+	});
+	
+	$('#pagaAdeudo').on('hidden.bs.modal', function (e) {
+		store.remove('id_ingreso');
+		$('#muestra_info_deuda').html("");
+  	});
+	
 });
 function eliminaConsulta(id){
 	bootbox.confirm("¿Estas seguro/a que quieres eliminar la consulta?", function (result) {
     	if(result==true){
 	    	var id_consulta = id;
-    		$('#verconsultas').block({ 
+    		$('#historial_consultas').block({ 
 			    overlayCSS:  { 
 				backgroundColor: '#FFF', 
 				opacity: 0.5, 
@@ -498,19 +534,129 @@ function eliminaConsulta(id){
     		});
     		$.post('ac/elimina_consulta.php?id_consulta='+id_consulta,function(data){
 			    if(data==1){
+				    $('#msg_consultas').hide();
 					$('.consulta_'+id_consulta).hide();
-			    	$('#verconsultas').unblock();
+			    	$('#historial_consultas').unblock();
 			    }else{
 			    	$('#msg_data_consultas').html(data);
 			    	$('#msg_consultas').show();
 			    	$('#msg_consultas').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
 			    	scrollToElement('#main');
-			    	$('#verconsultas').unblock();
+			    	$('#historial_consultas').unblock();
 			    }
 			});
 		}else{
 			event.preventDefault();
 		}
+	});
+}
+function eliminaIngreso(id){
+	bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago?", function (result) {
+    	if(result==true){
+    		$('#historial_pagos').block({ 
+			    overlayCSS:  { 
+				backgroundColor: '#FFF', 
+				opacity: 0.5, 
+				cursor: 'wait' 
+			},
+    		    message: '', 
+    		});
+    		$.post('ac/elimina_ingreso.php?id_ingreso='+id,function(data){
+			    if(data==1){
+				    $('#msg_ingresos').hide();
+					$('.ingreso_'+id).hide();
+			    	$('#historial_pagos').unblock();
+			    }else{
+			    	$('#msg_data_ingresos').html(data);
+			    	$('#msg_ingresos').show();
+			    	$('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+			    	scrollToElement('#main');
+			    	$('#historial_pagos').unblock();
+			    }
+			});
+		}else{
+			event.preventDefault();
+		}
+	});
+}
+function convierteDeuda(id){
+	bootbox.confirm("¿Estas seguro/a que quieres convertir el pago en deuda?", function (result) {
+    	if(result==true){
+    		$('#historial_pagos').block({ 
+			    overlayCSS:  { 
+				backgroundColor: '#FFF', 
+				opacity: 0.5, 
+				cursor: 'wait' 
+			},
+    		    message: '', 
+    		});
+    		$.post('ac/convierte_ingreso.php?id_paciente=<?=$id_paciente?>&id_ingreso='+id,function(data){
+			    if(data==1){
+				    $('#msg_ingresos').hide();
+					$('.ingreso_'+id).hide();
+			    	$('#historial_pagos').unblock();
+			    }else{
+			    	$('#msg_data_ingresos').html(data);
+			    	$('#msg_ingresos').show();
+			    	$('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+			    	scrollToElement('#main');
+			    	$('#historial_pagos').unblock();
+			    }
+			});
+		}else{
+			event.preventDefault();
+		}
+	});
+}
+function eliminaPagoPendiente(id){
+	bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago pendiente?", function (result) {
+    	if(result==true){
+    		$('#pagos_pendientes').block({ 
+			    overlayCSS:  { 
+				backgroundColor: '#FFF', 
+				opacity: 0.5, 
+				cursor: 'wait' 
+			},
+    		    message: '', 
+    		});
+    		$.post('ac/elimina_ingreso_pendiente.php?id_ingreso='+id,function(data){
+			    if(data==1){
+				    $('#msg_pendientes').hide();
+					$('.pendientes_'+id).hide();
+			    	$('#pagos_pendientes').unblock();
+			    }else{
+			    	$('#msg_data_pendientes').html(data);
+			    	$('#msg_pendientes').show();
+			    	$('#msg_pendientes').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+			    	scrollToElement('#main');
+			    	$('#pagos_pendientes').unblock();
+			    }
+			});
+		}else{
+			event.preventDefault();
+		}
+	});
+}
+function pagaDeuda(){
+	var btn_guarda = Ladda.create(document.querySelector('#btn_guarda'));
+	btn_guarda.start();
+	if(!store.get('id_ingreso')){
+		var id_ingreso = 0;
+	}else{
+		var id_ingreso = store.get('id_ingreso');
+	}
+	
+    $.post('ac/paga_pendiente.php?id_ingreso='+id_ingreso,function(data){
+	    if(data==1){
+		    alert("ok");
+			window.open("?Modulo=PerfilPaciente&id=<?=$id_paciente?>", "_self");
+	    }else{
+	    	$('#msg_data_paga').html(data);
+	    	$('#msg_paga').show();
+	    	$('#msg_paga').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+	    	$('#msg_paga').focus();
+	    	btn_guarda.stop();
+	    }
 	});
 }
 </script>
@@ -539,6 +685,34 @@ function eliminaConsulta(id){
             </div>
             <div class="modal-footer" style="display:none;" id="footer">
                 <button type="button" class="btn mod btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </form><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--/ END Modal -->
+
+<!-- START Modal -->
+<div id="pagaAdeudo" class="modal fade">
+    <div class="modal-dialog">
+        <form class="modal-content" id="frm_guarda">
+            <div class="modal-header">
+                <div class="cell text-center">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <div class="ico-coins mb15 mt15 fsize32"></div>
+                    <h4 class="semibold text-primary">Pago de Adeudo</h4>
+                </div>
+            </div>
+            <div class="modal-body">
+	            <!-- Mensaje -->
+				<div id="msg_paga" style="display:none;margin: 0px 10px 10px 10px;">
+					<span id="msg_data_paga"></span>
+				</div>
+				<!-- End Mensaje -->
+                <div id="muestra_info_deuda"></div>
+            </div>
+            <div class="modal-footer" style="display:none;" id="footer_adeudo">
+                <button type="button" class="btn mod btn-default" data-dismiss="modal">Cancelar</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-success ladda-button" data-style="zoom-in" id="btn_guarda" onclick="pagaDeuda();"><span class="ladda-label">Pagar</span></button>
             </div>
         </form><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
