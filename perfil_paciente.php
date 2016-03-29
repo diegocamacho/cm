@@ -31,7 +31,7 @@ $sql_cuentas="SELECT cuentas_cobrar.*,ingresos.*,tipo_cobro.*,aseguradoras.* FRO
 LEFT JOIN ingresos ON ingresos.id_cuentas_cobrar=cuentas_cobrar.id_cuentas_cobrar
 LEFT JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 LEFT JOIN aseguradoras on ingresos.id_aseguradora=aseguradoras.id_aseguradora
-WHERE cuentas_cobrar.id_paciente=$id_paciente AND ingresos.estado=2";
+WHERE cuentas_cobrar.id_paciente=$id_paciente AND ingresos.estado=2 AND ingresos.activo=1";
 $q_cuentas=mysql_query($sql_cuentas);
 $valida_cuentas=mysql_num_rows($q_cuentas);
 ?>

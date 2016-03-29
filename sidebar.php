@@ -324,11 +324,12 @@ $num_record = mysql_num_rows($q_recordatorios);
                             <span class="text">Aseguradoras</span>
                         </a>
                     </li>
+                    <!--
                     <li class="<?=$recetas_active?>">
                         <a href="index.php?Modulo=Recetas">
                             <span class="text">Recetas</span>
                         </a>
-                    </li>
+                    </li>-->
                     <li class="<?=$secretarias_active?>">
                         <a href="index.php?Modulo=Secretarias">
                             <span class="text">Secretarias</span>
