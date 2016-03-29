@@ -175,14 +175,14 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         <h3 class="panel-title">Cuentas por cobrar</h3>
                     </div>
 					
-                    <table class="table table-striped" id="pagos_pendientes">
+                    <table class="table table-striped" id="zero-configuration">
                         <thead>
                             <tr>
                             	<th>Nombre</th>
                                 <th>Descripción</th>
                                 <th>Fecha</th>
                                 <th align="right">Monto</th>
-                                <th>Estado</th>
+                                <th>Tipo</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -194,15 +194,17 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 	                        $monto=$ft['monto'];
                         ?>
                             <tr>
-                            	<td>Diego Camacho</td>
-                                <td><? if($id_tipo_ingreso==1){ echo "<a href='?Modulo=PerfilPaciente&id=$id_paciente'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
+                            	<td><?=$ft['nombre']?></td>
+                                <td><?=$ft['anotacion']?></td>
                                 <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
                                 <td><?=fnum($monto)?></td>
-                                <td><? if($estado==1){ ?><span class="label label-primary">Pagado</span> <? }else{ ?><span class="label label-danger"> Pagar</span> <span class="label label-teal"><?=$ft['tipo_cobro']?></span> <? } ?></td>
+                                <td><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
                                 <td>
                                     <div class="btn-group mb5 ml10">
                                         <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+                                            <li><a href="?Modulo=PerfilPaciente&id=<?=$id_paciente?>" class="text-info">Ver Perfil</a></li>
+                                            <br>
                                             <li><a href="javascript:void(0);" data-toggle="modal" data-ingreso="<?=$ft['id_ingreso']?>" data-target="#pagaAdeudo" class="text-success">Pagar</a></li>
                                             <li><a href="javascript:void(0);" onclick="eliminaPagoPendiente(<?=$ft['id_ingreso']?>)" class="text-danger">Eliminar</a></li>
                                        </ul>
@@ -268,7 +270,7 @@ $(function(){
 function eliminaPagoPendiente(id){
     bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago pendiente?", function (result) {
         if(result==true){
-            $('#pagos_pendientes').block({ 
+            $('#zero-configuration').block({ 
                 overlayCSS:  { 
                 backgroundColor: '#FFF', 
                 opacity: 0.5, 
@@ -280,13 +282,13 @@ function eliminaPagoPendiente(id){
                 if(data==1){
                     $('#msg_pendientes').hide();
                     $('.pendientes_'+id).hide();
-                    $('#pagos_pendientes').unblock();
+                    $('#zero-configuration').unblock();
                 }else{
                     $('#msg_data_pendientes').html(data);
                     $('#msg_pendientes').show();
                     $('#msg_pendientes').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
                     scrollToElement('#main');
-                    $('#pagos_pendientes').unblock();
+                    $('#zero-configuration').unblock();
                 }
             });
         }else{

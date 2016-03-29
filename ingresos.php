@@ -37,14 +37,28 @@ $sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_pac
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
 LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
 LEFT JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
-WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado $consulta_clinica";
+WHERE ingresos.id_medico=$id_medico AND ingresos.activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31' $consulta_estado $consulta_clinica";
 $query=mysql_query($sql);
 $muestra=mysql_num_rows($query);
 //Consulta para los totales
-$sq_total="SELECT SUM(monto) AS total FROM ingresos WHERE ingresos.id_medico=1 AND ingresos.activo=1 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$sq_total="SELECT SUM(monto) AS total FROM ingresos WHERE ingresos.id_medico=1 AND ingresos.activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
 $q_total=mysql_query($sq_total);
 $datos_total=mysql_fetch_assoc($q_total);
 $total=$datos_total['total'];
+
+$sq_total="SELECT SUM(monto) AS total FROM ingresos 
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
+WHERE ingresos.id_medico=$id_medico AND consultas.activo=1 AND estado=2 AND ingresos.activo=1 AND ingresos.id_tipo_cobro=3 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$q_total=mysql_query($sq_total);
+$datos_total=mysql_fetch_assoc($q_total);
+$total_general=$datos_total['total'];
+
+$sq_total="SELECT SUM(monto) AS total FROM ingresos 
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
+WHERE ingresos.id_medico=$id_medico AND consultas.activo=1 AND estado=2 AND ingresos.activo=1 AND ingresos.id_tipo_cobro=4 AND fecha_hora_pago BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'";
+$q_total=mysql_query($sq_total);
+$datos_total=mysql_fetch_assoc($q_total);
+$total_aseguradora=$datos_total['total'];
 //Falta relacionar los ingresos facturados
 
 //Buscamos clínicas
@@ -131,7 +145,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 				        </div>
 				        <div class="col-xs-8 panel">
 				            <div class="panel-body text-center">
-				                <h4 class="semibold nm">13,560.00</h4>
+				                <h4 class="semibold nm"><?=fnum($total_general)?></h4>
 				                <p class="semibold text-muted mb0 mt5">CRÉDITO EN GENERAL</p>
 				            </div>
 				        </div>
@@ -146,7 +160,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 				        </div>
 				        <div class="col-xs-8 panel">
 				            <div class="panel-body text-center">
-				                <h4 class="semibold nm">104,000.00</h4>
+				                <h4 class="semibold nm"><?=fnum($total_aseguradora)?></h4>
 				                <p class="semibold text-muted mb0 mt5">CRÉDITO ASEGURADORA</p>
 				            </div>
 				        </div>
@@ -172,22 +186,36 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                 <th>Descripción</th>
                                 <th>Fecha</th>
                                 <th align="right">Monto</th>
-                                <th>Estado</th>
-                                <th>Recibo CFDI</th>
+                                <th>Tipo</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                         <? while($ft=mysql_fetch_assoc($query)){ 
 	                        $id_tipo_ingreso=$ft['id_tipo_ingreso'];
+                            $id_paciente = $ft['id_paciente'];
 	                        $estado=$ft['estado'];
 	                        $monto=$ft['monto'];
                         ?>
                             <tr>
-                                <td><? if($id_tipo_ingreso==1){ echo "<a href='#'>".$ft['nombre']."</a>"; }else{ echo $ft['anotacion']; }?></td>
+                                <td><? if($id_tipo_ingreso==1){ echo $ft['nombre']; }else{ echo $ft['anotacion']; }?></td>
                                 <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
                                 <td><?=fnum($monto)?></td>
-                                <td><? if($estado==1){ ?><span class="label label-primary">Pagado</span> <? }else{ ?><span class="label label-danger"> Pagar</span> <span class="label label-teal"><?=$ft['tipo_cobro']?></span> <? } ?></td>
-                                <td><span class="label label-default">No Emitido</span></td>
+                                <td><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
+                                <td>
+                                    <div class="btn-group mb5 ml10">
+                                        <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
+                                            <? if($id_tipo_ingreso==1){?>
+                                            <li><a href="?Modulo=PerfilPaciente&id=<?=$id_paciente?>" class="text-info">Ver Perfil</a></li>
+                                            <?}?>
+                                            <li><a href="javascript:void(0);" class="text-info" onclick="">Facturar</a></li>
+                                            <br>
+                                            <li><a href="javascript:void(0);" onclick="convierteDeuda(<?=$ft['id_ingreso']?>)">Convertir en Deuda</a></li>
+                                            <li><a href="javascript:void(0);" class="text-danger" onclick="eliminaIngreso(<?=$ft['id_ingreso']?>)">Eliminar</a></li>
+                                       </ul>
+                                    </div>                                    
+                                </td>
                             </tr>
                         <? } ?>
                         </tbody>
@@ -209,6 +237,9 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <script type="text/javascript" src="library/jquery/js/jquery-migrate.min.js"></script>
 <script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="library/core/js/core.min.js"></script>
+<script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
+<script type="text/javascript" src="plugins/blockui/jquery.blockUI.js"></script>
 <!--/ Library script -->
 <script>
 $(function(){
@@ -271,6 +302,65 @@ function ac_nuevo_ingreso(){
 	    }
 	});
 };
+
+function eliminaIngreso(id){
+    bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago?", function (result) {
+        if(result==true){
+            $('#zero-configuration').block({ 
+                overlayCSS:  { 
+                backgroundColor: '#FFF', 
+                opacity: 0.5, 
+                cursor: 'wait' 
+            },
+                message: '', 
+            });
+            $.post('ac/elimina_ingreso.php?id_ingreso='+id,function(data){
+                if(data==1){
+                    $('#msg_ingresos').hide();
+                    $('.ingreso_'+id).hide();
+                    $('#zero-configuration').unblock();
+                }else{
+                    $('#msg_data_ingresos').html(data);
+                    $('#msg_ingresos').show();
+                    $('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+                    scrollToElement('#main');
+                    $('#zero-configuration').unblock();
+                }
+            });
+        }else{
+            event.preventDefault();
+        }
+    });
+}
+function convierteDeuda(id){
+    bootbox.confirm("¿Estas seguro/a que quieres convertir el pago en deuda?", function (result) {
+        if(result==true){
+            $('#zero-configuration').block({ 
+                overlayCSS:  { 
+                backgroundColor: '#FFF', 
+                opacity: 0.5, 
+                cursor: 'wait' 
+            },
+                message: '', 
+            });
+            $.post('ac/convierte_ingreso.php?id_paciente=<?=$id_paciente?>&id_ingreso='+id,function(data){
+                if(data==1){
+                    $('#msg_ingresos').hide();
+                    $('.ingreso_'+id).hide();
+                    $('#zero-configuration').unblock();
+                }else{
+                    $('#msg_data_ingresos').html(data);
+                    $('#msg_ingresos').show();
+                    $('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
+                    scrollToElement('#main');
+                    $('#zero-configuration').unblock();
+                }
+            });
+        }else{
+            event.preventDefault();
+        }
+    });
+}
 </script>
 
 <!-- App and page level script -->
