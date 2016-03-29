@@ -21,35 +21,36 @@
                 <!--/ Toolbar -->
             </div>
         </div>
-        <!-- Page Header -->
-        <!-- START row -->
-        <div class="row">             
+          
 
-     
-<!-- Diagnostico -->
+ 
 		<div class="row">
 			<div class="col-md-12">
                 <!-- START panel -->
                 <div class="panel panel-primary">
                     <!-- panel heading/header -->
                     <div class="panel-heading">
-                        <h3 class="panel-title"><i class="ico-user-md mr5"></i> Reporte de Gastos por Fecha</h3>
+                        <h3 class="panel-title"></h3>
                     </div>
                     <!--/ panel heading/header -->
                     
-                    <!-- panel body with collapse capable -->
                     <div class="panel-collapse pull out">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-sm-12 mb10">
-                                    <div class="col-sm-6">
+	                            <!-- Mensaje -->
+									<div id="msg" style="display:none;margin: 0px 10px 20px 10px;">
+										<span id="msg_data"></span>
+									</div>
+									<!-- End Mensaje -->
+                                <div class="col-sm-6 mb10">
+                                    <div class="col-sm-12">
                                         <label class="control-label">Fecha Inicio <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control mod" name="fecha_ini" id="fecha_inicio" placeholder="Seleccione fecha" />
                                     </div>
                                 </div>
 
-                                <div class="col-sm-12 mb10">
-                                    <div class="col-sm-6">
+                                <div class="col-sm-6 mb10">
+                                    <div class="col-sm-12">
                                         <label class="control-label">Fecha Fin <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control mod" name="fecha_fin" id="fecha_fin" placeholder="Seleccione fecha" />
                                     </div>
@@ -57,25 +58,17 @@
                             </div>
                         </div>
                     </div>
-                    <!--/ panel body with collapse capabale -->
+                    
+                    <div class="panel-footer">
+                        <button class="btn btn-primary pull-right" id="btn_guarda">Generar Reporte</button>
+                    </div>
 
                 </div>
                 <!--/ END panel -->
             </div>
 		</div>
 
-<!-- Termina el Row -->
-		
-		<div class="row">
-			<div class="col-md-12 text-center">
-				<br />
-				<button class="btn btn-lg btn-primary" id="btn_guarda">Generar Reporte</button>
-				<br /><br />
-			</div>
-		</div>
-
     </div>
-    <!--/ END Template Container -->
 
     <!-- START To Top Scroller -->
     <a href="#" class="totop animation" data-toggle="waypoints totop" data-marker="#main" data-showanim="bounceIn" data-hideanim="bounceOut" data-offset="-50%"><i class="ico-angle-up"></i></a>
@@ -110,7 +103,9 @@ $('#btn_guarda').click(function(){
                 "_blank"
             );
         }else{
-            alert("Debe seleccionar una fecha de inicio y una fecha de fin");
+            $('#msg_data').html("Para generar el reporte es necesario seleccionar el rango de fechas.");
+			$('#msg').show();
+			$('#msg').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
         }
         
     });

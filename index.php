@@ -24,6 +24,8 @@ include('includes/funciones.php');
         <link rel="stylesheet" href="library/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="stylesheet/layout.min.css">
         <link rel="stylesheet" href="stylesheet/uielement.min.css">
+        <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+         
         <!--/ CSS -->
         
 		<!-- START CSS NO MANDATORY -->
@@ -35,9 +37,7 @@ include('includes/funciones.php');
 		    case 'Agenda': 
 		    ?>
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
-			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
 			<? 
 		    break;
 		    
@@ -49,8 +49,8 @@ include('includes/funciones.php');
 		    
 		    case 'ConsultasAgendadas':
 		    ?>
-			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			 
+			 
 			<? 
 		    break;
 		    
@@ -70,16 +70,13 @@ include('includes/funciones.php');
 		    case 'Recordatorios':
 		    ?>
 			<link rel="stylesheet" href="plugins/switchery/css/switchery.min.css">
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
-			<link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<? 
 		    break;
 
 		    case 'Ingresos':
 		    ?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
@@ -87,7 +84,7 @@ include('includes/funciones.php');
 		    
 		    case 'Gastos':
 		    ?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+			 
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
@@ -96,7 +93,6 @@ include('includes/funciones.php');
 		    
 		    case 'Cuentas':
 		    ?>
-		    <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<?
@@ -105,7 +101,6 @@ include('includes/funciones.php');
 		    case 'NuevoCFDI':
 		    ?>
 			<link rel="stylesheet" href="plugins/steps/css/jquery-steps.min.css">
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
@@ -113,7 +108,6 @@ include('includes/funciones.php');
 
 		    case 'RecibosEmitidos':
 		    ?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
@@ -122,7 +116,6 @@ include('includes/funciones.php');
 		    
 		    case 'FacturasRecibidas':
 		    ?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
@@ -131,7 +124,6 @@ include('includes/funciones.php');
 		    
 		    case 'Aseguradoras':
 		    ?>
-		    <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
@@ -140,7 +132,6 @@ include('includes/funciones.php');
 			
 			case 'Recetas':
 			?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<?
@@ -148,7 +139,6 @@ include('includes/funciones.php');
 			
 			case 'Secretarias':
 			?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
@@ -157,7 +147,6 @@ include('includes/funciones.php');
 			
 			case 'Clinicas':
 			?>
-			<link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
