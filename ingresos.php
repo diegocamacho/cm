@@ -180,7 +180,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         <h3 class="panel-title">Ingresos de <?=$mes?></h3>
                     </div>
 					
-                    <table class="table table-striped" id="zero-configuration">
+                    <table class="table table-striped" id="tabla_ingresos">
                         <thead>
                             <tr>
                                 <th>Descripción</th>
@@ -199,10 +199,10 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         ?>
                             <tr>
                                 <td><? if($id_tipo_ingreso==1){ echo $ft['nombre']; }else{ echo $ft['anotacion']; }?></td>
-                                <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
-                                <td><?=fnum($monto)?></td>
-                                <td><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
-                                <td>
+                                <td width="15%"><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
+                                <td width="15%"><?=fnum($monto)?></td>
+                                <td width="15%"><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
+                                <td align="right" width="15%">
                                     <div class="btn-group mb5 ml10">
                                         <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
@@ -210,7 +210,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                                             <li><a href="?Modulo=PerfilPaciente&id=<?=$id_paciente?>" class="text-info">Ver Perfil</a></li>
                                             <?}?>
                                             <li><a href="javascript:void(0);" class="text-info" onclick="">Facturar</a></li>
-                                            <br>
+                                            <li role="separator" class="divider"></li>
                                             <li><a href="javascript:void(0);" onclick="convierteDeuda(<?=$ft['id_ingreso']?>)">Convertir en Deuda</a></li>
                                             <li><a href="javascript:void(0);" class="text-danger" onclick="eliminaIngreso(<?=$ft['id_ingreso']?>)">Eliminar</a></li>
                                        </ul>
@@ -243,6 +243,9 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <!--/ Library script -->
 <script>
 $(function(){
+	
+	$('#tabla_ingresos').DataTable();
+	 
 	$("#fecha").datepicker();
 	
 	//Nuevo Ingreso
