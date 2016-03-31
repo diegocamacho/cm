@@ -2,6 +2,55 @@
 //RECORDATORIOS
 $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
 //END RECORDATORIOS
+//CITAS
+$sql="SELECT agenda.*, pacientes.nombre,pacientes.celular, clinicas.clinica FROM agenda 
+    JOIN pacientes ON pacientes.id_paciente=agenda.id_paciente
+    JOIN clinicas ON clinicas.id_clinica=agenda.id_clinica
+    LEFT JOIN secretarias ON secretarias.id_secretaria=agenda.id_secretaria
+    WHERE agenda.id_medico=$id_medico AND agenda.activo=1 AND agenda.fecha='$fecha_actual' ORDER BY hora ASC";  
+$qcitas=mysql_query($sql);
+$valida_citas=mysql_num_rows($qcitas);
+//END CITAS
+
+//FINANZAS
+$mes_actual=date('m');
+$ano_actual=date('Y');
+$fecha_consulta=$ano_actual."-".$mes_actual;
+$ayer = date('Y-m-d',strtotime("yesterday"));
+if(date('w')==1){
+    $lunes = date( 'Y-m-d', strtotime( 'today') );
+}else{
+    $lunes = date( 'Y-m-d', strtotime( 'last monday') );
+}
+if(date('w')==0){
+    $domingo = date( 'Y-m-d', strtotime( 'today') );
+}else{
+    $domingo = date( 'Y-m-d', strtotime( 'sunday this week' ) );
+}
+
+$total_ing_hoy = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE id_medico = $id_medico AND estado=1 AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND DATE(fecha_hora_pago)='$fecha_actual'"), 0);
+$total_gas_hoy = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico = $id_medico AND fecha='$fecha_actual'"), 0);
+$total_total_hoy = $total_ing_hoy-$total_gas_hoy;
+$total_ing_ayer = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE id_medico = $id_medico AND estado=1 AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND DATE(fecha_hora_pago)='$ayer'"), 0);
+$total_gas_ayer = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico = $id_medico AND fecha='$ayer'"), 0);
+$total_total_ayer = $total_ing_ayer-$total_gas_ayer;
+$total_ing_sem = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE id_medico = $id_medico AND estado=1 AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND DATE(fecha_hora_pago) BETWEEN '$lunes' AND '$domingo'"), 0);
+$total_gas_sem = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico = $id_medico AND fecha BETWEEN '$lunes' AND '$domingo'"), 0);
+$total_total_sem = $total_ing_sem-$total_gas_sem;
+$total_ing_mes = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE id_medico = $id_medico AND estado=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND activo=1 AND DATE(fecha_hora_pago) BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'"), 0);
+$total_gas_mes = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico = $id_medico AND fecha BETWEEN '$fecha_consulta-01' AND '$fecha_consulta-31'"), 0);
+$total_total_mes = $total_ing_mes-$total_gas_mes;
+//END FINANZAS
+
+//COBRANZAS
+$sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_paciente FROM ingresos 
+JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
+LEFT JOIN consultas ON consultas.id_consulta=ingresos.id_consulta
+LEFT JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
+WHERE ingresos.id_medico=$id_medico AND consultas.activo = 1 AND estado=2 AND ingresos.activo=1 AND (ingresos.id_tipo_cobro=3 OR ingresos.id_tipo_cobro=4) ORDER BY fecha_hora_captura ASC";
+$qcobranzas=mysql_query($sql);
+$valida_cobranza=mysql_num_rows($qcobranzas);
+//END COBRANZAS
 ?>
 
 <!-- START Template Main -->
@@ -14,122 +63,39 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
     <!-- Citas del día -->
     		<div class="col-md-8">
     			<!-- START Widget Panel -->
-        		<div class="widget panel">
+        		<div class="widget panel" id="citas">
         		<a href="?Modulo=ConsultasAgendadas" class="panel-ribbon panel-ribbon-teal pull-right"><i class="ico-user-md"></i></a>
         	    <!-- panel body -->
         	    <div class="panel-body">
         	        <h5 class="semibold text-teal">Citas para hoy</h5>
         	    </div>
         	    <!--/ panel body -->
+                <?if ($valida_citas){?>
         	    <table class="table">
         	        <tbody>
+                        <?while ($ft = mysql_fetch_assoc($qcitas)){
+                            $id_paciente = $ft['id_paciente'];?>
         	            <tr>
-        	                <td width="15%">12:00 PM</td>
-        	                <td>Diego Camacho Flores</td>
+        	                <td width="15%"><?=formatoHora($ft['hora'])?></td>
+        	                <td><?=$ft['nombre']?></td>
         	                <td align="right">
                                 <div class="btn-group mb5 ml10">
 	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
                                 	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
+                                	    <li><a href="?Modulo=Consulta&ID=<?=$ft['id_agenda']?>">Atender</a></li>
+                                	    <li><a href="javascript:void(0);" onclick="cancelaCita(<?=$ft['id_agenda']?>)">Cancelar</a></li>
                                 	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
+                                	    <li><a href="?Modulo=PerfilPaciente&id=<?=$id_paciente?>">Perfil</a></li>
                                 	</ul>
                                 </div>
         	                </td>
         	            </tr>
-        	            <tr>
-        	                <td width="15%">01:00 PM</td>
-        	                <td>Adolfo Flores</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
-        	            <tr>
-        	                <td width="15%">02:00 PM</td>
-        	                <td>José González Samudio</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
-        	            <tr>
-        	                <td width="15%">03:00 PM</td>
-        	                <td>Edgar Dorantes Celis</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
-        	            <tr>
-        	                <td width="15%">06:00 PM</td>
-        	                <td>Antonino Salgado Nosequemás</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
-        	            <tr>
-        	                <td width="15%">07:00 PM</td>
-        	                <td>Edgar Dorantes Celis</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
-        	            <tr>
-        	                <td width="15%">08:00 PM</td>
-        	                <td>Antonino Salgado Nosequemás</td>
-        	                <td align="right">
-                                <div class="btn-group mb5 ml10">
-	                            	<button type="button" class="btn btn-xs btn-teal dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
-                                	<ul class="dropdown-menu" role="menu" style="min-width: 0px;">
-                                	    <li><a href="javascript:void(0);">Atender</a></li>
-                                	    <li><a href="javascript:void(0);">Cancelar</a></li>
-                                	    <li class="divider"></li>
-                                	    <li><a href="javascript:void(0);">Perfil</a></li>
-                                	</ul>
-                                </div>
-        	                </td>
-        	            </tr>
+                        <?}?>
         	        </tbody>
         	    </table>
+                <?}else{?>
+                    <div class="alert alert-dismissable alert-info animation animating flipInX">No se han <b>Agendado Consultas.</b>&nbsp;</div>
+                <?}?>
         	</div>
         		<!--/ END Widget Panel -->
     		
@@ -158,7 +124,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                                         
                                 <td onclick="abrir()" style="cursor: pointer;" data-id="<?=$recordatorio['id_recordatorio']?>"><?=$recordatorio['recordatorio']?></td>
                                         
-                                <td width="8%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
+                                <td width="20%" align="right" class="text-muted" ><small><?=fechaDiaMes($recordatorio['fecha_limite'])?></small></td>
                             </tr>
                         <?}?>
         	        </tbody>
@@ -196,7 +162,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">83,845.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_ing_hoy)?></h4>
                             <p class="semibold text-muted mb0 mt5">INGRESOS HOY</p>
                         </div>
                     </div>
@@ -211,7 +177,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">13,560.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_ing_ayer)?></h4>
                             <p class="semibold text-muted mb0 mt5">INGRESOS AYER</p>
                         </div>
                     </div>
@@ -226,7 +192,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">54,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_ing_sem)?></h4>
                             <p class="semibold text-muted mb0 mt5">INGRESOS SEMANA</p>
                         </div>
                     </div>
@@ -241,7 +207,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">104,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_ing_mes)?></h4>
                             <p class="semibold text-muted mb0 mt5">INGRESOS MES</p>
                         </div>
                     </div>
@@ -262,7 +228,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">33,845.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_gas_hoy)?></h4>
                             <p class="semibold text-muted mb0 mt5">EGRESOS HOY</p>
                         </div>
                     </div>
@@ -277,7 +243,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">24,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_gas_ayer)?></h4>
                             <p class="semibold text-muted mb0 mt5">EGRESOS AYER</p>
                         </div>
                     </div>
@@ -292,7 +258,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">44,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_gas_sem)?></h4>
                             <p class="semibold text-muted mb0 mt5">EGRESOS SEMANA</p>
                         </div>
                     </div>
@@ -307,7 +273,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                     </div>
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">74,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_gas_mes)?></h4>
                             <p class="semibold text-muted mb0 mt5">EGRESOS MES</p>
                         </div>
                     </div>
@@ -327,7 +293,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
 
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">10,845.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_total_hoy)?></h4>
                             <p class="semibold text-muted mb0 mt5">TOTAL HOY</p>
                         </div>
                     </div>
@@ -339,7 +305,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                 <div class="table-layout">
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">8,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_total_ayer)?></h4>
                             <p class="semibold text-muted mb0 mt5">TOTAL AYER</p>
                         </div>
                     </div>
@@ -351,7 +317,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                 <div class="table-layout">
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">58,000.00</h4>
+                            <h4 class="semibold nm"><?=fnum($total_total_sem)?></h4>
                             <p class="semibold text-muted mb0 mt5">TOTAL SEMANA</p>
                         </div>
                     </div>
@@ -363,7 +329,7 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                 <div class="table-layout">
                     <div class="col-xs-8 panel">
                         <div class="panel-body text-center">
-                            <h4 class="semibold nm">232,040.30</h4>
+                            <h4 class="semibold nm"><?=fnum($total_total_mes)?></h4>
                             <p class="semibold text-muted mb0 mt5">TOTAL MES</p>
                         </div>
                     </div>
@@ -459,13 +425,11 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
                         <h5 class="panel-title"><i class="ico-credit2 mr5"></i>Cuentas por Cobrar</h5>
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item">Diego Camacho Flores <span class="semibold pull-right">500.00</span></li>
-                        <li class="list-group-item">Adolfo Flores (AXA Seguros y Fianzas) <span class="semibold pull-right">4,890.00</span></li>
-                        <li class="list-group-item">Banorte Seguros y Fianzas <span class="semibold pull-right">13,698.98</span></li>
-                        <li class="list-group-item">Grupo Nacional Financiera Seguros <span class="semibold pull-right">800.00</span></li>
-                        <li class="list-group-item">Banco Azteca Seguros <span class="semibold pull-right">3,483.98</span></li>
+                        <?while($ft = mysql_fetch_assoc($qcobranzas)){?>
+                        <li class="list-group-item"><?=$ft['nombre']?> <span class="semibold pull-right"><?=fnum($ft['monto'])?></span></li>
+                        <?$total_cobranza+=$ft['monto'];}?>
                         <!-- Total -->
-                        <li class="list-group-item text-right semibold">Total: <span class="ml10 semibold pull-right">35,483.98</span></li>
+                        <li class="list-group-item text-right semibold">Total: <span class="ml10 semibold pull-right"><?=fnum($total_cobranza)?></span></li>
                     </ul>
                 </div>
             </div>
@@ -528,15 +492,35 @@ $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_
 <script type="text/javascript" src="plugins/flot/jquery.flot.resize.min.js"></script>
 <script type="text/javascript" src="plugins/flot/jquery.flot.spline.min.js"></script>
 <script type="text/javascript" src="javascript/pages/dashboard.js"></script>
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->
 <script>
+$("#citas").css("overflow", "visible");
+
 ///TODO LO DE RECORDATORIOS
 $("#nv_record").keyup(function(event){
     if(event.keyCode == 13){
         agregaRecord();
     }
   });
+
+function cancelaCita(id){
+    bootbox.confirm("¿Estas seguro/a que quieres cancelar la cita?", function (result) {
+        if(result==true){
+            $.post('ac/cancela_cita.php', { id_agenda: id },function(data){
+                if(data==1){
+                    alert("Se cancelo correctamente esta cita.");
+                    location.reload(true);
+                }else{
+                    alert("Error: "+data);
+                }
+            });
+        }else{
+            event.preventDefault();        
+        }
+    });
+}
 
 function agregaRecord(){
   var record = $('#nv_record').val();

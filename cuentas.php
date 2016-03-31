@@ -175,7 +175,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         <h3 class="panel-title">Cuentas por cobrar</h3>
                     </div>
 					
-                    <table class="table table-striped" id="zero-configuration">
+                    <table class="table table-striped" id="tabla_cuentas">
                         <thead>
                             <tr>
                             	<th>Nombre</th>
@@ -196,15 +196,15 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                             <tr>
                             	<td><?=$ft['nombre']?></td>
                                 <td><?=$ft['anotacion']?></td>
-                                <td><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
-                                <td><?=fnum($monto)?></td>
-                                <td><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
-                                <td>
+                                <td width="15%"><? if($id_tipo_ingreso==1){ echo fechaLetra($ft['fecha_hora_pago']); }else{ echo fechaLetra(fechaSinHora($ft['fecha_hora_pago'])); }?></td>
+                                <td width="15%"><?=fnum($monto)?></td>
+                                <td width="15%"><span class="label label-teal"><?=$ft['tipo_cobro']?></span></td>
+                                <td align="right" width="15%">
                                     <div class="btn-group mb5 ml10">
                                         <button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">Opciones <span class="caret"></span></button>
                                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dLabel" role="menu" style="min-width: 0px;">
                                             <li><a href="?Modulo=PerfilPaciente&id=<?=$id_paciente?>" class="text-info">Ver Perfil</a></li>
-                                            <br>
+                                            <li role="separator" class="divider"></li>
                                             <li><a href="javascript:void(0);" data-toggle="modal" data-ingreso="<?=$ft['id_ingreso']?>" data-target="#pagaAdeudo" class="text-success">Pagar</a></li>
                                             <li><a href="javascript:void(0);" onclick="eliminaPagoPendiente(<?=$ft['id_ingreso']?>)" class="text-danger">Eliminar</a></li>
                                        </ul>
@@ -237,7 +237,26 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <!--/ Library script -->
 <script>
 $(function(){
-	//Envio el formulario al presionar enter
+	$('#tabla_cuentas').DataTable({
+        "order": [[ 3, "desc" ]],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ cuentas por página",
+            "search": "Buscar:",
+            "zeroRecords": "Ninguna coincidencia encontrada",
+            "info": "Del _PAGE_ a _PAGES_",
+            "infoEmpty": "No hay cuentas disponibles",
+            "infoFiltered": "(filtrado de _MAX_ cuentas totales)"
+        },
+        "columnDefs": [
+            {
+                "targets": [ 5 ],
+                "ordering": false,
+                "searchable": false
+            }
+        ]
+    });
+
+    //Envio el formulario al presionar enter
 	$('form').submit(function(e) {
 		ac_nuevo_ingreso();
 		e.preventDefault();
@@ -270,7 +289,7 @@ $(function(){
 function eliminaPagoPendiente(id){
     bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago pendiente?", function (result) {
         if(result==true){
-            $('#zero-configuration').block({ 
+            $('#tabla_cuentas').block({ 
                 overlayCSS:  { 
                 backgroundColor: '#FFF', 
                 opacity: 0.5, 
@@ -282,13 +301,13 @@ function eliminaPagoPendiente(id){
                 if(data==1){
                     $('#msg_pendientes').hide();
                     $('.pendientes_'+id).hide();
-                    $('#zero-configuration').unblock();
+                    $('#tabla_cuentas').unblock();
                 }else{
                     $('#msg_data_pendientes').html(data);
                     $('#msg_pendientes').show();
                     $('#msg_pendientes').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
                     scrollToElement('#main');
-                    $('#zero-configuration').unblock();
+                    $('#tabla_cuentas').unblock();
                 }
             });
         }else{

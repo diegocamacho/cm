@@ -24,9 +24,29 @@ if(!$factura){
 }
 
 /********************* Mandamos la mágia ************************/
-if(ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clinica)){
-	echo "1";
+if(!is_numeric($id_cat)){
+	if(limpiaStr($id_cat,1,1)==true){
+		$sql="INSERT INTO categorias_gastos (id_medico,categoria)VALUES('$id_medico','$id_cat')";
+		$query=@mysql_query($sql);
+		if($query){
+				$n_id_cat=mysql_insert_id();
+				if(ac_gastos($monto,$fecha,$n_id_cat,$descripcion,$factura,$pdf,$xml,$id_clinica)){
+					echo "1";
+				}else{
+					echo "No se guardaron los datos $n_id_cat, por favor intente más tarde.";
+				}
+			}else{
+				exit("Ocurrió un error al guardar la categoría de gastos, no se creo el gasto, intente de nuevo.");
+			}
+	}else{
+		exit("La categoria ".$id_cat." no es válida");
+	}
 }else{
-	echo "No se guardaron los datos, por favor intente más tarde.";
+	if(ac_gastos($monto,$fecha,$id_cat,$descripcion,$factura,$pdf,$xml,$id_clinica)){
+		echo "1";
+	}else{
+		echo "No se guardaron los datos, por favor intente más tarde.";
+	}
 }
+
 ?>
