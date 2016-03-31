@@ -27,24 +27,33 @@ $oldest_fecha_ini = $oldest_ano."-".$oldest_mes."-01";
 
 ///EMPIEZA EL INFIERNO.
 while($oldest_fecha_fin<=$fecha_tope){
+	$total_ing = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE id_medico = $id_medico AND estado=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) AND activo=1 AND DATE(fecha_hora_pago) BETWEEN '$oldest_fecha_ini' AND '$oldest_fecha_fin'"), 0);
+	$total_gas = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico = $id_medico AND fecha BETWEEN '$oldest_fecha_ini' AND '$oldest_fecha_fin'"), 0);
+	if($total_ing<1){
+		$total_ing=0;
+	}
+	if($total_gas<1){
+		$total_gas=0;
+	}
+	$ingresos .= soloMes($oldest_mes)." ".$oldest_ano."&".$total_ing."_";
+	$egresos .= soloMes($oldest_mes)." ".$oldest_ano."&".$total_gas."_";
 	
-	
-	if($oldest_mes == 12 && $oldest_ano<$ano_actual){
+	if($oldest_mes == 12 && $oldest_ano<=$ano_actual){
 		$oldest_ano++;
-		$oldest_mes = 1;
+		$oldest_mes = "01";
 	}else{
 		$oldest_mes++;
+		if($oldest_mes<10){
+			$oldest_mes="0".$oldest_mes;
+		}
 	}
 	$oldest_fecha_fin = $oldest_ano."-".$oldest_mes."-31";
 	$oldest_fecha_ini = $oldest_ano."-".$oldest_mes."-01";
 }
 
-$qtingresos = mysql_query("SELECT SUM(monto) AS total FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC");
-$qtgastos = mysql_query("SELECT SUM(monto) AS total FROM gastos WHERE id_medico=$id_medico ORDER BY fecha ASC");
-
-if($query){
-	$ft=mysql_fetch_assoc($query);
+if(strlen($ingresos)>0 && strlen($egresos)>0){
 	echo "1|".$ingresos."|".$egresos;
+
 }else{
-	echo "0|No se pudo localizar el gasto seleccionado.";
+	echo "0|NO HAY INGRESOS O EGRESOS.";
 }
