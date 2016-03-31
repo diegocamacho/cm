@@ -174,7 +174,7 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
                         <h3 class="panel-title">Gastos de <?=$mes?></h3>
                     </div>
                    
-                    <table class="table table-striped" id="zero-configuration">
+                    <table class="table table-striped" id="tabla_gastos">
                         <thead>
                             <tr>
                                 <th>Descripción</th>
@@ -228,7 +228,26 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <!--/ Library script -->
 <script>
 $(function(){
-	//UPLOADER PDF
+	$('#tabla_gastos').DataTable({
+        "order": [[ 2, "desc" ]],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ gastos por página",
+            "search": "Buscar:",
+            "zeroRecords": "Ninguna coincidencia encontrada",
+            "info": "Del _PAGE_ a _PAGES_",
+            "infoEmpty": "No hay gastos disponibles",
+            "infoFiltered": "(filtrado de _MAX_ gastos totales)"
+        },
+        "columnDefs": [
+            {
+                "targets": [ 4 ],
+                "ordering": false,
+                "searchable": false
+            }
+        ]
+    });
+
+    //UPLOADER PDF
     $("#filepdf").uploadFile({url: "ac/subir_files_pdf.php",
         dragDrop: false,
         fileName: "archivo",
@@ -417,6 +436,7 @@ $(function(){
     $("#datepicker2").datepicker();
 	
 	$("#selectize-selectmultiple").selectize({
+        create: true,
         maxItems: 1
     });
 

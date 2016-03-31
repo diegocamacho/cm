@@ -240,11 +240,33 @@ $valida_clinicas=mysql_num_rows($q_clinicas);
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="plugins/blockui/jquery.blockUI.js"></script>
+
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
+<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
 <!--/ Library script -->
 <script>
 $(function(){
 	
-	$('#tabla_ingresos').DataTable();
+	$('#tabla_ingresos').DataTable({
+        "order": [[ 2, "desc" ]],
+        "language": {
+            "lengthMenu": "Mostrar _MENU_ ingresos por página",
+            "search": "Buscar:",
+            "zeroRecords": "Ninguna coincidencia encontrada",
+            "info": "Del _PAGE_ a _PAGES_",
+            "infoEmpty": "No hay ingresos disponibles",
+            "infoFiltered": "(filtrado de _MAX_ ingresos totales)"
+        },
+        "columnDefs": [
+            {
+                "targets": [ 4 ],
+                "ordering": false,
+                "searchable": false
+            }
+        ]
+    });
 	 
 	$("#fecha").datepicker();
 	
@@ -309,7 +331,7 @@ function ac_nuevo_ingreso(){
 function eliminaIngreso(id){
     bootbox.confirm("¿Estas seguro/a que quieres eliminar el pago?", function (result) {
         if(result==true){
-            $('#zero-configuration').block({ 
+            $('#tabla_ingresos').block({ 
                 overlayCSS:  { 
                 backgroundColor: '#FFF', 
                 opacity: 0.5, 
@@ -327,7 +349,7 @@ function eliminaIngreso(id){
                     $('#msg_ingresos').show();
                     $('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
                     scrollToElement('#main');
-                    $('#zero-configuration').unblock();
+                    $('#tabla_ingresos').unblock();
                 }
             });
         }else{
@@ -338,7 +360,7 @@ function eliminaIngreso(id){
 function convierteDeuda(id){
     bootbox.confirm("¿Estas seguro/a que quieres convertir el pago en deuda?", function (result) {
         if(result==true){
-            $('#zero-configuration').block({ 
+            $('#tabla_ingresos').block({ 
                 overlayCSS:  { 
                 backgroundColor: '#FFF', 
                 opacity: 0.5, 
@@ -350,13 +372,13 @@ function convierteDeuda(id){
                 if(data==1){
                     $('#msg_ingresos').hide();
                     $('.ingreso_'+id).hide();
-                    $('#zero-configuration').unblock();
+                    $('#tabla_ingresos').unblock();
                 }else{
                     $('#msg_data_ingresos').html(data);
                     $('#msg_ingresos').show();
                     $('#msg_ingresos').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
                     scrollToElement('#main');
-                    $('#zero-configuration').unblock();
+                    $('#tabla_ingresos').unblock();
                 }
             });
         }else{
@@ -369,11 +391,6 @@ function convierteDeuda(id){
 <!-- App and page level script -->
 <script type="text/javascript" src="plugins/sparkline/js/jquery.sparkline.min.js"></script><!-- will be use globaly as a summary on sidebar menu -->
 <script type="text/javascript" src="javascript/app.min.js"></script>
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
-<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
-<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
-<script type="text/javascript" src="javascript/tables/datatable.js"></script>
 
 <script type="text/javascript" src="javascript/components/animation.js"></script>
 <script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>

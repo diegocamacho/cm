@@ -29,10 +29,10 @@
                     </span>
                 </a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="javascript:void(0);"><span class="icon"><i class="ico-user-plus2"></i></span>Mi Cuenta</a></li>
+                    <li><a href="?Modulo=MiCuenta"><span class="icon"><i class="ico-user-plus2"></i></span>Mi Cuenta</a></li>
                     <li><a href="javascript:void(0);"><span class="icon"><i class="ico-question"></i></span>Ayuda</a></li>
                     <li class="divider"></li>
-                    <li><a href="javascript:void(0);"><span class="icon"><i class="ico-exit"></i></span>Cerrar Sesión</a></li>
+                    <li><a href="login.php"><span class="icon"><i class="ico-exit"></i></span>Cerrar Sesión</a></li>
                 </ul>
             </li>
             <!--/ Profile dropdown -->
