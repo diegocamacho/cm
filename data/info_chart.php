@@ -6,8 +6,16 @@ include("../includes/funciones.php");
 $mes_actual=date('m');
 $ano_actual=date('Y');
 $fecha_tope = $ano_actual."-".$mes_actual."-31";
-$fingresos = mysql_result(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"),0);
-$fgastos = mysql_result(mysql_query("SELECT fecha FROM gastos WHERE id_medico=$id_medico ORDER BY fecha ASC"),0);
+if(mysql_num_rows(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"))){
+	$fingresos = mysql_result(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"),0);
+}else{
+	$fingresos = $fecha_tope;
+}
+if(mysql_num_rows(mysql_query("SELECT fecha FROM gastos WHERE id_medico=$id_medico ORDER BY fecha ASC"))){
+	$fgastos = mysql_result(mysql_query("SELECT fecha FROM gastos WHERE id_medico=$id_medico ORDER BY fecha ASC"),0);
+}else{
+	$fgastos = $fecha_tope;
+}
 
 $mes_old_ing = substr($fingresos,5,2);
 $ano_old_ing = substr($fingresos,0,4);
