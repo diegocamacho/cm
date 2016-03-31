@@ -105,6 +105,14 @@ include('includes/funciones.php');
 			<link rel="stylesheet" href="plugins/datatables/css/jquery.datatables.min.css">
 			<? 
 		    break;
+		    
+		    case 'ConfiguraFacturacion':
+		    ?>
+			<link rel="stylesheet" href="plugins/steps/css/jquery-steps.min.css">
+			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
+			<link rel="stylesheet" href="plugins/uploader/uploader.css">
+			<? 
+		    break;
 
 		    case 'RecibosEmitidos':
 		    ?>
@@ -275,6 +283,10 @@ alert(user.name + ' likes ' + user.likes)
 		    	
 		    	case 'Facturacion';
 		    	include("facturacion.php");
+		    	break;
+		    	
+		    	case 'ConfiguraFacturacion';
+		    	include("configura_facturacion.php");
 		    	break;
 		    	
 		    	case 'Aseguradoras';
