@@ -41,7 +41,7 @@
 											</div>
 											<div class="panel-body text-center">
 												<p><i class="ico-file9" style="font-size: 62px"></i><br>Archivo certificado .KEY</p><br>
-												<button id="uploadBtn" class="btn btn-sm btn-info">Seleccione archivo</button>&nbsp;
+												<button id="uploadBtn" class="btn btn-sm btn-info">Seleccione archivo</button>
                                         		
                                         		<div id="progressOuter" class="progress progress-striped active" style="display:none;">
 													<div id="progressBar" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
@@ -59,7 +59,7 @@
 											</div>
 											<div class="panel-body text-center">
 												<p><i class="ico-file9" style="font-size: 62px"></i><br>Archivo certificado .CER</p><br>
-												<button id="uploadBtn2" class="btn btn-sm btn-info">Seleccione archivo</button>&nbsp;
+												<button id="uploadBtn2" class="btn btn-sm btn-info">Seleccione archivo</button>
                                         		
                                         		<div id="progressOuter2" class="progress progress-striped active" style="display:none;">
 													<div id="progressBar2" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
@@ -88,75 +88,37 @@
                         
 									</div>
 								</div>
-								
-								<!--
-								<div class="form-group">
-                                    <label class="col-sm-2 control-label">Llave:</label>
-                                    <div class="col-sm-10">
-                                        <button id="uploadBtn" class="btn btn-sm btn-info">Seleccione archivo (*.Key)</button>&nbsp;
-                                        
-                                        <div id="progressOuter" class="progress progress-striped active" style="display:none;">
-											<div id="progressBar" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-          								</div>
-          								<div id="msg_key" style="margin: 10px 0px 10px 0px;">
-	                                        <div id="msg_key_data"></div>
-          								</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Certificado:</label>
-                                    <div class="col-sm-10">
-                                        <button id="uploadBtn2" class="btn btn-sm btn-info">Seleccione archivo (*.Cer)</button>&nbsp;
-                                        
-                                        <div id="progressOuter" class="progress progress-striped active" style="display:none;">
-											<div id="progressBar" class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
-          								</div>
-          								<div id="msg_key" style="margin: 10px 0px 10px 0px;">
-	                                        <div id="msg_key_data"></div>
-          								</div>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">Contraseña:</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" name="contrasena" class="form-control mb5" >
-                                    </div>
-                                </div>
-                                -->
                                 
                             </div>
                             <!--/ Wizard Container 1 -->
 
                             <!-- Wizard Container 2 -->
-                            <div class="wizard-title">Datos del Cliente</div>
+                            <div class="wizard-title">Datos del Emisor</div>
                             <div class="wizard-container">
                             
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <h5 class="semibold text-primary nm">Diego Camacho Flores.</h5>
-                                        <p class="text-muted nm">Consulta Médica $ 500.00</p>
-                                    </div>
-                                </div>
-                            
+                                <h3 class="text-center title semibold" style="margin: 30px 0px 30px 0px;">Ingrese sus Datos de Facturación<br><small>Llene los siguientes campos para continuar.</small></h3>
+								<!--
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">Datos Fiscales <span class="text-danger">*</span></label>
                                     <div class="col-sm-10">
                                     	<div class="row">
-                                    		<div class="col-sm-12">
-                                        		<input type="text" name="razon_social" class="form-control mb5" placeholder="Nombre Razón Social" data-parsley-group="information" >
+	                                    	
+                                    		<div class="col-sm-12 mb10">
+                                        		<input type="text" name="razon_social" class="form-control" placeholder="Nombre o Razón Social" data-parsley-group="information" >
                                     		</div>
-											<div class="col-sm-6">
+											<div class="col-sm-6 mb10">
 											    <input type="text" name="rfc" class="form-control" placeholder="RFC" data-parsley-group="information" >
 											</div>
-											<div class="col-sm-6">
+											<div class="col-sm-6 mb10">
 											    <select class="form-control" name="country-address">
 											        <option value="">Tipo de Persona (Físico/Moral)</option>
 											        <option value="1">Físico</option>
 											        <option value="2">Moral</option>
 											    </select>
 											</div>
+											<div class="col-sm-12 ">
+                                        		<input type="text" name="regimen_fiscal" class="form-control" placeholder="Régimen Fiscal" data-parsley-group="information" >
+                                    		</div>
                                     	</div>
                                     </div>
                                 </div>
@@ -168,25 +130,33 @@
                                                 <input type="text" name="street-address" class="form-control mb5" placeholder="Calle">
                                             </div>
                                             <div class="col-sm-2">
-                                                <input type="text" name="street-address" class="form-control mb5" placeholder="N. Interior">
-                                            </div>
-                                            <div class="col-sm-2">
                                                 <input type="text" name="street-address" class="form-control mb5" placeholder="N. Exterior">
                                             </div>
+                                            <div class="col-sm-2">
+                                                <input type="text" name="street-address" class="form-control mb5" placeholder="N. Int. (Opcional)">
+                                            </div>
+                                            
+                                            
                                             <div class="col-sm-4">
                                                 <input type="text" name="line2-address" class="form-control mb5" placeholder="Colonia">
                                             </div>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="city-address" class="form-control mb5" placeholder="Localidad">
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="text" name="state-address" class="form-control mb5" placeholder="Municipio">
+                                            <div class="col-sm-6">
+                                                <input type="text" name="line2-address" class="form-control mb5" placeholder="Referencias (Opcional)">
                                             </div>
                                             <div class="col-sm-2">
                                                 <input type="text" name="postal-address" class="form-control mb5" placeholder="Código Postal">
                                             </div>
+                                            
+                                            <div class="col-sm-4">
+                                                <input type="text" name="city-address" class="form-control mb5" placeholder="Ciudad o Localidad">
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <input type="text" name="state-address" class="form-control mb5" placeholder="Municipio">
+                                            </div>
+                                            
                                             <div class="col-sm-4">
                                                 <select class="form-control" name="country-address">
+	                                                <option value="">Seleccione un Estado</option>
                                                     <option value="AGUASCALIENTES">Aguascalientes</option>
 													<option value="BAJA CALIFORNIA">Baja California</option>
 													<option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
@@ -221,12 +191,169 @@
 													<option value="ZACATECAS">Zacatecas</option>
                                                 </select>
                                             </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">Datos en Factura</label>
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <input type="text" name="folio" class="form-control mb5" placeholder="Serie">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="serie" class="form-control mb5" placeholder="Folio Inicial">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="serie" class="form-control mb5" placeholder="Folio Final">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="text" name="serie" class="form-control mb5" placeholder="Folio Actual">
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                -->
+                                
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="color: #000;">Datos Fiscales <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                    	<div class="row">
+	                                    	
+                                    		<div class="col-sm-12 mb10">
+	                                    		<label for="x" class="control-label">Nombre o Razón Social</label>
+                                        		<input type="text" name="razon_social" class="form-control" data-parsley-group="information" >
+                                    		</div>
+											<div class="col-sm-6 mb10">
+												<label for="x" class="control-label">RFC</label>
+											    <input type="text" name="rfc" class="form-control" data-parsley-group="information" >
+											</div>
+											<div class="col-sm-6 mb10">
+												<label for="x" class="control-label">Tipo de persona (Físico/Moral)</label>
+											    <select class="form-control" name="country-address">
+											        <option value="">Seleccione</option>
+											        <option value="1">Físico</option>
+											        <option value="2">Moral</option>
+											    </select>
+											</div>
+											<div class="col-sm-12 ">
+												<label for="x" class="control-label">Régimen Fiscal</label>
+
+														<input type="text" name="regimen_fiscal" class="form-control" data-parsley-group="information">
+														
+                                    		</div>
+
+                                    	</div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="color: #000;">Dirección <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-sm-8">
+	                                            <label for="x" class="control-label">Calle</label>
+                                                <input type="text" name="street-address" class="form-control mb5" >
+                                            </div>
                                             <div class="col-sm-2">
-                                                <input type="text" name="postal-address" class="form-control mb5" placeholder="Teléfono">
+	                                            <label for="x" class="control-label">N. Exterior</label>
+                                                <input type="text" name="street-address" class="form-control mb5">
+                                            </div>
+                                            <div class="col-sm-2">
+	                                            <label for="x" class="control-label">N. Int. (Opcional)</label>
+                                                <input type="text" name="street-address" class="form-control mb5">
+                                            </div>
+                                            
+                                            
+                                            <div class="col-sm-4">
+	                                            <label for="x" class="control-label">Colonia</label>
+                                                <input type="text" name="line2-address" class="form-control mb5">
+                                            </div>
+                                            <div class="col-sm-6">
+	                                            <label for="x" class="control-label">Referencias (Opcional)</label>
+                                                <input type="text" name="line2-address" class="form-control mb5">
+                                            </div>
+                                            <div class="col-sm-2">
+	                                            <label for="x" class="control-label">Código Postal</label>
+                                                <input type="text" name="postal-address" class="form-control mb5">
+                                            </div>
+                                            
+                                            <div class="col-sm-4">
+	                                            <label for="x" class="control-label">Ciudad o Localidad</label>
+                                                <input type="text" name="city-address" class="form-control mb5">
                                             </div>
                                             <div class="col-sm-4">
-                                                <input type="text" name="postal-address" class="form-control mb5" placeholder="Correo Electrónico">
+	                                            <label for="x" class="control-label">Municipio</label>
+                                                <input type="text" name="state-address" class="form-control mb5">
                                             </div>
+                                            
+                                            <div class="col-sm-4">
+	                                            <label for="x" class="control-label">Estado</label>
+                                                <select class="form-control" name="country-address">
+	                                                <option value="">Seleccione un Estado</option>
+                                                    <option value="AGUASCALIENTES">Aguascalientes</option>
+													<option value="BAJA CALIFORNIA">Baja California</option>
+													<option value="BAJA CALIFORNIA SUR">Baja California Sur</option>
+													<option value="CAMPECHE">Campeche</option>
+													<option value="COAHUILA">Coahuila</option>
+													<option value="COLIMA">Colima</option>
+													<option value="CHIAPAS">Chiapas</option>
+													<option value="CHIHUAHUA">Chihuahua</option>
+													<option value="DISTRISTO FEDERAL">Distrito Federal</option>
+													<option value="DURANGO">Durango</option>
+													<option value="ESTADO DE MEXICO">Estado de México</option>
+													<option value="GUANAJUATO">Guanajuato</option>
+													<option value="GUERRERO">Guerrero</option>
+													<option value="HIDALGO">Hidalgo</option>
+													<option value="JALISCO">Jalisco</option>
+													<option value="MICHOACAN">Michoacán</option>
+													<option value="MORELOS">Morelos</option>
+													<option value="NAYARIT">Nayarit</option>
+													<option value="NUEVO LEON">Nuevo León</option>
+													<option value="OAXACA">Oaxaca</option>
+													<option value="PUEBLA">Puebla</option>
+													<option value="QUERETARO">Querétaro</option>
+													<option value="QUINTANA ROO">Quintana Roo</option>
+													<option value="SAN LUIS POTOSI">San Luis Potosí</option>
+													<option value="SINALOA">Sinaloa</option>
+													<option value="SONORA">Sonora</option>
+													<option value="TABASCO">Tabasco</option>
+													<option value="TAMAULIPAS">Tamaulipas</option>
+													<option value="TLAXCALA">Tlaxcala</option>
+													<option value="VERACRUZ">Veracruz</option>
+													<option value="YUCATAN">Yucatán</option>
+													<option value="ZACATECAS">Zacatecas</option>
+                                                </select>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label" style="color: #000;">Serie y Folio <span class="text-danger">*</span></label>
+                                    <div class="col-sm-10">
+                                        <div class="row">
+                                            <div class="col-sm-3">
+	                                            <label for="x" class="control-label">Serie</label>
+                                                <input type="text" name="folio" class="form-control mb5" value="A">
+                                            </div>
+                                            <div class="col-sm-3">
+	                                            <label for="x" class="control-label">Folio Inicial</label>
+                                                <input type="text" name="serie" class="form-control mb5" value="1">
+                                            </div>
+                                            <div class="col-sm-3">
+	                                            <label for="x" class="control-label">Folio Final</label>
+                                                <input type="text" name="serie" class="form-control mb5" value="1000">
+                                            </div>
+                                            <div class="col-sm-3">
+	                                            <label for="x" class="control-label">Folio Actual</label>
+                                                <input type="text" name="serie" class="form-control mb5" value="1">
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -504,7 +631,7 @@ window.onload = function() {
   var uploader = new ss.SimpleUpload({
         button: btn,
         url: 'carga_certificados.php',
-        name: 'uploadfile',
+        name: 'certificado_key',
         multipart: true,
         hoverClass: 'hover',
         focusClass: 'focus',
@@ -550,18 +677,19 @@ window.onload = function() {
             msgBox.innerHTML = '<span class="ico-close2"></span> Error al cargar el achivo';
           }
 	});
-};
-window.onload = function() {
+	
+	
+	/*COPIA*/
+	
+	var btn2 = document.getElementById('uploadBtn2'),
+      progressBar2 = document.getElementById('progressBar2'),
+      progressOuter2 = document.getElementById('progressOuter2'),
+      msgBox2 = document.getElementById('msg_cer_data');
 
-  var btn = document.getElementById('uploadBtn2'),
-      progressBar = document.getElementById('progressBar2'),
-      progressOuter = document.getElementById('progressOuter2'),
-      msgBox = document.getElementById('msg_cer_data');
-
-  var uploader = new ss.SimpleUpload({
-        button: btn,
+	var uploader2 = new ss.SimpleUpload({
+        button: btn2,
         url: 'carga_certificados.php',
-        name: 'uploadfile',
+        name: 'certificado_cer',
         multipart: true,
         hoverClass: 'hover',
         focusClass: 'focus',
@@ -569,42 +697,42 @@ window.onload = function() {
         multiple: false,
         allowedExtensions: ["jpg", "jpeg", "png", "gif"],
         startXHR: function() {
-            progressOuter.style.display = 'block'; // make progress bar visible
-            this.setProgressBar( progressBar );
+            progressOuter2.style.display = 'block'; // make progress bar visible
+            this.setProgressBar( progressBar2 );
         },
         onSubmit: function() {
-            msgBox.innerHTML = ''; // empty the message box
-            btn.innerHTML = 'Cargando...'; // change button text to "Uploading..."
+            msgBox2.innerHTML = ''; // empty the message box
+            btn2.innerHTML = 'Cargando...'; // change button text to "Uploading..."
           },
         onComplete: function( filename, response ) {
-            btn.innerHTML = 'Cambiar por otro archivo';
-            progressOuter.style.display = 'none'; // hide progress bar when upload is completed
+            btn2.innerHTML = 'Cambiar por otro archivo';
+            progressOuter2.style.display = 'none'; // hide progress bar when upload is completed
 
             if ( !response ) {
 	            $('#msg_cer').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-                msgBox.innerHTML = '<span class="ico-close2"></span> No se ha podido cargar el certificado.';
+                msgBox2.innerHTML = '<span class="ico-close2"></span> No se ha podido cargar el certificado.';
                 return;
             }
 
             if ( response.success === true ) {
                 $('#msg_cer').attr("class","alert alert-dismissable alert-success animation animating flipInX");
-                msgBox.innerHTML = '<span class="ico-checkmark"></span> <strong>' + escapeTags( filename ) + '</strong>' + ' se ha cargado correctamente.';
+                msgBox2.innerHTML = '<span class="ico-checkmark"></span> <strong>' + escapeTags( filename ) + '</strong>' + ' se ha cargado correctamente.';
 
             } else {
                 if ( response.msg )  {
 	                $('#msg_cer').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-                    msgBox.innerHTML = escapeTags( response.msg );
+                    msgBox2.innerHTML = escapeTags( response.msg );
 
                 } else {
 	                $('#msg_cer').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-                    msgBox.innerHTML = '<span class="ico-close2"></span> Ocurrió un error, la llave no se ha podido cargar, intente nuevamente.';
+                    msgBox2.innerHTML = '<span class="ico-close2"></span> Ocurrió un error, la llave no se ha podido cargar, intente nuevamente.';
                 }
             }
           },
         onError: function() {
-            progressOuter.style.display = 'none';
+            progressOuter2.style.display = 'none';
             $('#msg_cer').attr("class","alert alert-dismissable alert-danger animation animating flipInX");
-            msgBox.innerHTML = '<span class="ico-close2"></span> Error al cargar el achivo';
+            msgBox2.innerHTML = '<span class="ico-close2"></span> Error al cargar el achivo';
           }
 	});
 };
@@ -645,15 +773,6 @@ window.onload = function() {
 
 <script type="text/javascript" src="plugins/steps/js/jquery.steps.min.js"></script>
 
-<script type="text/javascript" src="plugins/inputmask/js/inputmask.min.js"></script>
-
 <script type="text/javascript" src="javascript/forms/wizard.js"></script>
-
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables.min.js"></script>
-<script type="text/javascript" src="plugins/datatables/tabletools/js/tabletools.min.js"></script>
-<script type="text/javascript" src="plugins/datatables/tabletools/js/zeroclipboard.js"></script>
-<script type="text/javascript" src="plugins/datatables/js/jquery.datatables-custom.min.js"></script>
-<script type="text/javascript" src="javascript/tables/datatable.js"></script>
-
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->

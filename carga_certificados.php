@@ -15,3 +15,4 @@ if (!$result) {
 }
 
 echo json_encode(array('success' => true));
+//print_r($_POST);
