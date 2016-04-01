@@ -1,6 +1,7 @@
 <?
 //RECORDATORIOS
 $qrecordatorios = mysql_query("SELECT * FROM recordatorios WHERE id_medico='$id_medico' AND activo=1 ORDER BY fecha_limite ASC");
+$valida_recordatorios=mysql_num_rows($qrecordatorios);
 //END RECORDATORIOS
 //CITAS
 $sql="SELECT agenda.*, pacientes.nombre,pacientes.celular, clinicas.clinica FROM agenda 
@@ -94,7 +95,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
         	        </tbody>
         	    </table>
                 <?}else{?>
-                    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 20px 20px;">No se han <b>Agendado Consultas.</b>&nbsp;</div>
+                    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 75px 20px;"><i class="ico-info-sign"></i> No se han <b>Agendado Consultas.</b>&nbsp;</div>
                 <?}?>
         	</div>
         		<!--/ END Widget Panel -->
@@ -110,6 +111,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
         	        <h5 class="semibold text-teal">Recordatorios</h5>
         	    </div>
         	    <!--/ panel body -->
+        	    <? if($valida_recordatorios){ ?>
         	    <table class="table" id="tabla_recordatorios">
         	        <tbody>
         	            <!-- Solo este TR se va utilizar, los demás son ejemplos. -->    
@@ -129,6 +131,15 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                         <?}?>
         	        </tbody>
         	    </table>
+        	    <? }else{ ?>
+        	    <table class="table" id="tabla_recordatorios">
+        	        <tbody>
+                        
+                            
+        	        </tbody>
+        	    </table>
+        	    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 20px 20px;"><i class="ico-info-sign"></i> Aún no tienes <b>Recordatorios.</b>&nbsp;</div>
+        	    <? } ?>
         	    <!-- panel footer -->
         	    <div class="panel-footer">
         	        <div class="input-group">
@@ -340,7 +351,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
 <!-- Balance -->
         <hr>
         <div class="section-header">
-        	<h5 class="semibold title mb15">Balance</h5>
+        	<h5 class="semibold title mb15">Balance Anual</h5>
         </div>
         <div class="row">
             <div class="col-sm-12">
@@ -426,6 +437,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                     <div class="panel-heading">
                         <h5 class="panel-title"><i class="ico-credit2 mr5"></i>Cuentas por Cobrar</h5>
                     </div>
+                    <? if($valida_cobranza){ ?>
                     <ul class="list-group">
                         <?while($ft = mysql_fetch_assoc($qcobranzas)){?>
                         <li class="list-group-item"><?=$ft['nombre']?> <span class="semibold pull-right"><?=fnum($ft['monto'])?></span></li>
@@ -433,6 +445,9 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                         <!-- Total -->
                         <li class="list-group-item text-right semibold">Total: <span class="ml10 semibold pull-right"><?=fnum($total_cobranza)?></span></li>
                     </ul>
+                    <? }else{ ?>
+                    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 10px 20px 10px 20px;"><i class="ico-info-sign"></i> No hay <b>Cuentas por Cobrar.</b>&nbsp;</div>
+                    <? } ?>
                 </div>
             </div>
         <!-- Contabilidad -->
