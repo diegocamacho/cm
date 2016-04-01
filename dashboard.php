@@ -94,7 +94,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
         	        </tbody>
         	    </table>
                 <?}else{?>
-                    <div class="alert alert-dismissable alert-info animation animating flipInX">No se han <b>Agendado Consultas.</b>&nbsp;</div>
+                    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 20px 20px;">No se han <b>Agendado Consultas.</b>&nbsp;</div>
                 <?}?>
         	</div>
         		<!--/ END Widget Panel -->
