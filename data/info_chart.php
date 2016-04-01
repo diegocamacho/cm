@@ -6,7 +6,7 @@ include("../includes/funciones.php");
 $mes_actual=date('m');
 $ano_actual=date('Y');
 $fecha_tope = $ano_actual."-".$mes_actual."-31";
-if(mysql_num_rows(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"))){
+/*if(mysql_num_rows(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"))){
 	$fingresos = mysql_result(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"),0);
 }else{
 	$fingresos = $fecha_tope;
@@ -29,9 +29,11 @@ if($ano_old_ing > $ano_old_gas){
 }else{
 	$oldest_ano = $ano_old_ing;
 	$oldest_mes = $mes_old_ing;
-}
-$oldest_fecha_fin = $oldest_ano."-".$oldest_mes."-31";
-$oldest_fecha_ini = $oldest_ano."-".$oldest_mes."-01";
+}*/
+$oldest_mes = 1;
+$oldest_ano = $ano_actual;
+$oldest_fecha_fin = $oldest_ano."-01-31";
+$oldest_fecha_ini = $oldest_ano."-01-01";
 
 ///EMPIEZA EL INFIERNO.
 while($oldest_fecha_fin<=$fecha_tope){
