@@ -370,7 +370,9 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                     <!--/ panel-toolbar -->
                     <!-- panel-body -->
                     <div class="panel-body pt0">
-                        <div class="chart mt10" id="chart-audience" style="height:250px;"></div>
+                        <div class="chart mt10" id="chart-audience" style="height:300px;"></div>
+                        <br>
+                        <center><div id="leyenda"></div></center>
                     </div>
                     <!--/ panel-body -->
                     <!-- panel-footer -

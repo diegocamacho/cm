@@ -51,7 +51,7 @@ $(function () {
                         color: "#91C854",
                         data: datos_ingresos
                         }, {
-                        label: "Egresos",
+                        label: "Gastos",
                         color: "#ED5466",
                         data: datos_egresos
                     }], {
@@ -74,6 +74,7 @@ $(function () {
                             borderColor: "rgba(0, 0, 0, 0.05)",
                             borderWidth: 1,
                             hoverable: true,
+                            labelmargin: 600,
                             backgroundColor: "transparent"
                         },
                         tooltip: true,
@@ -87,6 +88,15 @@ $(function () {
                         },
                         yaxis: {
                             tickColor: "rgba(0, 0, 0, 0.05)"
+                        },
+                        legend:{
+                            container: "#leyenda",
+                            noColumns: 2,
+                            show: true,
+                            labelFormatter: function(label, series) {
+                                // series is the series object for the label
+                                return '&nbsp<a width="120px" href="?Modulo=' + label + '">' + label + '</a>&nbsp&nbsp';
+                            }
                         },
                         shadowSize: 0
                     });
