@@ -91,7 +91,7 @@ $(function () {
                         shadowSize: 0
                     });
                 }else{
-                    alert("NO SE PUDO HACER NADA");
+                    alert(respuesta);
                 }
             });
         
