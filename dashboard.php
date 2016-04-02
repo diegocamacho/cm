@@ -43,6 +43,11 @@ $total_gas_mes = mysql_result(mysql_query("SELECT SUM(monto) AS total FROM gasto
 $total_total_mes = $total_ing_mes-$total_gas_mes;
 //END FINANZAS
 
+//PLOT
+$valida_ingresos = mysql_num_rows(mysql_query("SELECT fecha_hora_pago FROM ingresos WHERE estado=1 AND id_medico=$id_medico AND activo=1 AND (ingresos.id_tipo_cobro=1 OR ingresos.id_tipo_cobro=2) ORDER BY fecha_hora_pago ASC"));
+$valida_egresos = mysql_num_rows(mysql_query("SELECT fecha FROM gastos WHERE id_medico=$id_medico ORDER BY fecha ASC"));
+//END PLOT
+
 //COBRANZAS
 $sql="SELECT ingresos.*, tipo_cobro.tipo_cobro,pacientes.nombre,consultas.id_paciente FROM ingresos 
 JOIN tipo_cobro ON tipo_cobro.id_tipo_cobro=ingresos.id_tipo_cobro
@@ -138,7 +143,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                             
         	        </tbody>
         	    </table>
-        	    <div class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 20px 20px;"><i class="ico-info-sign"></i> Aún no tienes <b>Recordatorios.</b>&nbsp;</div>
+        	    <div id="warning_recordatorios" class="alert alert-dismissable alert-info animation animating flipInX" style="margin: 0 20px 20px 20px;"><i class="ico-info-sign"></i> Aún no tienes <b>Recordatorios.</b>&nbsp;</div>
         	    <? } ?>
         	    <!-- panel footer -->
         	    <div class="panel-footer">
@@ -349,6 +354,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
             </div>
 		</div>
 <!-- Balance -->
+        <?if($valida_egresos || $valida_ingresos){?>
         <hr>
         <div class="section-header">
         	<h5 class="semibold title mb15">Balance Anual</h5>
@@ -427,6 +433,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
             </div>
         </div>
 <!-- Termina finanzas -->
+<?}?>
 		<hr>
 
 <!-- Cuentas por cobrar y contabilidad -->
@@ -522,6 +529,10 @@ $("#nv_record").keyup(function(event){
     }
   });
 
+function abrir(){
+    location.href = "?Modulo=Recordatorios";
+}
+
 function cancelaCita(id){
     bootbox.confirm("¿Estas seguro/a que quieres cancelar la cita?", function (result) {
         if(result==true){
@@ -549,6 +560,9 @@ function agregaRecord(){
         fecha = fecha[1]+"/"+fecha[2]+"/"+fecha[0];
         respuesta = respuesta[0];
         if(respuesta=='1'){
+            if(<?=$valida_recordatorios?>==0){
+                $("#warning_recordatorios").hide();
+            }
           $("#tabla_recordatorios").append(tr);
           $('#nv_record').val("");
           /*$("#record_mod").val(record);

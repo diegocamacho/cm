@@ -30,6 +30,7 @@ if($ano_old_ing > $ano_old_gas){
 	$oldest_ano = $ano_old_ing;
 	$oldest_mes = $mes_old_ing;
 }*/
+
 $oldest_mes = 1;
 $oldest_ano = $ano_actual;
 $oldest_fecha_fin = $oldest_ano."-01-31";
