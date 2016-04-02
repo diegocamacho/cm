@@ -97,11 +97,10 @@ $valida=mysql_num_rows($q);
                                     </div>
                                 </div>
                             </li>
-                            
                             <li class="text-center mb10 nombres">
                                 <h4 class="semibold  nm"><?=substr($ft['nombre'],0,22)?></h4>
                                 <p class="bold nm"><?=$ft['clinica']?></p>
-                                <p class="text-muted nm">Hoy - <?=formatoHora($ft['hora'])?></p>
+                                <p class="text-muted nm"><time class="timeago" datetime="<?=$ft['fecha']?>T<?=$ft['hora']?>Z"><?=$ft['fecha']?> <?=formatoHora($ft['hora'])?></time></p>
                                 
                             </li>
                             
@@ -135,6 +134,7 @@ $valida=mysql_num_rows($q);
 <script type="text/javascript" src="library/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="library/core/js/core.min.js"></script>
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="plugins/timeago/jquery.timeago.js"></script>
 <!--/ Library script -->
 
 <!-- App and page level script -->
@@ -144,10 +144,11 @@ $valida=mysql_num_rows($q);
 <script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript" src="plugins/shuffle/js/jquery.shuffle.min.js"></script>
-
 <script>
 $(function () {
 	store.clear();
+	jQuery.timeago.settings.allowFuture = true;
+	jQuery("time.timeago").timeago();
 	//Para las fechas
 	$("#fecha").datepicker({
 		minDate: 0,

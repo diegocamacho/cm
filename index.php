@@ -22,14 +22,16 @@ include('includes/funciones.php');
 
         <!-- CSS: mandatory -->
         <link rel="stylesheet" href="library/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="stylesheet/layout.min.css">
-        <link rel="stylesheet" href="stylesheet/uielement.min.css">
         <link rel="stylesheet" href="plugins/jqueryui/css/jquery-ui.min.css">
+        <link rel="stylesheet" href="stylesheet/uielement.min.css">
+        <link rel="stylesheet" href="stylesheet/layout.min.css">
+
+
+		
+        
          
         <!--/ CSS -->
-        <!-- START JAVASCRIPT SECTION - Load only modernizr script here -->
-        <script src="library/modernizr/js/modernizr.min.js"></script>
-        <!--/ END JAVASCRIPT SECTION -->
+        
         
 		<!-- START CSS NO MANDATORY -->
 		<?php
@@ -39,6 +41,7 @@ include('includes/funciones.php');
 			    	
 		    case 'Agenda': 
 		    ?>
+		    <link rel="stylesheet" href="plugins/timepicker/css/bootstrap-datetimepicker.css">
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/fullcalendar/css/fullcalendar.min.css">
 			<? 
@@ -61,7 +64,6 @@ include('includes/funciones.php');
 			?>
 			<link rel="stylesheet" href="plugins/selectize/css/selectize.min.css">
 			<link rel="stylesheet" href="plugins/summernote/css/summernote.css">
-			<!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">-->
 			<?
 			break;
 		    case 'PerfilPaciente':
@@ -168,7 +170,9 @@ include('includes/funciones.php');
 		?>
 		
 		<!-- END CSS NO MANDATORY -->
-		
+		<!-- START JAVASCRIPT SECTION - Load only modernizr script here -->
+        <script src="library/modernizr/js/modernizr.min.js"></script>
+        <!--/ END JAVASCRIPT SECTION -->
         
         
         <script src="plugins/storage/store.min.js"></script>

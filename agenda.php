@@ -169,10 +169,10 @@ $citas=substr($citas, 0,-1);
                                         
 									<? }else{ ?>
 									
-                                    	<div class="alert alert-warning fade in">
+                                    	<div class="alert alert-danger fade in">
                                             <h4 class="semibold">Aviso:</h4>
                                             <p class="mb10">Para poder crear citas es necesario que primero configure una <b>Clínica</b></p>
-                                            <button type="button" class="btn btn-warning btn-block">Ir a Clínicas y crear una</button>
+                                            <a role="button" class="btn btn-danger btn-block" href="?Modulo=Clinicas">Ir a Clínicas y crear una</a>
                                         </div>
                                         
                                     <? } ?>
@@ -211,17 +211,27 @@ $citas=substr($citas, 0,-1);
 <script type="text/javascript" src="plugins/jqueryui/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="plugins/fullcalendar/js/fullcalendar.min.js"></script>
 
-
-<script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>
-<!--<script type="text/javascript" src="javascript/pages/calendar.js"></script>-->
-<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/moment.js"></script>
 <script type="text/javascript" src="plugins/timepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="plugins/parsley/js/parsley.min.js"></script>
+
+<script type="text/javascript" src="plugins/bootbox/js/bootbox.js"></script>
+
+
 <script type="text/javascript" src="plugins/selectize/js/selectize.min.js"></script>
 <!--/ App and page level scrip -->
 <!--/ END JAVASCRIPT SECTION -->
 <script>
 $(function () {
+	
+	//Para la hora
+	$('#hora').datetimepicker({
+		pickDate: false,
+		minuteStepping:10,
+		language: 'es',
+		autoclose: 1,
+		format: 'HH:mm' //'LT',
+	});
 	
 	//Agenda
 
@@ -305,14 +315,7 @@ $(function () {
         dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ]
     });
 	
-	//Para la hora
-	$('#hora').datetimepicker({
-		pickDate: false,
-		minuteStepping:10,
-		language: 'es',
-		autoclose: 1,
-		format: 'HH:mm' //'LT',
-	});
+	
 	
 	//Selector
 	$("#selectize-select").selectize({
