@@ -54,8 +54,7 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
                 <div class="navbar-header navbar-header-transparent">
                     <!-- Brand -->
                     <a class="navbar-brand" href="javascript:void(0);">
-                        <span class="logo-figure" style="margin-left:-4px;"></span>
-                        <span class="logo-text"></span>
+						<img src="logo_negro.png" width="180" class="img-responsive" style="margin-top: 28px;">
                     </a>
                     <!--/ Brand -->
                 </div>
@@ -96,6 +95,13 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
                                 <a href="index.php">
                                     <span class="meta">
                                         <span class="text">INICIO</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="dropdown <? if($menu_php=="Registro"){ ?>active<? } ?>">
+                                <a href="index.php?Seccion=Registro">
+                                    <span class="meta">
+                                        <span class="text">REGISTRARSE</span>
                                     </span>
                                 </a>
                             </li>
@@ -185,13 +191,17 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
 		    case 'Registro':
 		    include("registro.php");	
 		    break;
+		    
+		    case 'Recovery':
+		    include("recupera.php");	
+		    break;
 		    		    
 		    default:
 		    include('portada.php');
 		    
 		}
 		?>
-
+		<? if($menu_php!="Recovery"){ ?>
         <!-- START Template Footer -->
         <footer role="contentinfo" class="bgcolor-dark pt25">
             <!-- container -->
@@ -273,7 +283,7 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
 
         </footer>
         <!--/ END Template Footer -->
-
+		<? } ?>
         <!-- START JAVASCRIPT SECTION (Load javascripts at bottom to reduce load time) -->
         <!-- Application and vendor script : mandatory -->
         <script type="text/javascript" src="javascript/vendor.js"></script>

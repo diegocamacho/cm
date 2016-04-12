@@ -1,5 +1,3 @@
-<? session_start();
-	session_destroy(); ?>
 <!DOCTYPE html>
 <html>
     <!-- START Head -->
@@ -7,7 +5,7 @@
         <!-- START META SECTION -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Calidad Medica</title>
+        <title>PROMEDIA</title>
         <meta name="author" content="epicmedia.pro">
         <meta name="description" content="App para el contreol de consulta medica y consultorios">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -49,7 +47,7 @@
                         <!-- Brand -->
                         <div class="text-center" style="margin-bottom:40px;">
                             <center><img src="../logo_negro.png" width="200" class="mb15 mt15 img-responsive"></center>
-                            <h5 class="semibold text-muted mt-5">Inicie sesión con su cuenta.</h5>
+                            <h5 class="semibold text-muted mt-5">Recupere su cuenta.</h5>
                         </div>
                         <!--/ Brand -->
 
@@ -76,31 +74,15 @@
                                         <input name="email" id="email" type="text" class="form-control input-lg" placeholder="Correo Electrónico" data-parsley-errors-container="#error-container" data-parsley-error-message="Debe ingresar su cuenta de correo electrónico" data-parsley-required>
                                         <i class="ico-user2 form-control-icon"></i>
                                     </div>
-                                    <div class="form-stack has-icon pull-left">
-                                        <input name="pass" id="pass" type="password" class="form-control input-lg" placeholder="Contraseña" data-parsley-errors-container="#error-container" data-parsley-error-message="Debe ingresar su contraseña" data-parsley-required>
-                                        <i class="ico-lock2 form-control-icon"></i>
-                                    </div>
                                 </div>
 
                                 <!-- Error container -->
                                 <div id="error-container"class="mb15"></div>
                                 <!--/ Error container -->
 
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-xs-6">
-                                            <div class="checkbox custom-checkbox">  
-                                                <input type="checkbox" name="remember" id="remember" value="1">  
-                                                <label for="remember">&nbsp;&nbsp;Recordarme</label>   
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6 text-right">
-                                            <a href="recovery.php">¿Olvido su contraseña?</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                
                                 <div class="form-group nm">
-                                    <button type="submit" class="btn btn-block btn-success"><span class="semibold">Iniciar Sesión</span></button>
+                                    <button type="submit" class="btn btn-block btn-info"><span class="semibold">Recuperar Contraseña</span></button>
                                 </div>
                             </div>
                         </form>
@@ -108,7 +90,7 @@
 
                         <hr><!-- horizontal line -->
 
-                        <p class="text-muted text-center">¿No tiene una cuenta? <a class="semibold" href="../index.php?Seccion=Registro">Puede registrarse aquí</a></p>
+                        <p class="text-muted text-center">¿Sabe su usuario y contraseña? <a class="semibold" href="login.php">inicie sesión aquí</a></p>
                     </div>
                 </div>
                 <!--/ END row -->

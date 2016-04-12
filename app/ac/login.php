@@ -27,6 +27,4 @@ $fecha_hora=date("Y-m-d H:i:s");
 		}
 
 	}
-
-$sql =""
 ?>

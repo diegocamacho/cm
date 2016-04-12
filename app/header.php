@@ -4,8 +4,8 @@
     <div class="navbar-header">
         <!-- Brand -->
         <a class="navbar-brand" href="javascript:void(0);">
-            <!--<span class="logo-figure"></span>-->
-            <!--<span class="logo-text"></span>-->
+            <span class="logo-figure"></span>
+            <span class="logo-text"></span>
         </a>
         <!--/ Brand -->
     </div>

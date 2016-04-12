@@ -114,7 +114,7 @@
                                     <input type="text" class="form-control" name="nombre" id="nombre" maxlength="128">
                                     <i class="ico-user2 form-control-icon"></i>
                                 </div>
-                                <span id="msg-nombre" class="help-block"></span>
+                                <span id="msg-nombre" class="help-block" style="display: none;"></span>
                             </div>
                             <div class="form-group" id="form-email">
                                 <label class="control-label">Email</label>
@@ -122,7 +122,7 @@
                                     <input type="email" class="form-control" name="email" id="email" maxlength="128">
                                     <i class="ico-envelop form-control-icon"></i>
                                 </div>
-                                <span id="msg-email" class="help-block"></span>
+                                <span id="msg-email" class="help-block" style="display: none;"></span>
                             </div>
 							<div class="form-group">
 								<div class="row">
@@ -132,7 +132,7 @@
 										    <input type="phone" class="form-control numero" name="telefono" id="telefono" maxlength="10">
 										    <i class="ico-phone2 form-control-icon"></i>
 										</div>
-										<span id="msg-telefono" class="help-block"></span>
+										<span id="msg-telefono" class="help-block" style="display: none;"></span>
 									</div>
 									<div class="col-md-6" id="form-ciudad">
 										<label class="control-label">Ciudad</label>
@@ -140,7 +140,7 @@
                                 		    <input type="text" class="form-control" name="ciudad" id="ciudad" maxlength="64">
                                 		    <i class="ico-flag form-control-icon"></i>
                                 		</div>
-                                		<span id="msg-ciudad" class="help-block"></span>
+                                		<span id="msg-ciudad" class="help-block" style="display: none;"></span>
 									</div>
 								</div>
                             </div>
@@ -151,7 +151,7 @@
                                     <input type="password" class="form-control" name="contrasena" id="contrasena" maxlength="16">
                                     <i class="ico-key2 form-control-icon"></i>
                                 </div>
-                                <span id="msg-contrasena" class="help-block"></span>
+                                <span id="msg-contrasena" class="help-block" style="display: none;"></span>
                             </div>
                             <!--
                             <hr>
@@ -216,6 +216,14 @@
 
 <script>
 $(function(){
+	
+	$('.form-control').keyup(function(e) {
+	
+			if(e.keyCode==13){
+				registra();
+			}
+	
+	});
 	
 	
 	$("#nombre").blur(function() {
@@ -292,7 +300,12 @@ $(function(){
 	
 
 	$("#btn-registra").click(function() {
-		
+		registra();
+	});
+	
+	
+});
+function registra(){
 		var nombre = $('#nombre').val();
 		var email = $('#email').val();
 		var telefono = $('#telefono').val();
@@ -359,18 +372,24 @@ $(function(){
 		var formulario=$('#frm-registro').serialize();
 		$.post('ac/registro.php',formulario,function(data){
 	    	if(data==1){
-		    	alert(data);
+		    	window.open("app/index.php", "_self");
 	    	}else{
 		    	$('#msg_data').html(data);
 	    		$('#msg').show();
 	    	}
 		});
-		
-		
+}
+function recupertaContrasena(){
+	var formulario=$('#frm-registro').serialize();
+	$.post('ac/recupera.php',formulario,function(data){
+		if(data==1){
+	    	alert("ok");
+		}else{
+	    	$('#msg_data').html(data);
+			$('#msg').show();
+		}
 	});
-	
-	
-});
+}
 
 $('.numero').numeric();
 </script>

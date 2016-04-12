@@ -12,43 +12,23 @@
                         Administrar tu consultorio nunca fue tan fácil y economico, te presentamos <b>ProMedica</b> herramienta sencilla para la gestión de consultas medicas, historial clínico de pacientes, agenda, recordatorios, control de ingresos y egresas, facturación electrónica y muchas herramientas más que harán de tus consultas algo más sencillo y seguro.
                     </p>
                     <!--<h4 class="mt0"><a href="javascript:void(0);">Lee más...</a></h4>-->
-                    <a href="?Seccion=Registro" role="button" class="btn btn-danger btn-lg">Consigue un mes gratis</a>
+                    <a href="?Seccion=Registro" role="button" class="btn btn-danger btn-lg">Consigue un mes Gratis</a>
                 </div>
-                <div class="col-md-4 hide">
-                    <form role="form">
-                        <h2 class="thin text-white font-alt mt0 mb5">Crea una cuenta gratis</h2>
-                        <div class="form-group">
-                            <input type="text" class="form-control input-lg" id="signup_username" placeholder="Nombre">
-                        </div>
+                <div class="col-md-4">
+                    <form role="form" class="hide">
+                        <h2 class="thin text-white font-alt mt0 mb5">Inicia Sesión</h2>
                         <div class="form-group">
                             <input type="text" class="form-control input-lg" id="signup_email" placeholder="Email">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control input-lg" id="signup_email" placeholder="Teléfono">
-                        </div>
-                        <hr>
-                        <!--
-                        <div class="form-group">
-                            <input type="text" class="form-control input-lg" id="signup_username" placeholder="Cédula Profesional">
-                        </div>-->
-                        <div class="form-group">
-                            <select class="form-control input-lg" name="id_estado">
-                                <option value="">ESTADO</option>
-                                <? $q=mysql_query("SELECT * FROM estados");
-                                while($ft=mysql_fetch_assoc($q)){ ?>
-								<option value="<?=$ft['id_estado']?>"><?=$ft['estado']?></option>
-								<? } ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control input-lg" id="signup_email" placeholder="Ciudad">
-                        </div>
-                        <div class="form-group">
                             <input type="password" class="form-control input-lg" id="signup_password" placeholder="Crea una contraseña" maxlength="8">
-                            <span class="help-block text-muted">Distingue entre mayúsculas y minúsculas, máximo 8 caracteres.</span>
+                            <span class="help-block text-muted hide">Distingue entre mayúsculas y minúsculas, máximo 8 caracteres.</span>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block btn-lg">Registrarme Gratis</button>
+                        <button type="submit" class="btn btn-success btn-block btn-lg">Iniciar Sesión</button>
                     </form>
+                    <a role="button" href="app/login.php" class="btn btn-success btn-block btn-lg">Iniciar Sesión</a>
+                    <hr>
+                    <a role="button" href="?Seccion=Registro" class="btn btn-danger btn-block btn-lg">Consigue un mes Gratis</a>
                 </div>
             </div>
         </div>

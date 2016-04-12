@@ -732,3 +732,17 @@ function sapo($nombre,$email,$telefono){
 	}
 	
 }
+function recuperaContrasena($email,$msg){
+
+	$titulo = "Solicitud para restablecer contraseña.";
+	$headers = "MIME-Version: 1.0\r\n"; 
+	$headers .= "Content-type: text/html; charset=utf8\r\n"; 
+	$headers .= "From: PROMEDIA <soporte@promedica.mx>\r\n";
+	$bool = mail($email,$titulo,$msg,$headers);
+	if($bool){
+		return true;
+	}else{
+	    return false;
+	}
+	
+}

@@ -113,7 +113,7 @@ $facturacion_2=$datos_medico['facturacion_2'];
 								</div>
                                 <!-- End mensaje -->
                                 
-                                <div class="form-group">
+                                <div class="form-group hide">
                                     <label class="col-sm-3 control-label">Foto</label>
                                     <div class="col-sm-9">
                                         <div class="btn-group pr5">
@@ -139,17 +139,18 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group <? if(!$datos_medico['cedula']){?>has-warning<? } ?>">
                                     <label class="col-sm-3 control-label">Cédula Profesional:</label>
                                     <div class="col-sm-3">
                                         <input type="text" class="form-control mod" name="cedula" maxlength="10" value="<?=$datos_medico['cedula']?>">
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group <? if(!$datos_medico['sexo']){?>has-warning<? } ?>">
                                     <label class="col-sm-3 control-label">Sexo:</label>
                                     <div class="col-sm-3">
                                     	<select class="form-control mod" name="sexo">
+	                                    	<option value="">Seleecione uno</option>
                                             <option value="M" <? if($datos_medico['sexo']=='M'){ ?>selected="1" <? } ?>>Masculino</option>
                                             <option value="F" <? if($datos_medico['sexo']=='F'){ ?>selected="1" <? } ?>>Femenino</option>
                                         </select>
@@ -170,11 +171,12 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group <? if(!$datos_medico['id_celular_compania']){?>has-warning<? } ?>">
                                     <label class="col-sm-3 control-label">Compañía Móvil:</label>
                                     <div class="col-sm-3">
                                         <select name="id_celular_compania" class="form-control mod" id="id_celular_compania">
                                     	<? $q=mysql_query("SELECT * FROM celular_compania"); ?>
+                                    	<option value="">Seleecione uno</option>
                                     	<? while($ft=mysql_fetch_assoc($q)){ ?>
 										<option value="<?=$ft['id_celular_compania']?>" <? if($datos_medico['id_celular_compania']==$ft['id_celular_compania']){ ?>selected="1" <? } ?>><?=$ft['compania']?></option>
 										<? } ?>
@@ -182,13 +184,14 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group <? if(!$ano_nacimiento){?>has-warning<? } ?>">
                                     <label class="col-sm-3 control-label">Fecha de Nacimiento:</label>
                                     <div class="col-sm-1" style="padding-right: 0px;">
                                         <input type="text" class="form-control mod" name="dia_nacimiento" maxlength="2" value="<?=$dia_nacimiento?>">
                                     </div>
                                     <div class="col-sm-2" style="padding-right: 0px;">
                                     	<select class="form-control mod" name="mes_nacimiento">
+	                                    	<option value="">Seleecione</option>
                                     		<option value="01" <? if($mes_nacimiento=='01'){ ?>selected="1"<? } ?>>Enero</option>
                                             <option value="02" <? if($mes_nacimiento=='02'){ ?>selected="1"<? } ?>>Febrero</option>
                                             <option value="03" <? if($mes_nacimiento=='03'){ ?>selected="1"<? } ?>>Marzo</option>
@@ -208,10 +211,11 @@ $facturacion_2=$datos_medico['facturacion_2'];
                                     </div>
                                 </div>
                                 
-                                <div class="form-group">
+                                <div class="form-group <? if(!$datos_medico['id_estado']){?>has-warning<? } ?>">
                                     <label class="col-sm-3 control-label">Estado:</label>
                                     <div class="col-sm-4">
                                         <select class="form-control mod" name="id_estado">
+	                                        <option value="">Seleecione uno</option>
                                             <? $q=mysql_query("SELECT * FROM estados");
                                             while($ft=mysql_fetch_assoc($q)){ ?>
 											<option value="<?=$ft['id_estado']?>" <? if($ft['id_estado']==$datos_medico['id_estado']){?> selected="selected"<? } ?>><?=$ft['estado']?></option>
