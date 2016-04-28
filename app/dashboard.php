@@ -439,7 +439,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
 <!-- Cuentas por cobrar y contabilidad -->
 		<div class="row">
 		<!-- Cuentas por cobrar -->
-			<div class="col-sm-8">
+			<div class="col-sm-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-title"><i class="ico-credit2 mr5"></i>Cuentas por Cobrar</h5>
@@ -458,7 +458,7 @@ $valida_cobranza=mysql_num_rows($qcobranzas);
                 </div>
             </div>
         <!-- Contabilidad -->
-        	<div class="col-sm-4">
+        	<div class="col-sm-4 hide">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h5 class="panel-title"><i class="ico-bar-chart mr5"></i>Resumen Fiscal</h5>

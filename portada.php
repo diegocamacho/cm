@@ -1,7 +1,7 @@
 <section id="main" role="main">
     <!-- START jumbotron -->
     <section class="jumbotron jumbotron-bg8 nm" data-stellar-background-ratio="0.4" style="min-height:780px;">
-        <!-- pattern + overlay -->
+        <!-- pattern + overlay --
         <div class="overlay pattern pattern2"></div>
         <!--/ pattern + overlay -->
         <div class="container" style="padding-top:8%;padding-bottom:8%;">
@@ -12,9 +12,10 @@
                         Administrar tu consultorio nunca fue tan fácil y economico, te presentamos <b>ProMedica</b> herramienta sencilla para la gestión de consultas medicas, historial clínico de pacientes, agenda, recordatorios, control de ingresos y egresas, facturación electrónica y muchas herramientas más que harán de tus consultas algo más sencillo y seguro.
                     </p>
                     <!--<h4 class="mt0"><a href="javascript:void(0);">Lee más...</a></h4>-->
-                    <a href="?Seccion=Registro" role="button" class="btn btn-danger btn-lg">Consigue un mes Gratis</a>
+                    <a href="?Seccion=Registro" role="button" class="btn btn-danger btn-lg">Consigue un mes Gratis</a>&nbsp;&nbsp;
+                    <a role="button" href="app/login.php" class="btn btn-success btn-lg">Iniciar Sesión</a>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 hide">
                     <form role="form" class="hide">
                         <h2 class="thin text-white font-alt mt0 mb5">Inicia Sesión</h2>
                         <div class="form-group">
@@ -36,7 +37,7 @@
     <!--/ END jumbotron -->
 
     <!-- START Features Section -->
-    <section class="section bgcolor-white">
+    <section class="section bgcolor-white" style="display: none;">
         <div class="container">
             <!-- START Section Header -->
             <div class="row">
@@ -104,7 +105,7 @@
     <!--/ END Features Section -->
 
     <!-- START Recent Blog Section -->
-    <section class="section">
+    <section class="section" style="display: none;">
         <div class="container">
             <!-- START Section Header -->
             <div class="row">
@@ -263,7 +264,7 @@
     <!--/ END Recent Blog Section -->
 
     <!-- START Testimonials section + jumbotron -->
-    <section class="section jumbotron jumbotron-bg6 nm" data-stellar-background-ratio="0.4">
+    <section class="section jumbotron jumbotron-bg6 nm" data-stellar-background-ratio="0.4" style="display: none;">
         <div class="pb35">
             <!-- pattern + overlay -->
             <div class="overlay pattern pattern10"></div>
@@ -337,15 +338,6 @@
         </div>
     </section>
     <!--/ END Testimonials section + jumbotron -->
-
-    <!-- START Tweet Section -->
-    <section class="pt35 pb35 bgcolor-primary">
-        <div class="container text-center">
-            <h4 class="mt0 mb5"><i class="ico-twitter2"></i>&nbsp;&nbsp;Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</h4>
-            <i>23 Minute Ago</i>
-        </div>
-    </section>
-    <!--/ END Tweet Section -->
 
 
     <!-- START To Top Scroller -->

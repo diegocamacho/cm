@@ -4,8 +4,7 @@
     <div class="navbar-header">
         <!-- Brand -->
         <a class="navbar-brand" href="javascript:void(0);">
-            <span class="logo-figure"></span>
-            <span class="logo-text"></span>
+            <img src="../logo_blanco.png" width="170" class="img-responsive" style="margin: 15px 0px 0px 20px">
         </a>
         <!--/ Brand -->
     </div>

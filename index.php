@@ -267,7 +267,7 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
                     <div class="row">
                         <div class="col-sm-6">
                             <!-- copyright -->
-                            <p class="nm text-muted">&copy; Copyright 2016 by <a href="javascript:void(0);" class="text-white">EPICMEDIA</a>. Todos los derechos resevados.</p>
+                            <p class="nm text-muted">&copy; Copyright 2016 by <a href="http://epicmedia.pro" target="_blank" class="text-white">EPICMEDIA</a>. Todos los derechos resevados.</p>
                             <!--/ copyright -->
                         </div>
                         <div class="col-sm-6 text-right hidden-xs">

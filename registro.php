@@ -51,7 +51,7 @@
                         <div class="col-xs-2 valign-top"><img src="image/icons/brandprotection.png" width="100%"></div>
                         <div class="col-xs-10 valign-top pl15">
                             <h4 class="section-title font-alt mt0">Total Seguridad</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            <p class="hide">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Excepteur sint occaecat cupidatat non
                             proident.</p>
                         </div>
@@ -63,7 +63,7 @@
                         <div class="col-xs-2 valign-top"><img src="image/icons/seoperfomance.png" width="100%"></div>
                         <div class="col-xs-10 valign-top pl15">
                             <h4 class="section-title font-alt mt0">Potente integración</h4>
-                            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            <p class="hide">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                         <div class="col-xs-2 valign-top"><img src="image/icons/responsivewebdesign.png" width="100%"></div>
                         <div class="col-xs-10 valign-top pl15">
                             <h4 class="section-title font-alt mt0">Compatible con todos los dispositivos</h4>
-                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            <p class="hide">Duis aute irure dolor in reprehenderit in voluptate velit esse
                             cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                             proident, sunt in culpa qui officia.</p>
                         </div>
@@ -86,7 +86,7 @@
                         <div class="col-xs-2 valign-top"><img src="image/icons/supportservices.png" width="100%"></div>
                         <div class="col-xs-10 valign-top pl15">
                             <h4 class="section-title font-alt mt0">Soporte Técnico personalizado</h4>
-                            <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            <p class="hide">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
                         </div>
                     </div>
