@@ -242,7 +242,7 @@ $menu_php = isset($_GET['Seccion']) ? $_GET['Seccion']: NULL;
                     <!--/ Address + Social -->
 					<div class="col-md-4">&nbsp;</div>
                     <!-- Newsletter -->
-                    <div class="col-md-4">
+                    <div class="col-md-4 hide">
                         <h4 class="font-alt mt0">NOTICIAS</h4>
                         <form role="form">
                             <div class="form-group">
