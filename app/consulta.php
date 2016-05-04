@@ -1,6 +1,7 @@
 <?
 $id_agenda=escapar($_GET['ID'],1);
 $id_paciente=escapar($_GET['id_paciente'],1);
+$id_consulta=escapar($_GET['Consulta'],1); //RESUMEN DE CONSULTA
 if(!$id_agenda){
 	//Si viene desde los pacientes pero sin cita
 	if($id_paciente){
@@ -19,6 +20,7 @@ if(!$id_agenda){
 		$anotacion=$datos['anotacion'];
 		$antecedentes=$datos['antecedentes_alergias'];
 		$titulo="/ ".$nombre;
+        $return = "Pacientes";
 	}else{
 		//Clinicas
 		$sql_clinica="SELECT * FROM clinicas WHERE id_medico='$id_medico' AND activo='1'";
@@ -50,8 +52,40 @@ if(!$id_agenda){
 	$anotacion=$datos['anotacion'];
 	$antecedentes=$datos['antecedentes_alergias'];
 	$titulo="/ ".$nombre;
+    $return = "ConsultasAgendadas";
 	
 }
+
+///SI VIENE DE RESUMEN
+if($id_consulta){
+    $sql="SELECT consultas.*, pacientes.*, recetas.receta FROM consultas 
+    JOIN pacientes ON pacientes.id_paciente=consultas.id_paciente
+    JOIN recetas ON recetas.id_consulta=consultas.id_consulta
+    WHERE consultas.id_medico=$id_medico AND consultas.activo=1 AND consultas.id_consulta='$id_consulta'";
+    $q=mysql_query($sql);
+    $valida_consulta=mysql_num_rows($q);
+    if(!$valida_consulta) header("Location: index.php");
+    
+    $datos=mysql_fetch_assoc($q);
+    /* Datos */
+    $id_paciente=$datos['id_paciente'];
+    $nombre=$datos['nombre'];
+    $telefono=$datos['celular'];
+    $email=$datos['email'];
+    $edad=$datos['edad'];
+    $sexo=$datos['sexo'];
+    $anotacion=$datos['anotacion'];
+    $antecedentes=$datos['antecedentes_alergias'];
+    $info1 = $datos['diagnostico'];
+    $info2 = $datos['receta'];
+    $info3 = $datos['sugerencias'];
+    $titulo="/ ".$nombre." ".fechaLetra($datos['fecha_hora']);
+    $msj = "Resumen ";
+    $block = "readonly";
+    $hide = "display:none;";
+    $return = "ConsultasAtendidas";
+}
+///FIN DE RESUMEN
 
 $sq_aseguradoras="SELECT * FROM aseguradoras WHERE id_medico=$id_medico AND activo=1";
 $q_aseguradoras=mysql_query($sq_aseguradoras);
@@ -66,13 +100,13 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
         <!-- Page Header -->
         <div class="page-header page-header-block">
             <div class="page-header-section">
-                <h4 class="title semibold">Consulta <?=$titulo?></h4>
+                <h4 class="title semibold"><?=$msj?> Consulta <?=$titulo?></h4>
             </div>
             <div class="page-header-section">
                 <!-- Toolbar -->
                 <div class="toolbar">
 
-                	<a class="btn btn-sm btn-danger" href="javascript:void(0);" role="button">Regresar</a>
+                	<a class="btn btn-sm btn-danger" href="?Modulo=<?=$return?>" role="button">Regresar</a>
                 </div>
                 <!--/ Toolbar -->
             </div>
@@ -111,7 +145,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
 									<? }else{ 
 										if($id_paciente){
 									?>
-										<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" >
+										<input type="text" class="form-control" name="nombre" value="<?=$nombre?>" <?=$block?>>
 										<input type="hidden" class="form-control" name="id_paciente" value="<?=$id_paciente?>" >
 										<? }else{ ?>
 									<input type="text" class="form-control" name="id_paciente" maxlength="68" >
@@ -123,14 +157,14 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Teléfono<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="telefono" data-mask="(99) 9999-9999" value="<?=$telefono?>" >
+                                <input type="text" class="form-control" name="telefono" data-mask="(99) 9999-9999" value="<?=$telefono?>" <?=$block?>>
                             </div>
                         </div>
                         
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Email</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" name="email" value="<?=$email?>" >
+                                <input type="text" class="form-control" name="email" value="<?=$email?>" <?=$block?>>
                             </div>
                         </div>
                         
@@ -157,12 +191,12 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                             
                                 <div class="col-sm-6">
                                     <label class="control-label">Edad</label>
-                                    <input type="text" name="edad" class="form-control" data-mask="99" value="<?=$edad?>" >
+                                    <input type="text" name="edad" class="form-control" data-mask="99" value="<?=$edad?>" <?=$block?>>
                                 </div>
                                 
                                 <div class="col-sm-6">
                                     <label class="control-label">Sexo</label>
-                                    <select class="form-control" name="sexo">
+                                    <select class="form-control" name="sexo" <?=$block?>>
                                 		<option>Seleccione</option>
 										<option value="M" <? if($sexo=="M"){ ?>selected="selected" <? } ?>>Masculino</option>
 										<option value="F" <? if($sexo=="F"){ ?>selected="selected" <? } ?>>Femenino</option>
@@ -180,7 +214,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4" name="antecedentes"><?=$antecedentes?></textarea>
+                                    <textarea class="form-control animated" rows="4" name="antecedentes" <?=$block?>><?=$antecedentes?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -238,7 +272,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4" name="diagnostico" id="diagnostico"></textarea>
+                                    <textarea class="form-control animated" rows="4" name="diagnostico" id="diagnostico" <?=$block?>><?=$info1?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -264,7 +298,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                     <div class="panel-collapse pull out">
                         <div class="panel-body">
 	                        
-                            	<div class="summernote" id="summernote_receta" name="summernote_receta"></div>
+                            	<div class="summernote" id="summernote_receta" name="summernote_receta" ><?=$info2?></div>
                             	<br />
                             	
                             <div id="contenedor-receta" style="display: none;">
@@ -272,8 +306,8 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                             	<div class="summernote" id="summernote_receta_adicional" name="summernote_receta_adicional"></div>
                             	<br /><br />
                             </div>
-                            <div class="panel-footer text-right">
-                                <button class="btn btn-primary" id="btn-receta-adicional"><span class="ico-plus-circle2"></span> Receta Adicional</button>
+                            <div class="panel-footer text-right" style="<?=$hide?>">
+                                <button class="btn btn-primary" id="btn-receta-adicional" ><span class="ico-plus-circle2"></span> Receta Adicional</button>
                                 <button class="btn btn-danger" id="btn-receta-adicional-x" style="display: none;"><span class="ico-plus-circle2"></span> Eliminar Receta Adicional</button>
                             </div>
                         </div>
@@ -300,7 +334,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-sm-12 mb10">
-                                    <textarea class="form-control animated" rows="4" name="sugerencias" id="sugerencias"></textarea>
+                                    <textarea class="form-control animated" rows="4" name="sugerencias" id="sugerencias" <?=$block?>><?=$info3?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -316,7 +350,7 @@ $valida_aseguradoras=mysql_num_rows($q_aseguradoras);
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<br />
-				<button class="btn btn-lg btn-primary" data-toggle="modal" data-target="#ModalConfirma" data-backdrop="static">Terminar Consulta</button>
+				<button class="btn btn-lg btn-primary" style="<?=$hide?>" data-toggle="modal" data-target="#ModalConfirma" data-backdrop="static">Terminar Consulta</button>
 				<br /><br />
 			</div>
 		</div>
