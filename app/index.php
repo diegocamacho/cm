@@ -10,7 +10,7 @@ include('includes/funciones.php');
         <!-- START META SECTION -->
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Pro Medica - Administrar tu consultorio nunca fue tan fácil</title>
+        <title>Promedica - Administrar tu consultorio nunca fue tan fácil</title>
         <meta name="author" content="epicmedia.pro">
         <meta name="description" content="App para el contreol de consulta medica y consultorios">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">

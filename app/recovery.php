@@ -61,12 +61,11 @@
                         <hr><!-- horizontal line -->
 
                         <!-- Login form -->
-                        <form class="panel" name="form-login" action="">
+                        <form class="panel" name="form-recupera" id="form-recupera">
                             <div class="panel-body">
                                 <!-- Alert message -->
-                                <div class="alert alert-warning" style="display: none;" id="msg_error">
-                                    
-                                </div>
+                                <div class="alert alert-danger" id="msg_data" style="display: none;"></div>
+                                <div class="alert alert-success" id="msg_data2" style="display: none;"></div>
                                 <!--/ Alert message -->
                                 
                                 <div class="form-group">
@@ -82,7 +81,7 @@
 
                                 
                                 <div class="form-group nm">
-                                    <button type="submit" class="btn btn-block btn-info"><span class="semibold">Recuperar Contraseña</span></button>
+                                    <button type="button" onclick="javascript:recupertaContrasena();" class="btn btn-block btn-info"><span class="semibold">Recuperar Contraseña</span></button>
                                 </div>
                             </div>
                         </form>
@@ -91,6 +90,7 @@
                         <hr><!-- horizontal line -->
 
                         <p class="text-muted text-center">¿Sabe su usuario y contraseña? <a class="semibold" href="login.php">inicie sesión aquí</a></p>
+                        <p class="text-muted text-center">También puede <a class="semibold" href="../index.html#registro">Crear una cuenta nueva</a></p>
                     </div>
                 </div>
                 <!--/ END row -->
@@ -120,3 +120,18 @@
     </body>
     <!--/ END Body -->
 </html>
+<script>
+function recupertaContrasena(){
+	var formulario=$('#form-recupera').serialize();
+	$.post('../ac/recupera.php',formulario,function(data){
+		if(data==1){
+			$('#msg_data').hide();
+	    	$('#msg_data2').html("Hemos enviado un correo que le ayudara a restablecer su contraseña.");
+			$('#msg_data2').show();
+		}else{
+	    	$('#msg_data').html(data);
+			$('#msg_data').show();
+		}
+	});
+}
+</script>

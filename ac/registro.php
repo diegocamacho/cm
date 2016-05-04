@@ -28,7 +28,7 @@ extract($_POST);
 	$q=mysql_query($sq);
 	$val=mysql_num_rows($q);
 	if($val){
-		exit("El correo <strong>".escapar($email)."</strong> ya se ha registrado. <br><a href='#' onclick='javascript:recupertaContrasena();'>¿Olvido su contraseña?</a>.");
+		exit("El correo <strong>".escapar($email)."</strong> ya se ha registrado. <br><a href='javascript:;' onclick='javascript:recupertaContrasena();'>¿Olvido su contraseña?</a>.");
 	}
 	
 	mysql_query('BEGIN');
